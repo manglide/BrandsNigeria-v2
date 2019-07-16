@@ -1,0 +1,7 @@
+<!--submission-successful.html-->
+{{ template "header.html" .}}
+<div class="viewarea">
+<strong>The article was successfully submitted.</strong>
+<a href="/article/view/{{.payload.ID}}">{{.payload.Title}}</a>
+</div>
+{{ template "footer.html" .}}
