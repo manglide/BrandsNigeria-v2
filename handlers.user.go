@@ -4,11 +4,15 @@ package main
 import (
 	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
+var secretKey = []byte(os.Getenv("SESSION_SECRET"))
 var j *gin.Context
 
 func generateSessionToken() string {
@@ -32,7 +36,12 @@ func register(c *gin.Context) {
 	password := c.PostForm("password")
 	if user, err := registerNewUser(firstname, lastname, username, password); err == nil {
 		// If the user is created, set the token in a cookie and log the user in
-		token := generateSessionToken()
+		token, err := generateSessionTokenJWT(username)
+		if err != nil {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"ErrorTitle":   "Failed to Generate JWT Token",
+				"ErrorMessage": "Failed to generate JWT Token " + err.Error()})
+		}
 		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
 		render(c, gin.H{
@@ -84,7 +93,12 @@ func performLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	if isUserValid(username, password) {
-		token := generateSessionToken()
+		token, err := generateSessionTokenJWT(username)
+		if err != nil {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"ErrorTitle":   "Failed to Generate JWT Token",
+				"ErrorMessage": "Failed to generate JWT Token " + err.Error()})
+		}
 		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
 		render(c, gin.H{
@@ -102,4 +116,18 @@ func logout(c *gin.Context) {
 	c.SetCookie("token", "", -1, "", "", false, true)
 	c.Set("is_logged_in", false)
 	c.Redirect(http.StatusTemporaryRedirect, "/")
+}
+
+func generateSessionTokenJWT(username string) (string, error) {
+	claims := jwt.MapClaims{
+		"username":  username,
+		"ExpiresAt": 15000,
+		"IssuedAt":  time.Now().Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
 }

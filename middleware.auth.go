@@ -4,6 +4,7 @@ package main
 import (
 	"net/http"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,50 @@ func ensureLoggedIn() gin.HandlerFunc {
 		loggedIn := loggedInInterface.(bool)
 		if !loggedIn {
 			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+	}
+}
+
+func ensureLoggedInJWT() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if tokenString, err := c.Cookie("token"); err == nil || tokenString != "" {
+			token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+				// Don't forget to validate the alg is what you expect:
+				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+					// c.AbortWithStatus(http.StatusUnauthorized)
+					c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+						"ErrorTitle":   "Unauthorized Access",
+						"is_logged_in": false,
+						"ErrorMessage": err.Error()})
+				}
+				// hmacSampleSecret is a []byte containing your secret, e.g.
+
+				return secretKey, nil
+			})
+			if err != nil {
+				// c.AbortWithStatus(http.StatusUnauthorized)
+				c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+					"ErrorTitle":   "Unauthorized Access",
+					"is_logged_in": false,
+					"ErrorMessage": err.Error()})
+			}
+
+			if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+				// If token is valid
+				c.Next()
+			} else {
+				// c.AbortWithStatus(http.StatusUnauthorized)
+				c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+					"ErrorTitle":   "Unauthorized Access",
+					"is_logged_in": false,
+					"ErrorMessage": err.Error()})
+			}
+		} else {
+			// c.AbortWithStatus(http.StatusUnauthorized)
+			c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+				"ErrorTitle":   "Unauthorized Access",
+				"is_logged_in": false,
+				"ErrorMessage": err.Error()})
 		}
 	}
 }

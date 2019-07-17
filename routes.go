@@ -11,11 +11,11 @@ func initializeRoutes() {
 	{
 		userRoutes.GET("/login", ensureNotLoggedIn(), showLoginPage)
 		userRoutes.GET("/about", ensureNotLoggedIn(), showAboutPage)
-		userRoutes.GET("/s/about", ensureLoggedIn(), showAboutPageAuthenticated)
+		userRoutes.GET("/s/about", ensureLoggedInJWT(), showAboutPageAuthenticated)
 		userRoutes.GET("/feedback", ensureNotLoggedIn(), showFeedbackPage)
-		userRoutes.GET("/s/feedback", ensureLoggedIn(), showFeedbackPageAuthenticated)
+		userRoutes.GET("/s/feedback", ensureLoggedInJWT(), showFeedbackPageAuthenticated)
 		userRoutes.POST("/login", ensureNotLoggedIn(), performLogin)
-		userRoutes.GET("/logout", ensureLoggedIn(), logout)
+		userRoutes.GET("/logout", ensureLoggedInJWT(), logout)
 		userRoutes.GET("/register", ensureNotLoggedIn(), showRegistrationPage)
 		userRoutes.POST("/register", ensureNotLoggedIn(), register)
 	}
@@ -23,10 +23,10 @@ func initializeRoutes() {
 	articleRoutes := router.Group("/article")
 	{
 		// route from Part 1 of the tutorial
-		articleRoutes.GET("/view/:article_id", ensureLoggedIn(), getArticle)
+		articleRoutes.GET("/view/:article_id", ensureLoggedInJWT(), getArticle)
 		articleRoutes.GET("/views/:article_id", ensureNotLoggedIn(), getArticleUnAuthenticated)
-		articleRoutes.GET("/create", ensureLoggedIn(), showArticleCreationPage)
-		articleRoutes.POST("/create", ensureLoggedIn(), createArticle)
+		articleRoutes.GET("/create", ensureLoggedInJWT(), showArticleCreationPage)
+		articleRoutes.POST("/create", ensureLoggedInJWT(), createArticle)
 	}
 
 }
