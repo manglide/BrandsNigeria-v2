@@ -5,7 +5,9 @@ package main
 import (
 	"database/sql"
 	"errors"
+	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/brandsnigeria/webapp/database"
 	"github.com/gin-gonic/gin"
@@ -33,6 +35,35 @@ func render(c *gin.Context, data gin.H, templateName string) {
 
 }
 
+func add(index int) int {
+	return index + 1
+}
+
+func removeNewLines(item string) string {
+	return strings.ReplaceAll(item, "\n", "")
+}
+
+func uppercase(item string) string {
+	return strings.ToUpper(item)
+}
+
+func iterate(count *uint) []uint {
+	var i uint
+	var Items []uint
+	for i = 0; i < (*count); i++ {
+		Items = append(Items, i)
+	}
+	return Items
+}
+
+func equal(val, val2 int) bool {
+	if add(val) == val2 {
+		return true
+	} else {
+		return false
+	}
+}
+
 func main() {
 
 	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")
@@ -46,6 +77,13 @@ func main() {
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
+	router.SetFuncMap(template.FuncMap{
+		"add":            add,
+		"equal":          equal,
+		"removeNewLines": removeNewLines,
+		"uppercase":      uppercase,
+		"iterate":        iterate,
+	})
 	router.LoadHTMLGlob("templates/*.html")
 	router.Static("/css", "templates/css")
 	router.Static("/js", "templates/js")

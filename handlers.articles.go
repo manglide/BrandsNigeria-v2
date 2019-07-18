@@ -3,6 +3,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -11,12 +12,32 @@ import (
 
 func showIndexPage(c *gin.Context) {
 	articles := getAllArticles()
+	allItems, _ := getAllItems()
+	itemsCount := getAllItemsCount()
+	products, _ := getAllItemsFrontPage()
+	log.Println(products)
 	loggedInInterface, _ := c.Get("is_logged_in")
 	loggedIn := loggedInInterface.(bool)
 	if loggedIn {
-		render(c, gin.H{"title": "Home Page", "payload": articles, "is_logged_in": true}, "index.html")
+		render(c,
+			gin.H{
+				"title":        "Home Page",
+				"payload":      articles,
+				"items":        allItems,
+				"itemscount":   itemsCount,
+				"products":     products,
+				"is_logged_in": true},
+			"index.html")
 	} else {
-		render(c, gin.H{"title": "Home Page", "payload": articles, "is_logged_in": false}, "index.html")
+		render(c,
+			gin.H{
+				"title":        "Home Page",
+				"payload":      articles,
+				"items":        allItems,
+				"itemscount":   itemsCount,
+				"products":     products,
+				"is_logged_in": false},
+			"index.html")
 	}
 
 }

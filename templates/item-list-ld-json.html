@@ -1,0 +1,24 @@
+<script type="application/ld+json">
+    { 
+      "@context": "http://schema.org", 
+      "@type": "ItemList", 
+      "itemListElement": [
+        {{ $totalCount := .itemscount }}
+        {{ range $index, $value := .items }}
+          {{ $newVal := removeNewLines $value.PRODUCTGUID }}
+          {{  if equal $index $totalCount }}
+            {
+              "@type": "ListItem",
+              "position": {{ add $index }},
+              "url": "https://brandsnigeria.com.ng/product/{{ $newVal }}"
+            }
+          {{ else }}
+            {
+              "@type": "ListItem",
+              "position": {{ add $index }},
+              "url": "https://brandsnigeria.com.ng/product/{{ $newVal }}"
+            },
+          {{ end }}
+        {{ end }}
+    ]}
+</script>
