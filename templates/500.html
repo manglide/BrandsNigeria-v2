@@ -1,0 +1,13 @@
+<!--500.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+  <!--Data Not Found-->
+    <!-- Title of Article -->
+    <h2>{{.title}}</h2>
+    <!--Display the content of the article-->
+    <p>{{.message}}</p>
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

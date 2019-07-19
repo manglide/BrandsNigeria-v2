@@ -3,8 +3,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/brandsnigeria/webapp/database"
 )
 
@@ -39,7 +37,7 @@ type productList struct {
 	PRODUCTIMAGE2         string `json:"productIMAGE2"`
 }
 
-func getAllItemsFrontPage() ([]productList, string) {
+func getAllItemsFrontPage() ([]productList, error) {
 	var (
 		singleItem productList
 	)
@@ -78,28 +76,39 @@ func getAllItemsFrontPage() ([]productList, string) {
 		GROUP BY all_products.id ORDER BY rating DESC
 	`)
 	if err != nil {
-		return nil, err.Error()
+		return nil, err
 	} else {
-		log.Println()
 		for row.Next() {
 			err = row.Scan(
-				&singleItem.PRODUCTID, &singleItem.PRODUCTNAME, &singleItem.PRODUCTGUID,
-				&singleItem.PRODUCTDESCRIPTION, &singleItem.PRODUCTDESCRIPTION, &singleItem.PRODUCTMANUFACTURER,
-				&singleItem.PRODUCTLIKES, &singleItem.PRODUCTDISLIKES, &singleItem.PRODUCTTREND,
-				&singleItem.PRODUCTTRENDDIRECTION, &singleItem.PRODUCTSENTIMENT, &singleItem.PRODUCTSENTIMENTMOOD,
-				&singleItem.PRODUCTUSERCOMMENTS, &singleItem.PRODUCTRATING, &singleItem.PRODUCTDATEPUBLISHED,
-				&singleItem.PRODUCTPRICE, &singleItem.PRODUCTLOCATIONCOUNT, &singleItem.PRODUCTINGREDIENTS,
-				&singleItem.PRODUCTCATEGORY, &singleItem.PRODUCTIMAGE1, &singleItem.PRODUCTIMAGE2,
+				&singleItem.PRODUCTID,
+				&singleItem.PRODUCTNAME,
+				&singleItem.PRODUCTGUID,
+				&singleItem.PRODUCTDESCRIPTION,
+				&singleItem.PRODUCTMANUFACTURER,
+				&singleItem.PRODUCTLIKES,
+				&singleItem.PRODUCTDISLIKES,
+				&singleItem.PRODUCTTREND,
+				&singleItem.PRODUCTTRENDDIRECTION,
+				&singleItem.PRODUCTSENTIMENT,
+				&singleItem.PRODUCTSENTIMENTMOOD,
+				&singleItem.PRODUCTUSERCOMMENTS,
+				&singleItem.PRODUCTRATING,
+				&singleItem.PRODUCTDATEPUBLISHED,
+				&singleItem.PRODUCTPRICE,
+				&singleItem.PRODUCTLOCATIONCOUNT,
+				&singleItem.PRODUCTINGREDIENTS,
+				&singleItem.PRODUCTCATEGORY,
+				&singleItem.PRODUCTIMAGE1,
+				&singleItem.PRODUCTIMAGE2,
 			)
-			log.Println(singleItem.PRODUCTIMAGE1)
-			productLists = append(productLists, singleItem)
 			if err != nil {
-				return nil, err.Error()
+				return nil, err
 			}
+			productLists = append(productLists, singleItem)
 		}
 		defer row.Close()
 	}
-	return productLists, ""
+	return productLists, nil
 }
 
 // Return a list of all the products for ld/json
@@ -128,10 +137,10 @@ func getAllItems() ([]itemList, string) {
 	} else {
 		for row.Next() {
 			err = row.Scan(&singularItem.PRODUCTID, &singularItem.PRODUCTGUID)
-			itemLists = append(itemLists, singularItem)
 			if err != nil {
 				return nil, err.Error()
 			}
+			itemLists = append(itemLists, singularItem)
 		}
 		defer row.Close()
 	}

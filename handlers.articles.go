@@ -3,7 +3,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -14,8 +13,10 @@ func showIndexPage(c *gin.Context) {
 	articles := getAllArticles()
 	allItems, _ := getAllItems()
 	itemsCount := getAllItemsCount()
-	products, _ := getAllItemsFrontPage()
-	log.Println(products)
+	products, err := getAllItemsFrontPage()
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
+	}
 	loggedInInterface, _ := c.Get("is_logged_in")
 	loggedIn := loggedInInterface.(bool)
 	if loggedIn {

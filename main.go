@@ -4,9 +4,10 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 	"html/template"
+	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/brandsnigeria/webapp/database"
@@ -15,6 +16,7 @@ import (
 )
 
 var router *gin.Engine
+var c *gin.Context
 
 // Render one of HTML, JSON or CSV based on the 'Accept' header of the request
 // If the header doesn't specify this, HTML is rendered, provided that
@@ -47,13 +49,19 @@ func uppercase(item string) string {
 	return strings.ToUpper(item)
 }
 
-func iterate(count *uint) []uint {
-	var i uint
-	var Items []uint
-	for i = 0; i < (*count); i++ {
+func iterate(count string) []int {
+	s, err := strconv.ParseFloat(count, 64)
+	if err != nil {
+		log.Println(err)
+	}
+
+	var i int
+	var Items []int
+	for i = 0; i < (int(s)); i++ {
 		Items = append(Items, i)
 	}
 	return Items
+
 }
 
 func equal(val, val2 int) bool {
@@ -66,12 +74,6 @@ func equal(val, val2 int) bool {
 
 func main() {
 
-	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")
-	if err != nil {
-		errors.New("Database Connection Failed")
-	}
-	defer db.Close()
-	database.DB = db
 	// Set the router as the default one provided by Gin
 	router = gin.Default()
 
@@ -89,7 +91,14 @@ func main() {
 	router.Static("/js", "templates/js")
 	router.Static("/vendor", "templates/vendor")
 
-	// Initialize the routes
+	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
+	}
+	defer db.Close()
+
+	database.DB = db // Initialize the routes
+
 	initializeRoutes()
 
 	// Start serving the application

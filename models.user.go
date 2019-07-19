@@ -6,9 +6,11 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"net/http"
 	"strings"
 
 	"github.com/brandsnigeria/webapp/database"
+	"github.com/gin-gonic/gin"
 )
 
 type ReviewUser struct {
@@ -93,7 +95,7 @@ func checkCount(rows *sql.Rows) (count int) {
 
 func checkErr(err error) {
 	if err != nil {
-		panic(err)
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
 	}
 }
 
