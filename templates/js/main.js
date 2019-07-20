@@ -17,8 +17,8 @@ $(document).ready(function() {
 		 if(rateValMod !== 0) {
 			 if($(this).parent().attr("id") !== undefined) {
 				 var pT = document.getElementById($(this).parent().attr("id"));
-				 $(pT).append("<span class='fa fa-star-half-full' />");
-			 }
+				 $(pT).append("<span class='fa fa-star-half-full rates' />");
+			 } 
 		 }
 	 });
 	 $('span.ratesPage').each(function(i, obj) {

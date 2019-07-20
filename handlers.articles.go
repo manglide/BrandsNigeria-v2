@@ -78,6 +78,7 @@ func showArticleCreationPage(c *gin.Context) {
 		"title":        "Create New Article",
 		"is_logged_in": true}, "create-article.html")
 }
+
 func createArticle(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
@@ -89,4 +90,32 @@ func createArticle(c *gin.Context) {
 	} else {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
+}
+
+func getProductPage(c *gin.Context) {
+	productTitle := c.Param("product_id")
+	snippet, err := getRichSnippet(productTitle)
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
+	}
+	render(c,
+		gin.H{
+			"title":        "Product Page - " + productTitle,
+			"snippet":      snippet,
+			"is_logged_in": true,
+		},
+		"productPage.html")
+}
+
+func getCommentsBlock(c *gin.Context) {
+	// var allComments = []commentList{}
+	// productTitle := c.Param(":product_id")
+	// if allComments, err := getAllComments(productTitle); err == nil {
+	// 	render(c, gin.H{
+	// 		"title":   "Product Comments For Product " + productTitle,
+	// 		"payload": allComments,
+	// 	}, "comment-block.html")
+	// } else {
+	// 	c.AbortWithStatus(http.StatusInternalServerError)
+	// }
 }

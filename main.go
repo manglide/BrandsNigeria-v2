@@ -22,7 +22,6 @@ var c *gin.Context
 // If the header doesn't specify this, HTML is rendered, provided that
 // the template name is present
 func render(c *gin.Context, data gin.H, templateName string) {
-
 	switch c.Request.Header.Get("Accept") {
 	case "application/json":
 		// Respond with JSON
@@ -34,7 +33,6 @@ func render(c *gin.Context, data gin.H, templateName string) {
 		// Respond with HTML
 		c.HTML(http.StatusOK, templateName, data)
 	}
-
 }
 
 func add(index int) int {
@@ -54,14 +52,12 @@ func iterate(count string) []int {
 	if err != nil {
 		log.Println(err)
 	}
-
 	var i int
 	var Items []int
 	for i = 0; i < (int(s)); i++ {
 		Items = append(Items, i)
 	}
 	return Items
-
 }
 
 func equal(val, val2 int) bool {

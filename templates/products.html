@@ -1,15 +1,13 @@
 <div class="container-fluid">
   <div class="containerXZ">
       <div class='row'>
-        {{ range $index, $value := .products }}
-            <div class='paper' itemscope itemtype='http://schema.org/Product'>
-              <div class='c15'>
-                <div class='col'>
-                  {{ template "card.html" . }}
+            <div class='card-columns'>
+              {{ range .products }}
+                <div class='col' itemscope itemtype='http://schema.org/Product'>
+                    {{ template "card.html" . }}
                 </div>
-              </div>
+              {{ end }}
             </div>
-        {{ end }}
       </div>
   </div>
 </div>

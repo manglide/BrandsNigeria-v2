@@ -657,19 +657,19 @@ visibility:hidden;
   font-size: 30px;
 }
 .productpagebTag {
-  color: #FF8080;
-  font-family: 'Trebuchet', sans-serif;
-  font-weight: 150;
-  font-size: 12px;
+  color: #000;
+    font-family: 'Trebuchet', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
   height: auto;
   text-align: justify;
   overflow-wrap: break-word;
 }
 .productpagebTagCategory {
-  color: #FF8080;
-  font-family: 'Trebuchet', sans-serif;
-  font-weight: 150;
-  font-size: 12px;
+  color: #000;
+    font-family: 'Trebuchet', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
   height: auto;
   text-align: justify;
   overflow-wrap: break-word;
@@ -741,13 +741,14 @@ visibility:hidden;
 }
 
 .ingredientsTitle {
-  text-align: center;
+  text-align: left;
   font-family: 'Trebuchet', sans-serif;
   font-weight: 50;
   width: 100%;
-  padding: 10px;
   margin-top: 15px;
   color: #f60437;
+  display: inline-block;
+  border-bottom: thin solid #444;
 }
 .ingredientsTitleProductPage {
   text-align: left;
@@ -782,17 +783,16 @@ visibility:hidden;
   color: #4CAF50;
 }
 .dients {
-  border-top: thin solid #4CAF50;
-  border-bottom: thin solid #4CAF50;
-  color: rgba(0, 0, 0, 0.87);
+  /*color: rgba(0, 0, 0, 0.87);*/
+  color: #000;
   font-size: 18px;
   font-weight: 100;
   font-family: "Open Sans Condensed", sans-serif;
-  line-height: 1.46429em;
   margin: 0;
   display: block;
   margin-bottom: 5px;
   padding: 12px;
+  text-align: justify;
 }
 .ingredientsProductPage {
   width: 100%;
@@ -1008,20 +1008,20 @@ visibility:hidden;
     overflow-wrap: break-word;
   }
   .productpagebTag {
-    color: #FF8080;
+    color: #000;
     font-family: 'Trebuchet', sans-serif;
-    font-weight: 150;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 14px;
     height: auto;
     width: 100%;
     text-align: justify;
     overflow-wrap: break-word;
   }
   .productpagebTagCategory {
-    color: #FF8080;
+    color: #000;
     font-family: 'Trebuchet', sans-serif;
-    font-weight: 150;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 14px;
     height: auto;
     width: 100%;
     text-align: justify;
@@ -1374,20 +1374,20 @@ visibility:hidden;
     overflow-wrap: break-word;
   }
   .productpagebTag {
-    color: #FF8080;
+    color: #000;
     font-family: 'Trebuchet', sans-serif;
-    font-weight: 150;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 14px;
     height: auto;
     width: 100%;
     text-align: justify;
     overflow-wrap: break-word;
   }
   .productpagebTagCategory {
-    color: #FF8080;
+    color: #000;
     font-family: 'Trebuchet', sans-serif;
-    font-weight: 150;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 14px;
     height: auto;
     width: 100%;
     text-align: justify;
@@ -1701,12 +1701,12 @@ visibility:hidden;
   background: #fff; color:#444
 }
 .productpagebTagBy {
-  color:#444;
+  color:#000;
 }
 .mainratingblock {
   width: 100%;
-  padding: 8px;
-  height: 30px;
+  padding: 1px;
+  color: #f60437;
 }
 .nav {
   color: #fff;
@@ -1896,4 +1896,14 @@ nav .brand-logo {
 
 .viewarea {
 	margin-top: 100px;
+}
+
+.productname {
+	color: #000;
+    font-family: 'Trebuchet', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+}
+.rates {
+	font-size:25px;
 }

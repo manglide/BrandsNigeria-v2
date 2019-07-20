@@ -29,4 +29,14 @@ func initializeRoutes() {
 		articleRoutes.POST("/create", ensureLoggedInJWT(), createArticle)
 	}
 
+	productRoutes := router.Group("/product")
+	{
+		productRoutes.GET("/product/:product_id", ensureNotLoggedIn(), getProductPage)
+	}
+
+	commentRoutes := router.Group("/comments")
+	{
+		commentRoutes.GET("/comments/:product_id", ensureNotLoggedIn(), getCommentsBlock)
+	}
+
 }
