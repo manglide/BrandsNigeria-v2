@@ -1,0 +1,10 @@
+<div class='SentimentsDiv'>
+  <div class='cardTitleInnerExtendedChildren'>
+    <div>
+      <span><i class='material-icons' style='font-size:25px;color:red'>{{ .PRODUCTSENTIMENT }}</i></span>
+      <div class='textBelowRatingSentiment'>{{ .PRODUCTSENTIMENTMOOD }} </div>
+    </div>
+  </div> <!-- End of cardTitleInnerExtendedChildren -->
+  {{ template "favorites.tmpl" . }}
+  {{ template "ingredients.tmpl" . }}
+</div> <!-- End of Sentiment Div -->

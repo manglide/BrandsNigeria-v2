@@ -31,12 +31,12 @@ func initializeRoutes() {
 
 	productRoutes := router.Group("/product")
 	{
-		productRoutes.GET("/product/:product_id", ensureNotLoggedIn(), getProductPage)
+		productRoutes.GET("/:product_id", ensureNotLoggedIn(), getProductPage)
 	}
 
 	commentRoutes := router.Group("/comments")
 	{
-		commentRoutes.GET("/comments/:product_id", ensureNotLoggedIn(), getCommentsBlock)
+		commentRoutes.GET("/:product_id", ensureNotLoggedIn(), getCommentsBlock)
 	}
 
 }

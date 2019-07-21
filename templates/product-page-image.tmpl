@@ -1,0 +1,8 @@
+{{ range .data }}
+<div class="productImageProductPageWrapper">
+<img class="productImage" 
+			itemprop="image" src="{{ .PRODUCTIMAGE2 }}" 
+			alt="{{ removeNewLines .PRODUCTNAME }}" 
+			title="{{ removeNewLines .PRODUCTNAME }}" />
+</div>
+{{ end }}

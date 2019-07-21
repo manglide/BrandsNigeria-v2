@@ -1,0 +1,6 @@
+{{ range .data }}
+<div class="productpagebTag" 
+	itemprop="manufacturer" itemscope itemtype="http://schema.org/organization">
+	{{ uppercase .PRODUCTMANUFACTURER}}
+</div>
+{{ end }}

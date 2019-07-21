@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/brandsnigeria/webapp/database"
 	"github.com/gin-gonic/gin"
@@ -41,6 +42,31 @@ func add(index int) int {
 
 func removeNewLines(item string) string {
 	return strings.ReplaceAll(item, "\n", "")
+}
+
+func splitUtil(item string) []string {
+	return strings.Split(item, "~,")
+}
+
+func splitRLength(item string) int {
+	var c []string
+	c = strings.Split(item, "~,")
+	return len(c)
+}
+
+func splitRDateIndex(item string, index int) time.Time {
+	var q []string
+	var seconds int
+	q = strings.Split(item, "#")
+	seconds, _ = strconv.Atoi(q[index])
+	seconds = seconds
+	return time.Unix(int64(seconds), 0)
+}
+
+func splitRIndex(item string, index int) string {
+	var u []string
+	u = strings.Split(item, "#")
+	return u[index]
 }
 
 func uppercase(item string) string {
@@ -76,20 +102,24 @@ func main() {
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
 	router.SetFuncMap(template.FuncMap{
-		"add":            add,
-		"equal":          equal,
-		"removeNewLines": removeNewLines,
-		"uppercase":      uppercase,
-		"iterate":        iterate,
+		"add":             add,
+		"equal":           equal,
+		"removeNewLines":  removeNewLines,
+		"uppercase":       uppercase,
+		"iterate":         iterate,
+		"splitUtil":       splitUtil,
+		"splitRIndex":     splitRIndex,
+		"splitRLength":    splitRLength,
+		"splitRDateIndex": splitRDateIndex,
 	})
-	router.LoadHTMLGlob("templates/*.html")
+	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")
 	router.Static("/js", "templates/js")
 	router.Static("/vendor", "templates/vendor")
 
 	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")
 	if err != nil {
-		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
 	defer db.Close()
 

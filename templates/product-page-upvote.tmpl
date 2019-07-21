@@ -1,0 +1,11 @@
+{{ range .data }}
+<div class="cardTitleInnerExtendedChildrenProductPage">
+	<a href="#" 
+		class="btn btn-success btn-sm" 
+		data-toggle="modal" data-target="#upvoteProduct" 
+		onClick="upvoteProduct('{{ .PRODUCTGUID }}','{{ .PRODUCTID }}')">
+		<span class="fa fa-thumbs-up fa-1x"></span>
+	</a>
+	<div class="textBelowRatingsProductPage">{{ .PRODUCTLIKES }}</div>
+</div>
+{{ end }}

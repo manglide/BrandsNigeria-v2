@@ -1,0 +1,10 @@
+{{ range .comments }}
+		<div class="aboutProductComments" itemprop="review" itemscope itemtype="http://schema.org/Review">
+			<div class="individualUserAvatarAndName">
+				<div class="avatar">
+					<img src="https://asknigeria.com.ng/assets/brands/images/blank_boy.png" width="30" height="30" />
+				</div>
+				{{ template "product-page-user-comments.tmpl" . }}
+			</div>
+		</div>
+{{ end }}

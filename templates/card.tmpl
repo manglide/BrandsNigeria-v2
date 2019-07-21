@@ -1,0 +1,34 @@
+<div class='card bg-light mb-3 smallCard'> <!-- Card Block Begins -->
+    <div class='card-header' style='background: #fff; color:#444'> <!-- Card header -->
+      <span itemprop='name' class="productname">
+        {{ .PRODUCTNAME }}
+      </span>
+      <div itemprop='category' class='productpagebTagCategory' itemscope itemtype='http://schema.org/text'>
+        {{ uppercase .PRODUCTCATEGORY }}
+      </div>
+      <div class='productpagebTagBy'>BY</div>
+      <div class='productpagebTag' itemprop='manufacturer' itemscope itemtype='http://schema.org/organization'>
+        {{ uppercase .PRODUCTMANUFACTURER }}
+      </div>
+    </div> <!-- End of card header -->
+    <div> <!-- Product Image -->
+      <img itemprop='image' 
+              class='card-img-top productImage' 
+              src={{.PRODUCTIMAGE1}} 
+              title={{.PRODUCTNAME}} 
+              alt={{.PRODUCTNAME}} />
+    </div> <!-- End of Product Image -->
+    
+    <div class='card-body cardContent'> <!-- Card Content Starts -->
+      <p class='card-text'> <!-- Product Description -->
+        {{ template "product-rating.tmpl" . }}
+        <hr />
+        {{ .PRODUCTDESCRIPTION }}
+      </p> <!-- End of Product Description -->
+      
+      {{ template "rating.tmpl" . }}
+  
+      {{ template "viewbutton.tmpl" . }}
+      
+    </div> <!-- Card Content Ends -->
+</div> <!-- Card Block Ends -->

@@ -1,0 +1,7 @@
+<div title="user rated {{ .PRODUCTRATING }}" alt="Rating in stars"> <!-- Rating Stars -->
+      {{ $mainVal := .PRODUCTRATING }}
+    	  {{ $iterator := .PRODUCTRATING }}
+      {{ range $val := iterate $iterator }}
+        <span data='{{$mainVal}}' class='fa fa-star fa-1x commentrates' />
+      {{ end }}
+</div> <!-- Rating Stars Ends -->

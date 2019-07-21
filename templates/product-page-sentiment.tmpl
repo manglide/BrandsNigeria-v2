@@ -1,0 +1,14 @@
+{{ range .data }}
+<div class="cardTitleInnerExtendedChildrenProductPage">
+	<div>
+		<span>
+			<i class="material-icons md-36" style="color:red">
+				{{ .PRODUCTSENTIMENT }}
+			</i>
+		</span>
+		<div class="textBelowRatingSentiment">
+			{{ .PRODUCTSENTIMENTMOOD }}
+		</div>
+	</div>
+</div>
+{{ end }}

@@ -25,7 +25,7 @@ func generateSessionToken() string {
 func showRegistrationPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
-		"title": "Register"}, "register.html")
+		"title": "Register"}, "register.tmpl")
 }
 
 func register(c *gin.Context) {
@@ -47,11 +47,11 @@ func register(c *gin.Context) {
 		render(c, gin.H{
 			"title":        "Successful registration & Login",
 			"user":         &user,
-			"is_logged_in": true}, "registeration-successful.html")
+			"is_logged_in": true}, "registeration-successful.tmpl")
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
-		c.HTML(http.StatusBadRequest, "register.html", gin.H{
+		c.HTML(http.StatusBadRequest, "register.tmpl", gin.H{
 			"ErrorTitle":   "Registration Failed",
 			"ErrorMessage": err.Error()})
 	}
@@ -60,33 +60,33 @@ func register(c *gin.Context) {
 func showLoginPage(c *gin.Context) {
 	render(c, gin.H{
 		"title": "Login",
-	}, "login.html")
+	}, "login.tmpl")
 }
 
 func showAboutPage(c *gin.Context) {
 	render(c, gin.H{
 		"title": "About BrandsNigeria",
-	}, "about.html")
+	}, "about.tmpl")
 }
 
 func showAboutPageAuthenticated(c *gin.Context) {
 	render(c, gin.H{
 		"title":        "About BrandsNigeria",
 		"is_logged_in": true,
-	}, "about.html")
+	}, "about.tmpl")
 }
 
 func showFeedbackPage(c *gin.Context) {
 	render(c, gin.H{
 		"title": "Feedback",
-	}, "feedback.html")
+	}, "feedback.tmpl")
 }
 
 func showFeedbackPageAuthenticated(c *gin.Context) {
 	render(c, gin.H{
 		"title":        "Feedback",
 		"is_logged_in": true,
-	}, "feedback.html")
+	}, "feedback.tmpl")
 }
 
 func performLogin(c *gin.Context) {
@@ -104,9 +104,9 @@ func performLogin(c *gin.Context) {
 		render(c, gin.H{
 			"title":        "Successful Login",
 			"user":         username,
-			"is_logged_in": true}, "login-successful.html")
+			"is_logged_in": true}, "login-successful.tmpl")
 	} else {
-		c.HTML(http.StatusBadRequest, "login.html", gin.H{
+		c.HTML(http.StatusBadRequest, "login.tmpl", gin.H{
 			"ErrorTitle":   "Login Failed",
 			"ErrorMessage": "Invalid credentials provided"})
 	}

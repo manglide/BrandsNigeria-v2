@@ -1,0 +1,12 @@
+{{ range .data }}
+<div class="cardTitleInnerExtendedChildrenProductPage">
+	<div style="">
+		<span>
+			<i class="material-icons md-36" style="">{{ .PRODUCTTREND }}</i>
+		</span>
+		<div class="textBelowRatingTrends">
+			{{ .PRODUCTTRENDDIRECTION }}
+		</div>
+	</div>
+</div>
+{{ end }}

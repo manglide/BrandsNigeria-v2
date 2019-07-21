@@ -1,0 +1,5 @@
+{{ range .data }}
+<div itemprop="brand" itemtype="http://schema.org/Thing" itemscope>
+<meta itemprop="name" content="{{ removeNewLines .PRODUCTNAME }}" />
+</div>
+{{end}}

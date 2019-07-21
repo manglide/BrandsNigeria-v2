@@ -1,0 +1,53 @@
+<!--menu.tmpl-->
+
+          <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light justify-content-between navouter">
+            <a class="navbar-brand" href="#">
+              <div class="goback" title="Brands Nigeria">
+                      <button type="button" class="btn btn-success navbar-btn">
+                          BN
+                      </button>
+              </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav navlinks">
+                <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                {{ if .is_logged_in }}
+                <a class="nav-item nav-link" href="/u/s/about">About</a>
+                <a class="nav-item nav-link" href="/u/s/feedback">Feedback</a>
+                {{end}}
+                {{ if not .is_logged_in }}
+                <a class="nav-item nav-link" href="/u/about">About</a>
+                <a class="nav-item nav-link" href="/u/feedback">Feedback</a>
+                {{end}}
+                
+                {{ if .is_logged_in }}
+                <a class="nav-item nav-link" href="#">
+                  Create Product
+                </a>
+                {{end}}
+                {{ if not .is_logged_in }}
+                <a class="nav-item nav-link" href="/u/register">
+                  Register
+                </a>
+                {{end}}
+                {{ if not .is_logged_in }}
+                <a class="nav-item nav-link" href="/u/login">
+                  Login
+                </a>
+                {{end}}
+                {{ if .is_logged_in }}
+                <a class="nav-item nav-link" href="/u/logout">
+                  Logout
+                </a>
+                {{end}}
+              </div>
+            </div>
+            <form class="form-inline">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </nav>
+          </header>

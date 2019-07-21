@@ -1,0 +1,38 @@
+<script type="application/ld+json">
+    {
+      "@context": "http://schema.org", 
+      "@type": "Product",
+      
+      {{ range .snippet }}
+      "name": {{ removeNewLines .PRODUCTNAME }},
+      "image": {{ .PRODUCTIMAGE1 }},
+      "description": {{ .PRODUCTDESCRIPTION }},
+      "sku": {{ .PRODUCTSKU }},
+      "mpn": {{ .PRODUCTMPN }},
+        "brand": {
+          "@type": "Thing",
+          "name": {{ removeNewLines .PRODUCTNAME }}
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": {{ .PRODUCTRATING }},
+          "reviewCount": {{ .PRODUCTUSERCOMMENTS}}
+        },
+        "offers": {
+          "@type": "Offer", 
+          "priceCurrency": "NGN",
+          "price": {{ .PRODUCTPRICE }},
+          "url": "https://brandsnigeria.com.ng/product/{{ removeNewLines .PRODUCTNAME }}",
+          "priceValidUntil": "2020-11-05",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": {{ .PRODUCTMANUFACTURER }}
+          }
+        },
+        {{ end }}
+        "review": [ 
+          {{ template "richSnippetComments.tmpl" . }} 
+        ]
+    }
+</script>

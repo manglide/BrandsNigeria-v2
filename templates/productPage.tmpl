@@ -1,0 +1,34 @@
+<!--productPage.tmpl-->
+<!--Embed the header.tmpl template at this location-->
+{{ template "productpage-header.tmpl" .}}
+  <div class="viewarea">
+    <div class="aboutProduct">
+      <div class="product">
+        <div class="productDisplay">
+          <div class="productInner" itemscope>
+            {{ template "product-meta.tmpl" . }}
+            {{ template "brand.tmpl" . }}
+            {{ template "goback.tmpl" . }}
+            <!-- place adsense template here -->
+            {{ template "product-page-title.tmpl" . }}
+            {{ template "product-page-category.tmpl" . }}
+            {{ template "product-by-tag.tmpl" . }}
+            {{ template "product-page-manufacturer.tmpl" . }}
+            {{ template "product-page-image.tmpl" . }}
+            {{ template "product-page-icons.tmpl" . }}
+            {{ template "cl.tmpl" . }}
+            {{ template "product-page-main-rating.tmpl" . }}
+            {{ template "product-page-offers.tmpl" . }}
+            {{ template "cl.tmpl" . }}
+            {{ template "product-page-description.tmpl" . }}
+            {{ template "cl.tmpl" . }}
+            {{ template "product-page-ingredients.tmpl" . }}
+            {{ template "cl.tmpl" . }}
+            {{ template "product-page-customer-reviews.tmpl" . }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}

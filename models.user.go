@@ -95,7 +95,7 @@ func checkCount(rows *sql.Rows) (count int) {
 
 func checkErr(err error) {
 	if err != nil {
-		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.html")
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
 }
 

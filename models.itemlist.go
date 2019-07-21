@@ -50,7 +50,6 @@ type productListPage struct {
 	PRODUCTRATING            string `json:"productRATING"`
 	PRODUCTAUTHOR            string `json:"productAUTHOR"`
 	PRODUCTDATEPUBLISHED     string `json:"productDATEPUBLISHED"`
-	PRODUCTFULLCOMMENTS      string `json:"productCOMMENTS"`
 	PRODUCTSKU               string `json:"productSKU"`
 	PRODUCTMPN               string `json:"productMPN"`
 	PRODUCTPRICE             string `json:"productPRICE"`
@@ -80,6 +79,7 @@ type productRichSnippet struct {
 }
 
 type commentList struct {
+	PRODUCTNAME   string `json:"productname"`
 	LIKES         string `json:"likes"`
 	DISLIKE       string `json:"dislike"`
 	PRODUCTRATING string `json:"rate"`
@@ -87,6 +87,7 @@ type commentList struct {
 	LATITUDE      string `json:"latitude"`
 	LONGITUDE     string `json:"longitude"`
 	DATEPUBLISHED string `json:"datePublished"`
+	AUTHOR        string `json:"author"`
 }
 
 func getAllItemsFrontPage() ([]productList, error) {
@@ -226,28 +227,67 @@ func getAllItemsCount() int {
 	return numCount
 }
 
-func getAllComments(productID string) ([]commentList, error) {
+func getAllCommentsCount(productID int) int {
+	var (
+		numCount int
+	)
+	row, err := database.DB.Query(`
+		SELECT COUNT(*) 
+		FROM 
+		product_review WHERE product_id = ?
+	`, productID)
+	numCount = checkCount(row)
+	checkErr(err)
+	return numCount
+}
+
+func getPID(productID string) (int, error) {
+	var (
+		pid int
+	)
+	row, err := database.DB.Query(`
+		SELECT id FROM all_products 
+		WHERE product_name_clean_url = ?
+	`, productID)
+	if err != nil {
+		return 0, err
+	}
+	for row.Next() {
+		err := row.Scan(&pid)
+		if err != nil {
+			return 0, err
+		}
+	}
+	return pid, nil
+}
+
+func getAllComments(productID int) ([]commentList, error) {
 	var commentLists = []commentList{}
 	var (
 		comment commentList
 	)
 
 	row, err := database.DB.Query(`
-			SELECT 
-				likes AS likes, 
-				dislikes AS dislike, 
-				rating AS rate, 
-	            user_comments AS comment, 
-	            user_location_lat AS latitude, 
-	            user_location_lon AS longitude
-	            date AS datePublished 
-            FROM product_review WHERE product_id = ?
+			SELECT all_products.title AS productname, 
+			product_review.likes AS likes, 
+			product_review.dislikes AS dislike, 
+			product_review.rating AS rate, 
+			product_review.user_comments AS comment, 
+			product_review.user_location_lat AS latitude, 
+			product_review.user_location_lon AS longitude, 
+			product_review.date AS datePublished, 
+			product_review.author AS author 
+			FROM product_review 
+			JOIN all_products 
+			ON product_review.product_id = all_products.ID 
+			WHERE product_review.product_id = ?
 	`, productID)
 	if err != nil {
 		return nil, err
 	} else {
 		for row.Next() {
 			err = row.Scan(
+				&comment.PRODUCTNAME,
 				&comment.LIKES,
 				&comment.DISLIKE,
 				&comment.PRODUCTRATING,
@@ -255,6 +295,7 @@ func getAllComments(productID string) ([]commentList, error) {
 				&comment.LATITUDE,
 				&comment.LONGITUDE,
 				&comment.DATEPUBLISHED,
+				&comment.AUTHOR,
 			)
 			if err != nil {
 				return nil, err
@@ -291,20 +332,6 @@ func getProductData(pid string) ([]productListPage, error) {
 		AVG(product_review.rating) AS rating,
 		product_review.author AS author,
 		UNIX_TIMESTAMP(product_review.date) AS datePublished, 
-		GROUP_CONCAT(
-			CONCAT_WS(
-					'#', 
-					product_review.likes, 
-					product_review.dislikes, 
-					product_review.rating, 
-					product_review.user_comments, 
-					product_review.author, 
-					product_review.user_location_lat, 
-					product_review.user_location_lon, 
-					UNIX_TIMESTAMP(product_review.date), 
-					'~'
-				)
-		) AS fullcomments,
 		all_products.sku AS sku, 
 		all_products.mpn AS mpn,
 		all_products.price AS price, 
@@ -350,7 +377,6 @@ func getProductData(pid string) ([]productListPage, error) {
 				&singleItem.PRODUCTRATING,
 				&singleItem.PRODUCTAUTHOR,
 				&singleItem.PRODUCTDATEPUBLISHED,
-				&singleItem.PRODUCTFULLCOMMENTS,
 				&singleItem.PRODUCTSKU,
 				&singleItem.PRODUCTMPN,
 				&singleItem.PRODUCTPRICE,
@@ -410,9 +436,9 @@ func getRichSnippet(pid string) ([]productRichSnippet, error) {
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
 		WHERE 
+		all_products.product_name_clean_url = ? AND
 		all_products.about <> '' 
 		AND all_products.about IS NOT NULL
-		AND all_products.product_name_clean_url = ?
 		AND all_products.manufacturer IS NOT NULL AND 
 		all_products.address IS NOT NULL AND
 		all_products.ingredients IS NOT NULL AND
@@ -447,5 +473,6 @@ func getRichSnippet(pid string) ([]productRichSnippet, error) {
 		}
 		defer row.Close()
 	}
+
 	return richSnippet, nil
 }

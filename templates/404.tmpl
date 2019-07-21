@@ -1,0 +1,13 @@
+<!--404.tmpl-->
+
+<!--Embed the header.tmpl template at this location-->
+{{ template "header.tmpl" .}}
+
+  <!--Data Not Found-->
+    <!-- Title of Article -->
+    <h2>{{.title}}</h2>
+    <!--Display the content of the article-->
+    <p>{{.message}}</p>
+
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}
