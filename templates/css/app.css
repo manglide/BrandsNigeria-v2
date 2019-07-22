@@ -1920,6 +1920,7 @@ nav .brand-logo {
 
 .viewarea {
 	margin-top: 180px;
+	display: inline-block;
 }
 
 .productname {
