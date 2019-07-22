@@ -1,0 +1,16 @@
+{{ range .data }}
+<div class="card">
+	<div class="card-header text-white bg-warning" 
+		toggle="collapse" 
+		data-target="#competitorsview" 
+		aria-expanded="true" aria-controls="competitorsview">
+		<a data-toggle="collapse" class="panelanchortext" href="#competitorsview">
+			<i class="fa fa-caret-right"></i> Competitors and Markets
+		</a>
+	</div>
+	<div class="card-block collapse show" id="competitorsview">
+		<div data="{{ .PRODUCTFIRSTCOMPETITION }}" id="firstCompetitor"></div>
+		<div data="{{ .PRODUCTSECONDCOMPETITION }}" id="secondCompetitor"></div>
+	</div>
+</div>
+{{ end }}

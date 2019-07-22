@@ -1,0 +1,16 @@
+{{ range .data }}
+<div class="card">
+	<div class="card-header text-white bg-danger" 
+		toggle="collapse" data-target="#productsreviewdislikes" 
+		aria-expanded="true" 
+		aria-controls="productsreviewdislikes">
+		<a data-toggle="collapse" class="panelanchortext" href="#productsreviewdislikes">
+			<i class="fa fa-caret-right"></i> {{ .PRODUCTNAME }}, {{ .PRODUCTFIRSTCOMPETITION }} and {{ .PRODUCTSECONDCOMPETITION }} Dislikes Chart
+		</a>
+	</div>
+	<div class="card-block collapse show" 
+		data="{{ .PRODUCTNAME }},{{ .PRODUCTFIRSTCOMPETITION }},{{ .PRODUCTSECONDCOMPETITION }}"
+		id="productsreviewdislikes">
+	</div>
+</div>
+{{ end }}

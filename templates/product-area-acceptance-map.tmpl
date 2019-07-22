@@ -1,0 +1,15 @@
+{{ range .data }}
+<div class="card">
+	<div class="card-header text-white bg-info" 
+		toggle="collapse" 
+		data-target="#AreaAcceptanceMapElem" aria-expanded="true" 
+		aria-controls="AreaAcceptanceMapElem">
+		<a data-toggle="collapse" class="panelanchortext" href="#AreaAcceptanceMapElem">
+			<i class="fa fa-caret-right"></i> Strength Area Acceptance Map - 2.5 Stars and Above
+		</a>
+	</div>
+	<div data="{{ .PRODUCTID }}" class="card-block collapse show" id="AreaAcceptanceMapElem">
+		<div id="mapstoreacc" style="height: 300px"></div>
+	</div>
+</div>
+{{ end }}

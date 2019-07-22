@@ -291,7 +291,7 @@ mainprice.entry {
 .textBelowRatingTrends {
   font-family: 'Open Sans Condensed', sans-serif;
   padding: 1px;
-  padding: 8px;
+  padding: 6px;
   left: 1px;
   text-align: center;
   /*color: #5E35B1;*/
@@ -881,9 +881,9 @@ flex: 1;
   margin-top: 9px;
 }
 .otherIconsOnProductPage {
-width: 6;
+width: 63%;
 float: left;
-display: inline-block;
+display: block;
 flex: 1;
 margin: auto;
 padding: 5px;
@@ -912,7 +912,6 @@ padding: 5px;
 }
 .textBelowRatingsProductPage {
   font-family: 'Open Sans Condensed', sans-serif;
-  padding-top: 5px;
   left: 5px;
   text-align: center;
 }
@@ -1179,7 +1178,7 @@ padding: 5px;
   }
   .cardTitleChildExtendProductPage {
     float: left;
-    width: 80%;
+    width: 90%;
     font-family: 'Open Sans Condensed', sans-serif;
     padding: 1px;
   }
@@ -1558,7 +1557,7 @@ padding: 5px;
   }
   .cardTitleChildExtendProductPage {
     float: left;
-    width: 80%;
+    width: 90%;
     font-family: 'Open Sans Condensed', sans-serif;
     padding: 1px;
   }
@@ -1920,7 +1919,7 @@ nav .brand-logo {
 }
 
 .viewarea {
-	margin-top: 100px;
+	margin-top: 180px;
 }
 
 .productname {
