@@ -881,8 +881,12 @@ flex: 1;
   margin-top: 9px;
 }
 .otherIconsOnProductPage {
-  width: 75%;
-  float: left;
+width: 6;
+float: left;
+display: inline-block;
+flex: 1;
+margin: auto;
+padding: 5px;
 }
 .cardTitleChildExtendProductPage {
   float: left;
