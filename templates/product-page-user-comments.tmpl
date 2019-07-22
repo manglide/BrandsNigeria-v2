@@ -1,8 +1,5 @@
 <div>		
 		<div class="UserAndComment">
-			<div>
-				<span class="individualComment" itemprop="author"><b>Anonymous</b></span>
-			</div>
 			<span class="individualComment" itemprop="name">{{ .USERCOMMENTS }}</span>
 			<div class="smallRatingDiv" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
 				<div>
@@ -13,9 +10,5 @@
 					<span itemprop="ratingValue">{{ .PRODUCTRATING }}</span>/<span itemprop="bestRating">5</span>stars
 				</div>
 			</div>
-		</div>
-		<div class="DateX">
-			<meta itemprop="datePublished" content="{{ .DATEPUBLISHED }}" />
-			<span itemprop="datePublished">{{ .DATEPUBLISHED }}</span>
 		</div>
 </div>

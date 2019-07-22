@@ -640,7 +640,7 @@ visibility:hidden;
   text-align: left;
   width: 100%;
   height: auto;
-  color: #FF8080;
+  color: #F60437;
   font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 400;
   overflow-wrap: break-word;
@@ -686,7 +686,7 @@ visibility:hidden;
   max-width: 50%;
 }
 .smallRatingDiv {
-  color: #FF8080;
+  color: #F60437;
   font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 50;
   font-size: 12px;
@@ -733,11 +733,13 @@ visibility:hidden;
   font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 50;
   font-size: 20px;
-  height: auto;
-  width: 100%;
+  overflow: none;
+  width: 80%;
   margin-top: 20px;
   float: left;
   text-align: justify;
+  display: block;
+flex: 1;
 }
 
 .ingredientsTitle {
@@ -762,8 +764,10 @@ visibility:hidden;
 .ingredientsFontsTitleProductPage {
   text-align: left;
   font-family: 'Trebuchet', sans-serif;
-  font-weight: 50;
+  font-weight: 400;
   margin-right: 10px;
+  display: block;
+  color: #F60437;
 }
 .ingredients {
   border-top: thin solid #4CAF50;
@@ -835,7 +839,8 @@ visibility:hidden;
 .individualComment {
   text-align: justify;
   width: 100%;
-  height: auto;
+  overflow: none;
+  display: block;
   color: #000;
   font-family: 'Open Sans Condensed', sans-serif;
   overflow-wrap: break-word;
@@ -1002,10 +1007,12 @@ visibility:hidden;
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 50;
     font-size: 20px;
-    height: auto;
-    max-width: 50%;
-    text-align: left;
+    overflow: none;
+    width: 44%;
+    text-align: justify;
     overflow-wrap: break-word;
+    display: block;
+    flex: 1;
   }
   .productpagebTag {
     color: #000;
@@ -1268,8 +1275,9 @@ visibility:hidden;
   }
   .individualComment {
     text-align: left;
+    display: block;
     width: 100%;
-    height: auto;
+    overflow: none;
     color: #000;
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 20px;
@@ -1297,7 +1305,18 @@ visibility:hidden;
 
 }
 /******* Media Queries For Product Page Ends *******/
-
+@media screen and (max-width: 320px) {
+	.productdescriptionProductPage {
+	    font-family: 'Open Sans Condensed', sans-serif;
+	    font-weight: 50;
+	    font-size: 20px;
+	    text-align: justify;
+	    overflow-wrap: normal;
+	    display: block;
+	    width: 35%;
+		flex: 1;
+	}
+}
 /******* Media Queries For Product Page *******/
 @media screen and (max-width: 380px) {
   .containerXZ {
@@ -1366,12 +1385,13 @@ visibility:hidden;
   }
   .productdescriptionProductPage {
     font-family: 'Open Sans Condensed', sans-serif;
-    font-weight: 50;
-    font-size: 20px;
-    height: auto;
-    max-width: 50%;
-    text-align: left;
-    overflow-wrap: break-word;
+	font-weight: 50;
+	font-size: 20px;
+	text-align: justify;
+	overflow-wrap: normal;
+	display: block;
+	flex: 1;
+	width: 35%;
   }
   .productpagebTag {
     color: #000;
@@ -1635,7 +1655,8 @@ visibility:hidden;
   .individualComment {
     text-align: left;
     width: 100%;
-    height: auto;
+    overflow: none;
+    display: block;
     color: #000;
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 20px;
@@ -1876,7 +1897,7 @@ nav .brand-logo {
     font-weight: 50;
     font-size: 12px;
     height: auto;
-    width: 25%;
+    width: 180;
     margin-top: 20px;
     position: relative;
   }
@@ -1888,7 +1909,7 @@ nav .brand-logo {
     font-weight: 50;
     font-size: 12px;
     height: auto;
-    width: 50%;
+    width: 80%;
     margin-top: 20px;
     position: relative;
   }
@@ -1906,4 +1927,15 @@ nav .brand-logo {
 }
 .rates {
 	font-size:25px;
+}
+.author {
+	display:inline;margin-left:5px;
+}
+
+.dateX {
+	text-align: right;
+}
+
+.ingredientsQ {
+	text-align: left;
 }

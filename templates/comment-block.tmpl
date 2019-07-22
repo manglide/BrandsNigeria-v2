@@ -1,10 +1,15 @@
 {{ range .comments }}
 		<div class="aboutProductComments" itemprop="review" itemscope itemtype="http://schema.org/Review">
-			<div class="individualUserAvatarAndName">
-				<div class="avatar">
-					<img src="https://asknigeria.com.ng/assets/brands/images/blank_boy.png" width="30" height="30" />
+			<div class="individualUserAvatarAndName btn btn-success">
+				<div class="" style="display:inline; float:left;">
+					<i class="fa fa-user-circle"></i>
+					<div itemprop="author" class="author">{{.AUTHOR}}</div>
 				</div>
-				{{ template "product-page-user-comments.tmpl" . }}
+				<div class="dateX">
+					<meta itemprop="datePublished" content="{{ visualDate .DATEPUBLISHED }}" />
+					<span itemprop="datePublished">{{ visualDate .DATEPUBLISHED }}</span>
+				</div>
 			</div>
+			{{ template "product-page-user-comments.tmpl" . }}
 		</div>
 {{ end }}

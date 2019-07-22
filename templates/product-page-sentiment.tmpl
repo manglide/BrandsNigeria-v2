@@ -1,14 +1,14 @@
 {{ range .data }}
 <div class="cardTitleInnerExtendedChildrenProductPage">
-	<div>
+	{{ $dir := sentimentMood .PRODUCTSENTIMENTMOOD }}
+	{{ $title := sentimentMoodT .PRODUCTSENTIMENTMOOD}}
+	<a href="#" class="{{$dir}}" title={{$title}}>
 		<span>
-			<i class="material-icons md-36" style="color:red">
-				{{ .PRODUCTSENTIMENT }}
-			</i>
+			<i class="material-icons md-36" style="">{{ .PRODUCTSENTIMENT }}</i>
 		</span>
-		<div class="textBelowRatingSentiment">
+		<div class="textBelowRatingTrends">
 			{{ .PRODUCTSENTIMENTMOOD }}
 		</div>
-	</div>
+	</a>
 </div>
 {{ end }}

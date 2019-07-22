@@ -1,6 +1,8 @@
 {{ range .data }}
 <div class="productdescriptionProductPage">
-	<font class="ingredientsFontsTitleProductPage">Ingredients:-</font>
-	{{ .PRODUCTINGREDIENTS }}
+	<font class="ingredientsFontsTitleProductPage">It is made with:-</font>
+	<div class="ingredientsQ">
+		{{ .PRODUCTINGREDIENTS }}
+	</div>
 </div>
 {{ end }}

@@ -4,6 +4,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -54,13 +55,54 @@ func splitRLength(item string) int {
 	return len(c)
 }
 
-func splitRDateIndex(item string, index int) time.Time {
+func visualDate(val string) string {
+	layout := "2006-01-02 15:04:05"
+	t, err := time.Parse(layout, val)
+	if err != nil {
+		log.Println(err)
+	}
+	return t.Format(time.RFC1123)
+}
+
+func trendDir(val string) string {
+	if val == "Up" {
+		return "btn btn-success btn-lg"
+	} else {
+		return "btn btn-danger btn-lg"
+	}
+}
+
+func trendDirT(val string) string {
+	if val == "Up" {
+		return "Good Uptrend"
+	} else {
+		return "Bad Downtrend"
+	}
+}
+
+func sentimentMood(val string) string {
+	if val == "Good" {
+		return "btn btn-success btn-lg"
+	} else {
+		return "btn btn-danger btn-lg"
+	}
+}
+
+func sentimentMoodT(val string) string {
+	if val == "Good" {
+		return "Good Sentiment"
+	} else {
+		return "Bad Sentiment"
+	}
+}
+
+func splitRDateIndex(item string, index int) string {
 	var q []string
 	var seconds int
 	q = strings.Split(item, "#")
 	seconds, _ = strconv.Atoi(q[index])
 	seconds = seconds
-	return time.Unix(int64(seconds), 0)
+	return time.Unix(int64(seconds), 0).Format(time.RFC850)
 }
 
 func splitRIndex(item string, index int) string {
@@ -94,6 +136,11 @@ func equal(val, val2 int) bool {
 	}
 }
 
+func roundUp(val string) string {
+	i, _ := strconv.ParseFloat(val, 0)
+	s := fmt.Sprintf("%.2f", i)
+	return s
+}
 func main() {
 
 	// Set the router as the default one provided by Gin
@@ -111,6 +158,12 @@ func main() {
 		"splitRIndex":     splitRIndex,
 		"splitRLength":    splitRLength,
 		"splitRDateIndex": splitRDateIndex,
+		"visualDate":      visualDate,
+		"trendDir":        trendDir,
+		"trendDirT":       trendDirT,
+		"sentimentMood":   sentimentMood,
+		"sentimentMoodT":  sentimentMoodT,
+		"roundUp":         roundUp,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

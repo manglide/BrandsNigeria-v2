@@ -1,12 +1,14 @@
 {{ range .data }}
 <div class="cardTitleInnerExtendedChildrenProductPage">
-	<div style="">
+	{{ $dir := trendDir .PRODUCTTRENDDIRECTION }}
+	{{ $title := trendDirT .PRODUCTTRENDDIRECTION }}
+	<a href="#" class="{{$dir}}" title={{$title}}>
 		<span>
 			<i class="material-icons md-36" style="">{{ .PRODUCTTREND }}</i>
 		</span>
 		<div class="textBelowRatingTrends">
 			{{ .PRODUCTTRENDDIRECTION }}
 		</div>
-	</div>
+	</a>
 </div>
 {{ end }}

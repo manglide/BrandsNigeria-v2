@@ -3,7 +3,7 @@
 	itemprop="aggregateRating" 
 	itemscope itemtype="http://schema.org/AggregateRating">
 	<span class="ratingVal" itemprop="ratingValue">
-	  {{ .PRODUCTRATING}} / 5 stars
+	  {{ roundUp .PRODUCTRATING}} / 5 stars
 	</span><br />
 	<span class="numofCustReviews" itemprop="reviewCount">
 		{{ .PRODUCTUSERCOMMENTS }}
