@@ -3,6 +3,11 @@
 package main
 
 import (
+	"math/rand"
+	"time"
+
+	"errors"
+
 	"github.com/brandsnigeria/webapp/database"
 )
 
@@ -88,6 +93,17 @@ type commentList struct {
 	LONGITUDE     string `json:"longitude"`
 	DATEPUBLISHED string `json:"datePublished"`
 	AUTHOR        string `json:"author"`
+}
+
+type category struct {
+	ID       int    `json:"id"`
+	CATEGORY string `json:"category"`
+}
+
+type competitors struct {
+	PRODUCTID   int    `json:"id"`
+	PRODUCTGUID string `json:"productguid"`
+	PRODUCTNAME string `json:"productname"`
 }
 
 func getAllItemsFrontPage() ([]productList, error) {
@@ -475,4 +491,120 @@ func getRichSnippet(pid string) ([]productRichSnippet, error) {
 	}
 
 	return richSnippet, nil
+}
+
+func getCategories() ([]category, error) {
+	var categoryLists = []category{}
+	var (
+		c category
+	)
+
+	row, err := database.DB.Query(`
+			SELECT id, category 
+			FROM product_categories`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&c.ID,
+				&c.CATEGORY,
+			)
+			if err != nil {
+				return nil, err
+			}
+			categoryLists = append(categoryLists, c)
+		}
+		defer row.Close()
+	}
+	return categoryLists, nil
+}
+
+func makeProduct(items Myform) (*Myform, error) {
+	// We need to remember to generate sku and mpn
+	stmt, err := database.DB.Prepare(`insert into all_products
+				(
+					product_name_clean_url, title, category, competitor_1, competitor_2,
+					about, manufacturer, address, ingredients, updated, product_image_1,
+					product_image_2, price, sku, mpn
+				)
+				values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	res, err := stmt.Exec(
+		items.PRODUCTGUID, items.PRODUCTNAME, items.CATEGORIES, items.COMPETITORS[0],
+		items.COMPETITORS[1], items.ABOUT, items.MANUFACTURER, items.MANUFACTURERADDRESS,
+		items.INGREDIENTS, 0, items.PRODUCTIMAGE1, items.PRODUCTIMAGE2, items.PRICE,
+		items.SKU, items.MPN,
+	)
+
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	lid, err := res.LastInsertId()
+
+	var datetime = time.Now()
+	datetime.Format(time.RFC3339)
+	stmtX, errX := database.DB.Prepare(`insert into product_review
+				(
+					product_id, product_category, likes, dislikes, rating, user_comments, 
+					user_location_lat, user_location_lon, date, author
+				)
+				values(?,?,?,?,?,?,?,?,?,?);`)
+	if errX != nil {
+		return nil, errors.New(errX.Error())
+	}
+	_, errX = stmtX.Exec(
+		lid, items.CATEGORIES, 0, 0, 1, "Awesome Product", "", "", datetime, "System Generated",
+	)
+
+	if errX != nil {
+		return nil, errors.New(errX.Error())
+	}
+	defer stmt.Close()
+	defer stmtX.Close()
+
+	return &items, nil
+}
+
+func genSKU() int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	v := r.Int()
+	return v
+}
+
+func genMPN() int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	v := r.Int()
+	return v
+}
+
+func getCompetitors() ([]competitors, error) {
+	var competitorsLists = []competitors{}
+	var (
+		c competitors
+	)
+
+	row, err := database.DB.Query(`
+			SELECT id, product_name_clean_url, title 
+			FROM all_products`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&c.PRODUCTID,
+				&c.PRODUCTGUID,
+				&c.PRODUCTNAME,
+			)
+			if err != nil {
+				return nil, err
+			}
+			competitorsLists = append(competitorsLists, c)
+		}
+		defer row.Close()
+	}
+	return competitorsLists, nil
 }

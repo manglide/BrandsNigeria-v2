@@ -201,17 +201,18 @@ color: #444;
 text-align: center;
 font-family: 'Open Sans Condensed', sans-serif;
 font-size: 17px;
+display: inline-block;
 }
 .panelanchortext {
   font-family: 'Open Sans Condensed', sans-serif;
   font-size: 18px;
-  color:#fff;
+  color:#000;
   text-decoration: none;
 }
 .panelanchortext:hover {
   font-family: 'Open Sans Condensed', sans-serif;
   font-size: 18px;
-  color:#fff;
+  color:#444;
   text-decoration: none;
 }
 
@@ -261,3 +262,6 @@ font-size: 17px;
   }
 }
 
+.aboutCompetitor .card-header {
+	border: thin solid #444;
+}

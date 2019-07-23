@@ -11,6 +11,29 @@ $(document).ready(function() {
       }, 1000)
     }
 	 });
+	$("#datacomments").submit(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                    url:'/comment',
+                    type:'POST',
+                    data:$(this).serialize(),
+                    before: function() {
+                    	
+                    },
+                    success:function(result){
+                        $("#response").text(result);
+
+                    }
+
+            });
+        });
+	$("#s").click(function(){
+		var pid = document.getElementById("productid")
+		var cat = document.getElementById("productcategory")
+		pid = $(pid).val();
+		cat = $(cat).val();
+	});
 	 $('span.rates').each(function(i, obj) {
 		 var rateVal = $(this).attr("data");
 		 var rateValMod = rateVal % 1;

@@ -141,6 +141,7 @@ func roundUp(val string) string {
 	s := fmt.Sprintf("%.2f", i)
 	return s
 }
+
 func main() {
 
 	// Set the router as the default one provided by Gin
@@ -168,6 +169,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")
 	router.Static("/js", "templates/js")
+	router.Static("/assets", "templates/assets")
 	router.Static("/vendor", "templates/vendor")
 
 	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")

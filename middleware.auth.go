@@ -25,7 +25,7 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 				// Don't forget to validate the alg is what you expect:
 				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 					// c.AbortWithStatus(http.StatusUnauthorized)
-					c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+					c.HTML(http.StatusUnauthorized, "unauthenticated.tmpl", gin.H{
 						"ErrorTitle":   "Unauthorized Access",
 						"is_logged_in": false,
 						"ErrorMessage": err.Error()})
@@ -36,7 +36,7 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 			})
 			if err != nil {
 				// c.AbortWithStatus(http.StatusUnauthorized)
-				c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+				c.HTML(http.StatusUnauthorized, "unauthenticated.tmpl", gin.H{
 					"ErrorTitle":   "Unauthorized Access",
 					"is_logged_in": false,
 					"ErrorMessage": err.Error()})
@@ -47,14 +47,14 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 				c.Next()
 			} else {
 				// c.AbortWithStatus(http.StatusUnauthorized)
-				c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+				c.HTML(http.StatusUnauthorized, "unauthenticated.tmpl", gin.H{
 					"ErrorTitle":   "Unauthorized Access",
 					"is_logged_in": false,
 					"ErrorMessage": err.Error()})
 			}
 		} else {
 			// c.AbortWithStatus(http.StatusUnauthorized)
-			c.HTML(http.StatusUnauthorized, "unauthenticated.html", gin.H{
+			c.HTML(http.StatusUnauthorized, "unauthenticated.tmpl", gin.H{
 				"ErrorTitle":   "Unauthorized Access",
 				"is_logged_in": false,
 				"ErrorMessage": err.Error()})

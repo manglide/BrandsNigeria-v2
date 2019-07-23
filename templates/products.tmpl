@@ -2,11 +2,19 @@
   <div class="containerXZ">
       <div class='row'>
             <div class='card-columns'>
-              {{ range .products }}
-                <div class='col' itemscope itemtype='http://schema.org/Product'>
-                    {{ template "card.tmpl" . }}
-                </div>
-              {{ end }}
+            	  {{ if .is_logged_in }}
+				{{ range .products }}
+	                <div class='col' itemscope itemtype='http://schema.org/Product'>
+	                    {{ template "card-auth.tmpl" . }}
+	                </div>
+              	{{ end }}
+			  {{ else }}
+	              {{ range .products }}
+	                <div class='col' itemscope itemtype='http://schema.org/Product'>
+	                    {{ template "card.tmpl" . }}
+	                </div>
+	              {{ end }}
+			  {{ end }}
             </div>
       </div>
   </div>

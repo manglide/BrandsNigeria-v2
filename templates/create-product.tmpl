@@ -1,0 +1,85 @@
+<!--register.tmpl-->
+<!--Embed the header.tmpl template at this location-->
+{{ template "header.tmpl" .}}
+<div class="viewarea">
+<div class="aboutContent">
+<h1>Create New Product</h1>
+<div class="panel panel-default col-sm-6">
+<div class="panel-body">
+<!--If there's an error, display the error-->
+{{ if .ErrorTitle}}
+<p class="bg-danger">
+{{.ErrorTitle}}: {{.ErrorMessage}}
+</p>
+{{end}}
+<!--Create a form that POSTs to the /new/product route-->
+<form class="form" action="/new/product" method="POST">
+<div class="form-group">
+<label for="productname">Product Name (Title)</label>
+<input type="text" class="form-control" required="required" id="productname" name="productname" placeholder="productname">
+</div>
+<div class="form-group">
+<label for="imagedefault">Use Default Image</label>
+<label class="radio-inline"><input type="radio" checked="checked" name="imagedefault">Yes</label>
+<label class="radio-inline"><input type="radio" name="imagedefault">No</label>
+</div>
+<div class="form-group">
+<label for="imagehomepage">Product Image Homepage - <p class="bg-info">Dimensions - 281x133</p></label>
+<input type="file" class="form-control-file border" id="imagehomepage" name="imagehomepage" 
+	placeholder="imagehomepage">
+</div>
+<div class="form-group">
+<label for="imagemain">Product Image Main - <p class="bg-info">Dimensions - 750x354</p></label>
+<input type="file" class="form-control-file border" id="imagemain" name="imagemain" placeholder="imagemain">
+</div>
+<div class="form-group">
+<label for="category">Category</label>
+<select name="categories" id="categories" required="required">
+{{ range .categories }}
+<option class="form-control" name="{{.CATEGORY}}" value="{{.ID}}">{{.CATEGORY}}</option>
+{{ end }}
+</select>
+</div>
+<div class="form-group" required="required">
+<label for="manufacturer">Manufacturer</label>
+<input type="text" class="form-control" id="manufacturer" name="manufacturer" 
+	placeholder="manufacturer">
+</div>
+<div class="form-group" required="required">
+<label for="manufactureraddress">Manufacturer Address</label>
+<input type="text" class="form-control" id="manufactureraddress" name="manufactureraddress" 
+	placeholder="Manufacturer Address">
+</div>
+<div class="form-group">
+<label for="about">Description</label>
+<textarea type="textarea" required="required" rows="5" name="about" class="form-control" id="about" placeholder="Description"></textarea>
+</div>
+<div class="form-group">
+<label for="ingredients">Ingredients</label>
+<textarea type="textarea" rows="5" name="ingredients" class="form-control" id="ingredients" 
+	placeholder="ingredients"></textarea>
+</div>
+<div class="form-group">
+<label for="price">Price</label>
+<input type="number" min="1" name="price" class="form-control" id="price" 
+	placeholder="price" />
+</div>
+
+<div class="form-group">
+<label for="competitors">Competitors</label>
+<select multiple name="competitors[]" class="form-control" id="competitors" required="required">
+{{ range .competitors }}
+<option class="form-control" value="{{.PRODUCTNAME}}">{{.PRODUCTNAME}}</option>
+{{ end }}
+</select>
+</div>
+
+
+<button type="submit" class="btn btn-primary">Create Product</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}

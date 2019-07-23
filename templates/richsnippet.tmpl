@@ -3,7 +3,7 @@
       "@context": "http://schema.org", 
       "@type": "Product",
       
-      {{ range .snippet }}
+      {{ range .data }}
       "name": {{ removeNewLines .PRODUCTNAME }},
       "image": {{ .PRODUCTIMAGE1 }},
       "description": {{ .PRODUCTDESCRIPTION }},
