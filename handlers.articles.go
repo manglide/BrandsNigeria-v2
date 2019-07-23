@@ -150,9 +150,27 @@ func postComments(c *gin.Context) {
 	pid := c.PostForm("productid")
 	cat := c.PostForm("productcategory")
 	username := c.PostForm("username")
-	comments := c.PostForm("comments")
+	comments := c.PostForm("comment")
 	rating := c.PostForm("rating")
-	log.Println(pid, cat, username, comments, rating)
+	sentiment := c.PostForm("sentiment")
+	latitude := c.PostForm("latitude")
+	longitude := c.PostForm("longitude")
+	v, err := insertComments(pid, cat, username, comments, rating, sentiment, latitude, longitude)
+	if err != nil {
+		log.Println(err)
+	}
+	if v > 0 {
+		c.JSON(200, gin.H{
+			"data":    "success",
+			"message": "reload",
+		})
+	} else {
+		c.JSON(500, gin.H{
+			"data":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
 }
 
 func createProductPage(c *gin.Context) {

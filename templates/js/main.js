@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$(".dropdown-button").dropdown({hover: false});
+	//$(".dropdown-button").dropdown({hover: false});
 	$(function () {
     const ele = document.getElementById('ipl-progress-indicator')
     if (ele) {
@@ -13,21 +13,42 @@ $(document).ready(function() {
 	 });
 	$("#datacomments").submit(function(event){
             event.preventDefault();
-
-            $.ajax({
-                    url:'/comment',
-                    type:'POST',
-                    data:$(this).serialize(),
-                    before: function() {
-                    	
-                    },
-                    success:function(result){
-                        $("#response").text(result);
-
-                    }
-
-            });
-        });
+            var latitude = 0
+			var longitude = 0
+			if(navigator.geolocation){
+	            	navigator.geolocation.getCurrentPosition(function(position){
+	                	latitude = position.coords.latitude
+					longitude = position.coords.longitude
+					// do what you like with the input
+					$inputLat = $('<input type="text" name="latitude"/>').val(latitude);
+					$inputLon = $('<input type="text" name="longitude"/>').val(longitude);
+					// append to the form
+					$("#datacomments").append($inputLat);
+					$("#datacomments").append($inputLon);
+		            $.ajax({
+		                    url:'/u/comments',
+		                    type:'POST',
+		                    data:$("#datacomments").serialize(),
+		                    before: function() {
+			                    	
+		                    },
+		                    success:function(result){
+		                        location.reload();
+		                    },
+		                    error:function(result){
+		                    	   if(result.status==401&&result.statusText==="Unauthorized") {
+									alert("Sorry, you must be logged in to comment")
+							   } else {
+									alert(result.statusText)
+							   } 
+		                    }
+		            });
+	            	});		
+			} else {
+				alert("Please we would need GPS access")
+			}
+			
+     });
 	$("#s").click(function(){
 		var pid = document.getElementById("productid")
 		var cat = document.getElementById("productcategory")

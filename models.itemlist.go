@@ -608,3 +608,43 @@ func getCompetitors() ([]competitors, error) {
 	}
 	return competitorsLists, nil
 }
+
+func insertComments(pid, cat, username, comments, rating, sentiment, latitude, longitude string) (int, error) {
+	var datetime = time.Now()
+	datetime.Format(time.RFC3339)
+	var like int
+	var dislike int
+	if sentiment == "like" {
+		like = 1
+	} else {
+		dislike = 1
+	}
+	stmtX, errX := database.DB.Prepare(`insert into product_review
+				(
+					product_id, product_category, likes, dislikes, rating, 
+					user_comments, 
+					user_location_lat, user_location_lon, date, user, author
+				)
+				values(?,?,?,?,?,?,?,?,?,?,?);`)
+	if errX != nil {
+		return 0, errors.New(errX.Error())
+	}
+	resX, errX := stmtX.Exec(
+		pid, cat, like, dislike, rating, comments, latitude, longitude, datetime, username, username,
+	)
+
+	if errX != nil {
+		return 0, errors.New(errX.Error())
+	}
+
+	defer stmtX.Close()
+
+	lid, errX := resX.LastInsertId()
+
+	if errX != nil {
+		return 0, errors.New(errX.Error())
+	}
+
+	return int(lid), nil
+
+}

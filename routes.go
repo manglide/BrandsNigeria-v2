@@ -7,9 +7,6 @@ func initializeRoutes() {
 	// Handle the index route
 	router.GET("/", showIndexPage)
 
-	// Post Comments
-	router.POST("/comments", ensureLoggedInJWT(), postComments)
-
 	userRoutes := router.Group("/u")
 	{
 		userRoutes.GET("/login", ensureNotLoggedIn(), showLoginPage)
@@ -21,6 +18,7 @@ func initializeRoutes() {
 		userRoutes.GET("/logout", ensureLoggedInJWT(), logout)
 		userRoutes.GET("/register", ensureNotLoggedIn(), showRegistrationPage)
 		userRoutes.POST("/register", ensureNotLoggedIn(), register)
+		userRoutes.POST("/comments", ensureLoggedInJWT(), postComments)
 	}
 
 	articleRoutes := router.Group("/article")
