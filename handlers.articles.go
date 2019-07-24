@@ -211,7 +211,8 @@ type Myform struct {
 }
 
 func genGUID(str string) string {
-	c := strings.Split(str, " ")
+	k := strings.ToLower(str)
+	c := strings.Split(k, " ")
 	v := strings.Join(c, "-")
 	return v
 }
@@ -319,4 +320,60 @@ func getAreasOfRejection(c *gin.Context) {
 		"data":    listZ,
 		"message": "success",
 	})
+}
+
+func getProductRecommendation(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data1"))
+	p2, _ := url.QueryUnescape(c.PostForm("data2"))
+	p3, _ := url.QueryUnescape(c.PostForm("data3"))
+	q := []string{genGUID(p1), genGUID(p2), genGUID(p3)}
+	listZ, listY, err := productRecommendation(q)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+
+	loggedInInterface, _ := c.Get("is_logged_in")
+	loggedIn := loggedInInterface.(bool)
+	if loggedIn {
+		if len(listZ) > 0 && len(listY) == 0 {
+			render(c,
+				gin.H{
+					"products":     listZ,
+					"is_logged_in": true},
+				"product-recommendation-card-auth.tmpl")
+		} else if len(listZ) == 0 && len(listY) > 0 {
+			render(c,
+				gin.H{
+					"products":     listY,
+					"is_logged_in": true},
+				"product-recommendation-card-auth.tmpl")
+		}
+	} else {
+		if len(listZ) > 0 && len(listY) == 0 {
+			render(c,
+				gin.H{
+					"products":     listZ,
+					"is_logged_in": true},
+				"product-recommendation-card.tmpl")
+		} else if len(listZ) == 0 && len(listY) > 0 {
+			render(c,
+				gin.H{
+					"products":     listY,
+					"is_logged_in": true},
+				"product-recommendation-card.tmpl")
+		}
+	}
+
+	// if len(listZ) > 0 && len(listY) == 0 {
+	// 	c.JSON(200, gin.H{
+	// 		"data":    listZ,
+	// 		"message": "success",
+	// 	})
+	// } else if len(listZ) == 0 && len(listY) > 0 {
+	// 	c.JSON(200, gin.H{
+	// 		"data":    listY,
+	// 		"message": "success",
+	// 	})
+	// }
 }

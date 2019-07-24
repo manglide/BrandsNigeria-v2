@@ -376,7 +376,7 @@
     var load = products.split(',');
     $.ajax(
             {
-                url : '/productrecommendation',
+                url : '/api/productrecommendation',
                 type: "POST",
                 data: {data1: load[0], data2: load[1], data3: load[2]},
                 beforeSend: function ()
@@ -389,7 +389,7 @@
                 },
                 error: function()
                 {
-                  $("#productsrecommendation").fadeIn(2000).html('<div style="text-align:center;font-size:16px;color:#5CB85C;font-family: Open Sans, sans-serif;">Operation failed</div>');
+                  $('#productsrecommendation').fadeIn(2000).html('<div style="text-align:center;font-size:16px;color:#5CB85C;font-family: Open Sans, sans-serif;">Operation failed</div>');
                 }
               });
   }

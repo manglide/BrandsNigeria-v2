@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 
+	"database/sql"
 	"math/rand"
 	"time"
 
@@ -868,4 +869,163 @@ func getRejectionAreas(pid string) ([]rejectionArea, error) {
 		defer row.Close()
 	}
 	return rejectionList, nil
+}
+
+type pRecommendation struct {
+	PRODUCTID             int    `json:"productID"`
+	PRODUCTNAME           string `json:"productNAME"`
+	PRODUCTGUID           string `json:"productGUID"`
+	PRODUCTDESCRIPTION    string `json:"productDESCRIPTION"`
+	PRODUCTMANUFACTURER   string `json:"productMANUFACTURER"`
+	PRODUCTLIKES          string `json:"productLIKES"`
+	PRODUCTDISLIKES       string `json:"productDISLIKES"`
+	PRODUCTTREND          string `json:"productTREND"`
+	PRODUCTTRENDDIRECTION string `json:"productTRENDDIRECTION"`
+	PRODUCTSENTIMENT      string `json:"productSENTIMENT"`
+	PRODUCTSENTIMENTMOOD  string `json:"productSENTIMENTMOOD"`
+	PRODUCTUSERCOMMENTS   string `json:"productUSERCOMMENTS"`
+	PRODUCTRATING         string `json:"productRATING"`
+	PRODUCTDATEPUBLISHED  string `json:"productDATEPUBLISHED"`
+	PRODUCTPRICE          string `json:"productPRICE"`
+	PRODUCTLOCATIONCOUNT  string `json:"productLOCATIONCOUNT"`
+	PRODUCTINGREDIENTS    string `json:"productINGREDIENTS"`
+	PRODUCTCATEGORY       string `json:"productCATEGORY"`
+	PRODUCTIMAGE1         string `json:"productIMAGE1"`
+	PRODUCTIMAGE2         string `json:"productIMAGE2"`
+}
+
+type tMp struct {
+	PRODUCTNAME string `json:"productname"`
+	PRODUCTGUID string `json:"productguid"`
+	RATING      string `json:"rating"`
+	LIKES       string `json:"likes"`
+}
+
+type noCompetition struct {
+	PRODUCTNAME string `json:"productname"`
+	PRODUCTGUID string `json:"productguid"`
+	CATEGORY    string `json:"category"`
+}
+
+func productRecommendation(data []string) ([]pRecommendation, []noCompetition, error) {
+	var pRecommendationLists = []pRecommendation{}
+	var noCompetitionLists = []noCompetition{}
+	var (
+		singleItem pRecommendation
+		j          tMp
+		x          noCompetition
+	)
+
+	ids := strings.Join(data, "','")
+
+	sqlRaw := fmt.Sprintf(`SELECT all_products.title AS productname, 
+				all_products.product_name_clean_url AS productGUID, 
+				AVG(product_review.rating) AS rating, AVG(product_review.likes) AS likes 
+				FROM all_products 
+				JOIN product_review ON all_products.id = product_review.product_id 
+				WHERE all_products.product_name_clean_url IN ('%s')  
+				ORDER BY product_review.rating DESC LIMIT 1`, ids)
+
+	row, err := database.DB.Query(sqlRaw)
+
+	if err != nil {
+		return nil, nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&j.PRODUCTNAME,
+				&j.PRODUCTGUID,
+				&j.RATING,
+				&j.LIKES,
+			)
+			if err != nil {
+				return nil, nil, err
+			}
+
+			// Second Query
+			/////////////////////////////////////////////////////////////////////
+
+			if errX := database.DB.QueryRow(`
+					SELECT all_products.id AS product_ID, 
+					all_products.title AS productname,
+					all_products.product_name_clean_url AS productGUID, 
+					all_products.about AS description, 
+					all_products.manufacturer AS manufacturer, 
+					SUM(product_review.likes) AS likes, 
+					SUM(product_review.dislikes) AS dislikes, 
+					CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'trending_up' ELSE 'trending_down' END AS trend, 
+					CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'Up' ELSE 'Down' END AS trend_direction, 
+					CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'sentiment_very_satisfied' ELSE 'sentiment_very_dissatisfied' END AS sentiment, 
+					CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'Good' ELSE 'Bad' END AS sentiment_mood, 
+					COUNT(product_review.user_comments) AS usercomments, 
+					AVG(product_review.rating) AS rating,
+					UNIX_TIMESTAMP(product_review.date) AS datePublished, 
+					all_products.price AS price, 
+					COUNT(user_location_lat) + COUNT(user_location_lon) AS locationcount, 
+					all_products.ingredients AS ingredients, 
+					product_categories.category AS category, 
+					CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+					CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+					FROM all_products 
+					JOIN product_review ON all_products.id = product_review.product_id
+					JOIN product_categories ON all_products.category = product_categories.id  
+					WHERE 
+					all_products.about <> '' 
+					AND all_products.about IS NOT NULL
+					AND all_products.product_name_clean_url = ?
+					AND all_products.manufacturer IS NOT NULL AND 
+					all_products.address IS NOT NULL AND
+					all_products.ingredients IS NOT NULL AND
+					all_products.product_image_1 IS NOT NULL AND
+					all_products.product_image_2 IS NOT NULL AND
+					all_products.price IS NOT NULL
+					GROUP BY all_products.id ORDER BY rating DESC
+				`, &j.PRODUCTGUID).Scan(
+				&singleItem.PRODUCTID,
+				&singleItem.PRODUCTNAME,
+				&singleItem.PRODUCTGUID,
+				&singleItem.PRODUCTDESCRIPTION,
+				&singleItem.PRODUCTMANUFACTURER,
+				&singleItem.PRODUCTLIKES,
+				&singleItem.PRODUCTDISLIKES,
+				&singleItem.PRODUCTTREND,
+				&singleItem.PRODUCTTRENDDIRECTION,
+				&singleItem.PRODUCTSENTIMENT,
+				&singleItem.PRODUCTSENTIMENTMOOD,
+				&singleItem.PRODUCTUSERCOMMENTS,
+				&singleItem.PRODUCTRATING,
+				&singleItem.PRODUCTDATEPUBLISHED,
+				&singleItem.PRODUCTPRICE,
+				&singleItem.PRODUCTLOCATIONCOUNT,
+				&singleItem.PRODUCTINGREDIENTS,
+				&singleItem.PRODUCTCATEGORY,
+				&singleItem.PRODUCTIMAGE1,
+				&singleItem.PRODUCTIMAGE2,
+			); errX == nil {
+				// Meaning we have one result
+				pRecommendationLists = append(pRecommendationLists, singleItem)
+			} else if errX == sql.ErrNoRows {
+				// Meaning no result
+				errZ := database.DB.QueryRow(`
+					SELECT
+					all_products.title AS productname, 
+					all_products.product_name_clean_url AS productGUID, 
+					product_categories.category AS category FROM all_products 
+					JOIN product_categories ON all_products.category = product_categories.id 
+					 WHERE all_products.product_name_clean_url = ?
+				`, &j.PRODUCTGUID).Scan(&x.PRODUCTNAME, &x.PRODUCTGUID, &x.CATEGORY)
+				if errZ != nil {
+					return nil, nil, errZ
+				}
+				noCompetitionLists = append(noCompetitionLists, x)
+
+			} else {
+				return nil, nil, errX
+			}
+
+			/////////////////////////////////////////////////////////////////////
+		}
+		defer row.Close()
+		return pRecommendationLists, noCompetitionLists, nil
+	}
 }

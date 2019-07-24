@@ -1,17 +1,16 @@
 {{ range .data }}
 <div class="card">
-	<div class="card-header bg-default" 
+	<div class="card-header text-white bg-info" 
 		toggle="collapse" 
 		data-target="#productsrecommendation" 
 		aria-expanded="true" aria-controls="productsrecommendation">
 		<a data-toggle="collapse" class="panelanchortext" href="#productsrecommendation">
 			<i class="fa fa-caret-right"></i> 
-			Recommendation - Best Product After Reviews using Rates and Likes
+			Recommended Product
 		</a>
 	</div>
-	<div class="card-block collapse show" 
-		data="{{ .PRODUCTNAME }},{{ .PRODUCTFIRSTCOMPETITION }},{{ .PRODUCTSECONDCOMPETITION }}" 
-		id="productsrecommendation">
+	<div id="productsrecommendation" class="card-block collapse show" 
+		data="{{ .PRODUCTNAME }},{{ .PRODUCTFIRSTCOMPETITION }},{{ .PRODUCTSECONDCOMPETITION }}">
 	</div>
 </div>
 {{ end }}

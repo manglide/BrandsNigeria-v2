@@ -53,6 +53,7 @@ func initializeRoutes() {
 		api.POST("/chartsreviewrating", ensureNotLoggedIn(), reviewRatings)
 		api.POST("/areasofacceptance", ensureNotLoggedIn(), getAreasOfAcceptance)
 		api.POST("/areasofrejection", ensureNotLoggedIn(), getAreasOfRejection)
+		api.POST("/productrecommendation", ensureNotLoggedIn(), getProductRecommendation)
 	}
 
 }
