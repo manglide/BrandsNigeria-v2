@@ -54,6 +54,7 @@ func initializeRoutes() {
 		api.POST("/areasofacceptance", ensureNotLoggedIn(), getAreasOfAcceptance)
 		api.POST("/areasofrejection", ensureNotLoggedIn(), getAreasOfRejection)
 		api.POST("/productrecommendation", ensureNotLoggedIn(), getProductRecommendation)
+		api.POST("/productsAPICompetitor", ensureNotLoggedIn(), pCompetitor)
 	}
 
 }

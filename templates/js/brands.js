@@ -335,7 +335,7 @@
   function loadCompetitors1(title) {
     $.ajax(
             {
-                url : '/productsAPICompetitor',
+                url : '/api/productsAPICompetitor',
                 type: "POST",
                 data: {data: title},
                 beforeSend: function ()
@@ -355,7 +355,7 @@
   function loadCompetitors2(title) {
     $.ajax(
             {
-                url : '/productsAPICompetitor',
+                url : '/api/productsAPICompetitor',
                 type: "POST",
                 data: {data: title},
                 beforeSend: function ()

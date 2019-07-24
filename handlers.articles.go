@@ -179,7 +179,7 @@ func createProductPage(c *gin.Context) {
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
-	competitors, err := getCompetitors()
+	competitors, err := getCompetitorsI()
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
@@ -347,7 +347,7 @@ func getProductRecommendation(c *gin.Context) {
 				gin.H{
 					"products":     listY,
 					"is_logged_in": true},
-				"product-recommendation-card-auth.tmpl")
+				"product-no-competition-auth.tmpl")
 		}
 	} else {
 		if len(listZ) > 0 && len(listY) == 0 {
@@ -361,19 +361,49 @@ func getProductRecommendation(c *gin.Context) {
 				gin.H{
 					"products":     listY,
 					"is_logged_in": true},
-				"product-recommendation-card.tmpl")
+				"product-no-competition.tmpl")
 		}
 	}
 
-	// if len(listZ) > 0 && len(listY) == 0 {
-	// 	c.JSON(200, gin.H{
-	// 		"data":    listZ,
-	// 		"message": "success",
-	// 	})
-	// } else if len(listZ) == 0 && len(listY) > 0 {
-	// 	c.JSON(200, gin.H{
-	// 		"data":    listY,
-	// 		"message": "success",
-	// 	})
-	// }
+}
+
+func pCompetitor(c *gin.Context) {
+	v, _ := url.QueryUnescape(c.PostForm("data"))
+	v = genGUID(v)
+	listZ, listY, err := getCompetitors(v)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	loggedInInterface, _ := c.Get("is_logged_in")
+	loggedIn := loggedInInterface.(bool)
+	if loggedIn {
+		if len(listZ) > 0 && len(listY) == 0 {
+			render(c,
+				gin.H{
+					"products":     listZ,
+					"is_logged_in": true},
+				"product-competitor-auth.tmpl")
+		} else if len(listZ) == 0 && len(listY) > 0 {
+			render(c,
+				gin.H{
+					"products":     listY,
+					"is_logged_in": true},
+				"product-no-competition-auth.tmpl")
+		}
+	} else {
+		if len(listZ) > 0 && len(listY) == 0 {
+			render(c,
+				gin.H{
+					"products":     listZ,
+					"is_logged_in": true},
+				"product-competitor.tmpl")
+		} else if len(listZ) == 0 && len(listY) > 0 {
+			render(c,
+				gin.H{
+					"products":     listY,
+					"is_logged_in": true},
+				"product-no-competition.tmpl")
+		}
+	}
 }

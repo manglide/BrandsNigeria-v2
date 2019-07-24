@@ -1354,12 +1354,13 @@ padding: 5px;
   }
   .productpageTitle {
     text-align: justify;
-    width: 100%;
+    width: 40%;
     height: auto;
     color: #4CAF50;
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 400;
     font-size: 48px;
+    overflow-wrap: break-word;
   }
   .productDisplay {
     height: 100%;
@@ -1921,9 +1922,21 @@ nav .brand-logo {
   }
 }
 
-.viewarea {
-	margin-top: 180px;
+/*@media (min-width: 720px) and (max-width: 1200px) {
+	.viewarea {
+		margin-top: 100px;
+	}
 }
+*/
+@media screen and (max-width: 680px) {
+	.viewarea {
+		margin-top: 180px;
+	}
+}
+
+.viewarea {
+		margin-top: 100px;
+	}
 
 .productname {
 	color: #000;
