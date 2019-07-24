@@ -71,12 +71,7 @@ $(document).ready(function() {
 			}
 			
      });
-	$("#s").click(function(){
-		var pid = document.getElementById("productid")
-		var cat = document.getElementById("productcategory")
-		pid = $(pid).val();
-		cat = $(cat).val();
-	});
+	
 	 $('span.rates').each(function(i, obj) {
 		 var rateVal = $(this).attr("data");
 		 var rateValMod = rateVal % 1;

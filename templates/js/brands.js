@@ -64,7 +64,7 @@
   function preMapCallAccept(pid) {
     $.ajax(
             {
-                url : '/areasofacceptance',
+                url : '/api/areasofacceptance',
                 type: "POST",
                 data: {data: pid},
                 beforeSend: function ()
@@ -73,7 +73,7 @@
                 },
                 success:function(response)
                 {
-                  var areas = JSON.parse(response).data.map(obj => obj);
+                  var areas = response.data.map(obj => obj);
                   console.log(areas);
                   if (areas.length === 0) {
                     AreaAcceptanceMapFuncNoData();
@@ -90,7 +90,7 @@
   function preMapCallReject(pid) {
     $.ajax(
             {
-                url : '/areasofrejection',
+                url : '/api/areasofrejection',
                 type: "POST",
                 data: {data: pid},
                 beforeSend: function ()
@@ -99,7 +99,7 @@
                 },
                 success:function(response)
                 {
-                  var areas = JSON.parse(response).data.map(obj => obj);
+                  var areas = response.data.map(obj => obj);
                   if (areas.length === 0) {
                     AreaRejectionMapFuncNoData();
                   } else {
@@ -116,7 +116,7 @@
     var load = areas.split(',');
     $.ajax(
             {
-                url : '/chartsreviewlikes',
+                url : '/api/chartsreviewlikes',
                 type: "POST",
                 data: {data1: load[0], data2: load[1], data3: load[2]},
                 beforeSend: function ()
@@ -125,7 +125,7 @@
                 },
                 success:function(response)
                 {
-                  const areasX = JSON.parse(response).data.map(obj => obj);
+                  const areasX = response.data.map(obj => obj);
                   var _load = areasX;
                                   this.point = [];
                                                           for(var key in _load) {
@@ -189,7 +189,7 @@
     var load = areas.split(',');
     $.ajax(
             {
-                url : '/chartsreviewdislikes',
+                url : '/api/chartsreviewdislikes',
                 type: "POST",
                 data: {data1: load[0], data2: load[1], data3: load[2]},
                 beforeSend: function ()
@@ -198,7 +198,7 @@
                 },
                 success:function(response)
                 {
-                  const areasX = JSON.parse(response).data.map(obj => obj);
+                  const areasX = response.data.map(obj => obj);
                   var _load = areasX;
                                   this.point = [];
                                                           for(var key in _load) {
@@ -263,7 +263,7 @@
     var load = areas.split(',');
     $.ajax(
             {
-                url : '/chartsreviewrating',
+                url : '/api/chartsreviewrating',
                 type: "POST",
                 data: {data1: load[0], data2: load[1], data3: load[2]},
                 beforeSend: function ()
@@ -272,7 +272,7 @@
                 },
                 success:function(response)
                 {
-                  const areasX = JSON.parse(response).data.map(obj => obj);
+                  const areasX = response.data.map(obj => obj);
                   var _load = areasX;
                                   this.point = [];
                                                           for(var key in _load) {

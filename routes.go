@@ -46,4 +46,13 @@ func initializeRoutes() {
 		createProductRoutes.POST("/product", ensureLoggedInJWT(), createProduct)
 	}
 
+	api := router.Group("/api")
+	{
+		api.POST("/chartsreviewlikes", ensureNotLoggedIn(), reviewLikes)
+		api.POST("/chartsreviewdislikes", ensureNotLoggedIn(), reviewDisLikes)
+		api.POST("/chartsreviewrating", ensureNotLoggedIn(), reviewRatings)
+		api.POST("/areasofacceptance", ensureNotLoggedIn(), getAreasOfAcceptance)
+		api.POST("/areasofrejection", ensureNotLoggedIn(), getAreasOfRejection)
+	}
+
 }

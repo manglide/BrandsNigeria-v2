@@ -5,6 +5,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -244,4 +245,78 @@ func createProduct(c *gin.Context) {
 	} else {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
+}
+
+func reviewLikes(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data1"))
+	p2, _ := url.QueryUnescape(c.PostForm("data2"))
+	p3, _ := url.QueryUnescape(c.PostForm("data3"))
+	q := []string{p1, p2, p3}
+	list, err := getReviewLikes(q)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	c.JSON(200, gin.H{
+		"data":    list,
+		"message": "success",
+	})
+}
+
+func reviewDisLikes(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data1"))
+	p2, _ := url.QueryUnescape(c.PostForm("data2"))
+	p3, _ := url.QueryUnescape(c.PostForm("data3"))
+	q := []string{p1, p2, p3}
+	listD, err := getReviewDisLikes(q)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	c.JSON(200, gin.H{
+		"data":    listD,
+		"message": "success",
+	})
+}
+
+func reviewRatings(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data1"))
+	p2, _ := url.QueryUnescape(c.PostForm("data2"))
+	p3, _ := url.QueryUnescape(c.PostForm("data3"))
+	q := []string{p1, p2, p3}
+	listZ, err := getReviewRating(q)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	c.JSON(200, gin.H{
+		"data":    listZ,
+		"message": "success",
+	})
+}
+
+func getAreasOfAcceptance(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data"))
+	listZ, err := getAcceptanceAreas(p1)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	c.JSON(200, gin.H{
+		"data":    listZ,
+		"message": "success",
+	})
+}
+
+func getAreasOfRejection(c *gin.Context) {
+	p1, _ := url.QueryUnescape(c.PostForm("data"))
+	listZ, err := getRejectionAreas(p1)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	c.JSON(200, gin.H{
+		"data":    listZ,
+		"message": "success",
+	})
 }

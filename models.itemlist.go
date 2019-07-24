@@ -4,6 +4,8 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 
 	"math/rand"
 	"time"
@@ -630,6 +632,7 @@ func canComment(pid, cat, username string) bool {
 		return true
 	}
 }
+
 func insertComments(pid, cat, username, comments,
 	rating, sentiment, latitude, longitude, author string) (int, error) {
 	if canComment(pid, cat, username) {
@@ -673,4 +676,196 @@ func insertComments(pid, cat, username, comments,
 		return 0, errors.New("Oops, you cannot comment twice on the same product")
 	}
 
+}
+
+type productLikes struct {
+	PRODUCTNAME string `json:"productname"`
+	LIKES       string `json:"likes"`
+}
+
+type productDisLikes struct {
+	PRODUCTNAME string `json:"productname"`
+	DISLIKES    string `json:"dislikes"`
+}
+
+type reviewRating struct {
+	PRODUCTNAME string `json:"productname"`
+	RATING      string `json:"rating"`
+}
+
+type acceptanceArea struct {
+	LATITUDE  float32 `json:"latitude"`
+	LONGITUDE float32 `json:"longitude"`
+	RATING    int     `json:"rating"`
+}
+
+type rejectionArea struct {
+	LATITUDE  float32 `json:"latitude"`
+	LONGITUDE float32 `json:"longitude"`
+	RATING    int     `json:"rating"`
+}
+
+func getReviewLikes(data []string) ([]productLikes, error) {
+	var likesList = []productLikes{}
+	var (
+		j productLikes
+	)
+
+	ids := strings.Join(data, "','")
+
+	sqlRaw := fmt.Sprintf(`SELECT all_products.title AS productname, 
+				IFNULL(SUM(product_review.likes),0) AS likes
+				FROM all_products 
+				JOIN product_review 
+				ON all_products.id = product_review.product_id  
+				WHERE all_products.title IN ('%s')  GROUP BY all_products.title`, ids)
+
+	row, err := database.DB.Query(sqlRaw)
+
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&j.PRODUCTNAME,
+				&j.LIKES,
+			)
+			if err != nil {
+				return nil, err
+			}
+			likesList = append(likesList, j)
+		}
+		defer row.Close()
+	}
+	return likesList, nil
+}
+
+func getReviewDisLikes(data []string) ([]productDisLikes, error) {
+	var dislikesList = []productDisLikes{}
+	var (
+		v productDisLikes
+	)
+
+	ids := strings.Join(data, "','")
+
+	sqlRaw := fmt.Sprintf(`SELECT all_products.title AS productname, 
+				IFNULL(SUM(product_review.dislikes),0) AS dislikes
+				FROM all_products 
+				JOIN product_review 
+				ON all_products.id = product_review.product_id  
+				WHERE all_products.title IN ('%s')  GROUP BY all_products.title`, ids)
+
+	row, err := database.DB.Query(sqlRaw)
+
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&v.PRODUCTNAME,
+				&v.DISLIKES,
+			)
+			if err != nil {
+				return nil, err
+			}
+			dislikesList = append(dislikesList, v)
+		}
+		defer row.Close()
+	}
+	return dislikesList, nil
+}
+
+func getReviewRating(data []string) ([]reviewRating, error) {
+	var ratingsList = []reviewRating{}
+	var (
+		z reviewRating
+	)
+
+	ids := strings.Join(data, "','")
+
+	sqlRaw := fmt.Sprintf(`SELECT all_products.title AS productname, 
+				IFNULL(SUM(product_review.rating),0) AS rating
+				FROM all_products 
+				JOIN product_review 
+				ON all_products.id = product_review.product_id  
+				WHERE all_products.title IN ('%s')  GROUP BY all_products.title`, ids)
+
+	row, err := database.DB.Query(sqlRaw)
+
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&z.PRODUCTNAME,
+				&z.RATING,
+			)
+			if err != nil {
+				return nil, err
+			}
+			ratingsList = append(ratingsList, z)
+		}
+		defer row.Close()
+	}
+	return ratingsList, nil
+}
+
+func getAcceptanceAreas(pid string) ([]acceptanceArea, error) {
+	var acceptanceList = []acceptanceArea{}
+	var (
+		z acceptanceArea
+	)
+	row, err := database.DB.Query(`
+		SELECT user_location_lat AS latitude, user_location_lon AS longitude,
+		rating AS rate FROM product_review WHERE product_id = ?
+		 AND rating BETWEEN '2.5' AND '5' 
+	`, pid)
+
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&z.LATITUDE,
+				&z.LONGITUDE,
+				&z.RATING,
+			)
+			if err != nil {
+				return nil, err
+			}
+			acceptanceList = append(acceptanceList, z)
+		}
+		defer row.Close()
+	}
+	return acceptanceList, nil
+}
+
+func getRejectionAreas(pid string) ([]rejectionArea, error) {
+	var rejectionList = []rejectionArea{}
+	var (
+		z rejectionArea
+	)
+	row, err := database.DB.Query(`
+			SELECT user_location_lat AS latitude, user_location_lon AS longitude,
+			rating AS rate FROM product_review WHERE product_id = ?
+			AND rating BETWEEN '0' AND '2.5' 
+	`, pid)
+
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&z.LATITUDE,
+				&z.LONGITUDE,
+				&z.RATING,
+			)
+			if err != nil {
+				return nil, err
+			}
+			rejectionList = append(rejectionList, z)
+		}
+		defer row.Close()
+	}
+	return rejectionList, nil
 }
