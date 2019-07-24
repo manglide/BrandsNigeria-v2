@@ -3,10 +3,10 @@
 package main
 
 import (
+	"errors"
+
 	"math/rand"
 	"time"
-
-	"errors"
 
 	"github.com/brandsnigeria/webapp/database"
 )
@@ -609,42 +609,68 @@ func getCompetitors() ([]competitors, error) {
 	return competitorsLists, nil
 }
 
-func insertComments(pid, cat, username, comments, rating, sentiment, latitude, longitude string) (int, error) {
-	var datetime = time.Now()
-	datetime.Format(time.RFC3339)
-	var like int
-	var dislike int
-	if sentiment == "like" {
-		like = 1
+func canComment(pid, cat, username string) bool {
+	var (
+		numCount int
+	)
+	row, err := database.DB.Query(`
+		SELECT COUNT(*) FROM 
+			(SELECT COUNT(*) AS count 
+			FROM product_review 
+			WHERE product_id = ?
+			AND product_category = ?
+			AND user = ?) 
+		AS count
+	`, pid, cat, username)
+	numCount = checkCount(row)
+	checkErr(err)
+	if numCount > 0 {
+		return false
 	} else {
-		dislike = 1
+		return true
 	}
-	stmtX, errX := database.DB.Prepare(`insert into product_review
+}
+func insertComments(pid, cat, username, comments,
+	rating, sentiment, latitude, longitude, author string) (int, error) {
+	if canComment(pid, cat, username) {
+		var datetime = time.Now()
+		datetime.Format(time.RFC3339)
+		var like int
+		var dislike int
+		if sentiment == "like" {
+			like = 1
+		} else {
+			dislike = 1
+		}
+		stmtX, errX := database.DB.Prepare(`insert into product_review
 				(
 					product_id, product_category, likes, dislikes, rating, 
 					user_comments, 
 					user_location_lat, user_location_lon, date, user, author
 				)
 				values(?,?,?,?,?,?,?,?,?,?,?);`)
-	if errX != nil {
-		return 0, errors.New(errX.Error())
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+		resX, errX := stmtX.Exec(
+			pid, cat, like, dislike, rating, comments, latitude, longitude, datetime, username, author,
+		)
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		defer stmtX.Close()
+
+		lid, errX := resX.LastInsertId()
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		return int(lid), nil
+	} else {
+		return 0, errors.New("Oops, you cannot comment twice on the same product")
 	}
-	resX, errX := stmtX.Exec(
-		pid, cat, like, dislike, rating, comments, latitude, longitude, datetime, username, username,
-	)
-
-	if errX != nil {
-		return 0, errors.New(errX.Error())
-	}
-
-	defer stmtX.Close()
-
-	lid, errX := resX.LastInsertId()
-
-	if errX != nil {
-		return 0, errors.New(errX.Error())
-	}
-
-	return int(lid), nil
 
 }

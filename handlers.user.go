@@ -101,6 +101,7 @@ func performLogin(c *gin.Context) {
 		}
 		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
+		c.SetCookie("username", username, 3600, "", "", false, true)
 		render(c, gin.H{
 			"title":        "Successful Login",
 			"user":         username,
@@ -115,6 +116,7 @@ func performLogin(c *gin.Context) {
 func logout(c *gin.Context) {
 	c.SetCookie("token", "", -1, "", "", false, true)
 	c.Set("is_logged_in", false)
+	c.Set("username", nil)
 	c.Redirect(http.StatusTemporaryRedirect, "/")
 }
 

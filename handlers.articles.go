@@ -109,6 +109,7 @@ func getProductPageAuthenticated(c *gin.Context) {
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
+	v, _ := c.Cookie("username")
 	render(c,
 		gin.H{
 			"title":            "Product Page - " + productTitle,
@@ -116,6 +117,7 @@ func getProductPageAuthenticated(c *gin.Context) {
 			"numberofcomments": numberofcomments,
 			"comments":         comments,
 			"is_logged_in":     true,
+			"username":         v,
 		},
 		"productPage.tmpl")
 }
@@ -150,27 +152,25 @@ func postComments(c *gin.Context) {
 	pid := c.PostForm("productid")
 	cat := c.PostForm("productcategory")
 	username := c.PostForm("username")
+	author := c.PostForm("author")
 	comments := c.PostForm("comment")
 	rating := c.PostForm("rating")
 	sentiment := c.PostForm("sentiment")
 	latitude := c.PostForm("latitude")
 	longitude := c.PostForm("longitude")
-	v, err := insertComments(pid, cat, username, comments, rating, sentiment, latitude, longitude)
+	_, err := insertComments(pid, cat, username, comments,
+		rating, sentiment, latitude, longitude, author)
 	if err != nil {
-		log.Println(err)
-	}
-	if v > 0 {
+		c.JSON(400, gin.H{
+			"data":    "failed",
+			"message": err.Error(),
+		})
+	} else {
 		c.JSON(200, gin.H{
 			"data":    "success",
 			"message": "reload",
 		})
-	} else {
-		c.JSON(500, gin.H{
-			"data":    http.StatusInternalServerError,
-			"message": err.Error(),
-		})
 	}
-
 }
 
 func createProductPage(c *gin.Context) {

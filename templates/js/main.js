@@ -20,8 +20,8 @@ $(document).ready(function() {
 	                	latitude = position.coords.latitude
 					longitude = position.coords.longitude
 					// do what you like with the input
-					$inputLat = $('<input type="text" name="latitude"/>').val(latitude);
-					$inputLon = $('<input type="text" name="longitude"/>').val(longitude);
+					$inputLat = $('<input type="hidden" type="text" name="latitude"/>').val(latitude);
+					$inputLon = $('<input type="hidden" type="text" name="longitude"/>').val(longitude);
 					// append to the form
 					$("#datacomments").append($inputLat);
 					$("#datacomments").append($inputLon);
@@ -36,16 +36,38 @@ $(document).ready(function() {
 		                        location.reload();
 		                    },
 		                    error:function(result){
-		                    	   if(result.status==401&&result.statusText==="Unauthorized") {
+		                    	   if(result.status == 401 && result.statusText === "Unauthorized") {
 									alert("Sorry, you must be logged in to comment")
 							   } else {
-									alert(result.statusText)
+									alert(result.responseJSON.message)
 							   } 
 		                    }
 		            });
 	            	});		
 			} else {
-				alert("Please we would need GPS access")
+					$inputLat = $('<input type="hidden" type="text" name="latitude"/>').val(latitude);
+					$inputLon = $('<input type="hidden" type="text" name="longitude"/>').val(longitude);
+					// append to the form
+					$("#datacomments").append($inputLat);
+					$("#datacomments").append($inputLon);
+		            $.ajax({
+		                    url:'/u/comments',
+		                    type:'POST',
+		                    data:$("#datacomments").serialize(),
+		                    before: function() {
+			                    	
+		                    },
+		                    success:function(result){
+		                        location.reload();
+		                    },
+		                    error:function(result){
+		                    	   if(result.status == 401 && result.statusText === "Unauthorized") {
+									alert("Sorry, you must be logged in to comment")
+							   } else {
+									alert(result.responseJSON.message)
+							   } 
+		                    }
+		            });
 			}
 			
      });

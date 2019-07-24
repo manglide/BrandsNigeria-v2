@@ -1948,3 +1948,6 @@ nav .brand-logo {
 .desc {
 	text-align: justify;
 }
+.username {
+	width: 11em;
+}

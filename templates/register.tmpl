@@ -23,8 +23,13 @@
 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="lastname">
 </div>
 <div class="form-group">
-<label for="username">Username</label>
-<input type="text" class="form-control" id="username" name="username" placeholder="Username">
+<label for="username">Mobile Number</label>
+<!--<input type="number" class="form-control" 
+	class="username" id="username" min="1" max="11" 
+	name="username" placeholder="Username">-->
+<input class="form-control" type="tel" id="username" name="username"
+       pattern="[0-9]{11}"
+       required>
 </div>
 <div class="form-group">
 <label for="password">Password</label>
