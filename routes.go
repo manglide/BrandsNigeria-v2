@@ -13,12 +13,14 @@ func initializeRoutes() {
 		userRoutes.GET("/about", ensureNotLoggedIn(), showAboutPage)
 		userRoutes.GET("/s/about", ensureLoggedInJWT(), showAboutPageAuthenticated)
 		userRoutes.GET("/feedback", ensureNotLoggedIn(), showFeedbackPage)
+		userRoutes.GET("/s/ratedProducts", ensureLoggedInJWT(), ratedProducts)
 		userRoutes.GET("/s/feedback", ensureLoggedInJWT(), showFeedbackPageAuthenticated)
 		userRoutes.POST("/login", ensureNotLoggedIn(), performLogin)
 		userRoutes.GET("/logout", ensureLoggedInJWT(), logout)
 		userRoutes.GET("/register", ensureNotLoggedIn(), showRegistrationPage)
 		userRoutes.POST("/register", ensureNotLoggedIn(), register)
 		userRoutes.POST("/comments", ensureLoggedInJWT(), postComments)
+		userRoutes.POST("/withdrawrating", ensureLoggedInJWT(), withdrawRating)
 	}
 
 	articleRoutes := router.Group("/article")
@@ -44,17 +46,18 @@ func initializeRoutes() {
 	{
 		createProductRoutes.GET("/product", ensureLoggedInJWT(), createProductPage)
 		createProductRoutes.POST("/product", ensureLoggedInJWT(), createProduct)
+		createProductRoutes.GET("/productlist", ensureLoggedInJWT(), createProductListPage)
 	}
 
 	api := router.Group("/api")
 	{
-		api.POST("/chartsreviewlikes", ensureNotLoggedIn(), reviewLikes)
-		api.POST("/chartsreviewdislikes", ensureNotLoggedIn(), reviewDisLikes)
-		api.POST("/chartsreviewrating", ensureNotLoggedIn(), reviewRatings)
-		api.POST("/areasofacceptance", ensureNotLoggedIn(), getAreasOfAcceptance)
-		api.POST("/areasofrejection", ensureNotLoggedIn(), getAreasOfRejection)
-		api.POST("/productrecommendation", ensureNotLoggedIn(), getProductRecommendation)
-		api.POST("/productsAPICompetitor", ensureNotLoggedIn(), pCompetitor)
+		api.POST("/chartsreviewlikes", neutral(), reviewLikes)
+		api.POST("/chartsreviewdislikes", neutral(), reviewDisLikes)
+		api.POST("/chartsreviewrating", neutral(), reviewRatings)
+		api.POST("/areasofacceptance", neutral(), getAreasOfAcceptance)
+		api.POST("/areasofrejection", neutral(), getAreasOfRejection)
+		api.POST("/productrecommendation", neutral(), getProductRecommendation)
+		api.POST("/productsAPICompetitor", neutral(), pCompetitor)
 	}
 
 }

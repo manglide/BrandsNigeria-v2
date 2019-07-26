@@ -1,0 +1,36 @@
+<!--register.tmpl-->
+<!--Embed the header.tmpl template at this location-->
+{{ template "header.tmpl" .}}
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#plist').DataTable();
+} );
+</script>
+<div class="viewarea">
+	<div class="aboutContent">
+		<table id="plist" class="display responsive no-wrap"  style="width:100%">
+	    		<thead>
+	        <tr>
+	            <th>ID</th>
+	            <th>Product Title</th>
+				<th>Product GUID</th>
+				<th>Category</th>
+				<th>Manufacturer</th>
+	        </tr>
+	    		</thead>
+		    <tbody>
+		        {{ range .data}}
+				<tr>
+		            <td>{{.PRODUCTID}}</td>
+		            <td>{{.PRODUCTTITLE}}</td>
+					<td>{{.PRODUCTGUID}}</td>
+					<td>{{.PRODUCTCATEGORY}}</td>
+					<td>{{.PRODUCTMANUFACTURER}}</td>
+		        </tr>
+				{{ end }}
+		    </tbody>
+		</table>
+	</div>
+</div>
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}

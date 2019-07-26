@@ -20,6 +20,9 @@ import (
 var router *gin.Engine
 var c *gin.Context
 
+var Superadmin int
+var UserLoggedIn string
+
 // Render one of HTML, JSON or CSV based on the 'Accept' header of the request
 // If the header doesn't specify this, HTML is rendered, provided that
 // the template name is present
@@ -170,6 +173,7 @@ func main() {
 	router.Static("/css", "templates/css")
 	router.Static("/js", "templates/js")
 	router.Static("/assets", "templates/assets")
+	router.Static("/images", "templates/assets/images/")
 	router.Static("/vendor", "templates/vendor")
 
 	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")

@@ -5,6 +5,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"database/sql"
@@ -17,6 +18,24 @@ import (
 type itemList struct {
 	PRODUCTID   int    `json:"id"`
 	PRODUCTGUID string `json:"productGUID"`
+}
+
+type itemProductList struct {
+	PRODUCTID           int    `json:"id"`
+	PRODUCTTITLE        string `json:"productTITLE"`
+	PRODUCTGUID         string `json:"productGUID"`
+	PRODUCTCATEGORY     string `json:"productCATEGORY"`
+	PRODUCTMANUFACTURER string `json:"productMANUFACTURER"`
+}
+
+type userRatedProductList struct {
+	PRODUCTID           int    `json:"id"`
+	REVIEWID            int    `json:"reviewID"`
+	PRODUCTTITLE        string `json:"productTITLE"`
+	RATING              string `json:"rating"`
+	PRODUCTGUID         string `json:"productGUID"`
+	PRODUCTCATEGORY     string `json:"productCATEGORY"`
+	PRODUCTMANUFACTURER string `json:"productMANUFACTURER"`
 }
 
 type productList struct {
@@ -132,6 +151,10 @@ type competitors struct {
 	PRODUCTIMAGE2         string `json:"productIMAGE2"`
 }
 
+type cU struct {
+	COUNT int `json:"count"`
+}
+
 func getAllItemsFrontPage() ([]productList, error) {
 	var productLists = []productList{}
 	var (
@@ -242,6 +265,93 @@ func getAllItems() ([]itemList, string) {
 		defer row.Close()
 	}
 	return itemLists, ""
+}
+
+func getProductLists() ([]itemProductList, error) {
+	var itemProductLists = []itemProductList{}
+	var (
+		singularItem itemProductList
+	)
+	row, err := database.DB.Query(`
+		SELECT all_products.id AS product_ID, 
+		all_products.title AS productTITLE ,
+		all_products.product_name_clean_url AS productGUID ,
+		all_products.manufacturer AS manufacturer,
+		product_categories.category AS category
+		FROM all_products
+		JOIN product_review ON all_products.id = product_review.product_id
+		JOIN product_categories ON all_products.category = product_categories.id
+		WHERE
+		all_products.about IS NOT NULL AND
+		all_products.manufacturer IS NOT NULL AND 
+		all_products.address IS NOT NULL AND
+		all_products.ingredients IS NOT NULL AND
+		all_products.product_image_1 IS NOT NULL AND
+		all_products.product_image_2 IS NOT NULL AND
+		all_products.price IS NOT NULL
+		GROUP BY all_products.id ORDER BY rating DESC
+	`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(&singularItem.PRODUCTID, &singularItem.PRODUCTTITLE, &singularItem.PRODUCTGUID,
+				&singularItem.PRODUCTMANUFACTURER, &singularItem.PRODUCTCATEGORY)
+			if err != nil {
+				return nil, err
+			}
+			itemProductLists = append(itemProductLists, singularItem)
+		}
+		defer row.Close()
+	}
+	return itemProductLists, nil
+}
+
+func getProductListsByUser(userid string) ([]userRatedProductList, error) {
+	var itemProductLists = []userRatedProductList{}
+	var (
+		singularItem userRatedProductList
+	)
+	row, err := database.DB.Query(`
+		SELECT all_products.id AS product_ID, 
+		product_review.id AS reviewID,
+		all_products.title AS productTITLE ,
+		product_review.rating AS rating,
+		all_products.product_name_clean_url AS productGUID ,
+		all_products.manufacturer AS manufacturer,
+		product_categories.category AS category
+		FROM all_products
+		JOIN product_review ON all_products.id = product_review.product_id
+		JOIN product_categories ON all_products.category = product_categories.id
+		WHERE
+		product_review.user = ? AND
+		all_products.about IS NOT NULL AND
+		all_products.manufacturer IS NOT NULL AND 
+		all_products.address IS NOT NULL AND
+		all_products.ingredients IS NOT NULL AND
+		all_products.product_image_1 IS NOT NULL AND
+		all_products.product_image_2 IS NOT NULL AND
+		all_products.price IS NOT NULL
+		GROUP BY all_products.id ORDER BY rating DESC
+	`, userid)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(&singularItem.PRODUCTID,
+				&singularItem.REVIEWID,
+				&singularItem.PRODUCTTITLE,
+				&singularItem.RATING,
+				&singularItem.PRODUCTGUID,
+				&singularItem.PRODUCTMANUFACTURER, &singularItem.PRODUCTCATEGORY)
+			if err != nil {
+				return nil, err
+			}
+			itemProductLists = append(itemProductLists, singularItem)
+		}
+		defer row.Close()
+	}
+	return itemProductLists, nil
 }
 
 func getAllItemsCount() int {
@@ -728,18 +838,22 @@ func getCompetitors(guid string) ([]competitors, []noCompetition, error) {
 func canComment(pid, cat, username string) bool {
 	var (
 		numCount int
+		b        cU
 	)
-	row, err := database.DB.Query(`
-		SELECT COUNT(*) FROM 
-			(SELECT COUNT(*) AS count 
+
+	sqlRaw := fmt.Sprintf(`SELECT COUNT(*) AS count 
 			FROM product_review 
-			WHERE product_id = ?
-			AND product_category = ?
-			AND user = ?) 
-		AS count
-	`, pid, cat, username)
-	numCount = checkCount(row)
-	checkErr(err)
+			WHERE product_id = '%s'
+			AND product_category = '%s'
+			AND user = '%s'`, pid, cat, username)
+
+	if errX := database.DB.QueryRow(sqlRaw).Scan(&b.COUNT); errX == nil {
+		numCount = b.COUNT
+	} else if errX == sql.ErrNoRows {
+		log.Println(sql.ErrNoRows)
+	} else {
+		log.Println(errX)
+	}
 	if numCount > 0 {
 		return false
 	} else {
@@ -1141,4 +1255,27 @@ func productRecommendation(data []string) ([]pRecommendation, []noCompetition, e
 		defer row.Close()
 		return pRecommendationLists, noCompetitionLists, nil
 	}
+}
+
+func deleteRating(rid, pid, user string) (int, error) {
+
+	// We need to remember to generate sku and mpn
+	stmt, err := database.DB.Prepare(`
+						DELETE FROM product_review
+						WHERE id = ? AND
+						product_id = ?
+						AND user = ?
+								`)
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+	res, err := stmt.Exec(rid, pid, user)
+
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+
+	lid, err := res.RowsAffected()
+	return int(lid), nil
+
 }

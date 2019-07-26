@@ -1,0 +1,49 @@
+<!--register.tmpl-->
+<!--Embed the header.tmpl template at this location-->
+{{ template "header.tmpl" .}}
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#plist').DataTable();
+} );
+</script>
+<div class="viewarea">
+	<div class="aboutContent">
+		<table id="plist" class="display responsive no-wrap"  style="width:100%">
+	    		<thead>
+	        <tr>
+	            <th>Product ID</th>
+	            <th>Product Title</th>
+				<th>Rating</th>
+				<th>Category</th>
+				<th>Manufacturer</th>
+				<th>Action</th>
+	        </tr>
+	    		</thead>
+		    <tbody>
+				{{ $user := .username }}
+		        {{ range .data}}
+				<tr>
+			        <td>{{.PRODUCTID}}</td>
+			        <td>{{.PRODUCTTITLE}}</td>
+				    <td>
+						{{ $mainVal := .RATING }}
+						<div title="You rated it {{.RATING}}">
+							{{ range $val := iterate .RATING }}
+	        						<span data='{{$mainVal}}' class='fa fa-star fa-1x' />
+	      					{{ end }}
+						</div>
+					</td>
+				    <td>{{.PRODUCTCATEGORY}}</td>
+				    <td>{{.PRODUCTMANUFACTURER}}</td>
+					<td><button class="btn btn-danger" 
+							onClick="withdrawRating(this)" 
+							title="Withdraw this Rating" 
+							id="{{.REVIEWID}}_{{.PRODUCTID}}_{{$user}}">Withdraw</button></td>
+		        </tr>
+				{{ end }}
+		    </tbody>
+		</table>
+	</div>
+</div>
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}

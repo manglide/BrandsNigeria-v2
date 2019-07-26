@@ -56,12 +56,12 @@ func registerNewUser(firstname, lastname, username, password string) (*ReviewUse
 		return nil, errors.New("The username isn't available")
 	}
 	u := ReviewUser{Firstname: firstname, Lastname: lastname, Username: username, Password: password}
-	stmt, err := database.DB.Prepare(`insert into users (firstname, lastname, username, password) 
-									values(?,?,?,?);`)
+	stmt, err := database.DB.Prepare(`insert into users (firstname, lastname, username, password, super_admin) 
+									values(?,?,?,?,?);`)
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
-	_, err = stmt.Exec(firstname, lastname, username, password)
+	_, err = stmt.Exec(firstname, lastname, username, password, 0)
 
 	if err != nil {
 		return nil, errors.New(err.Error())

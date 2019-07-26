@@ -70,10 +70,20 @@ func showAboutPage(c *gin.Context) {
 }
 
 func showAboutPageAuthenticated(c *gin.Context) {
-	render(c, gin.H{
-		"title":        "About BrandsNigeria",
-		"is_logged_in": true,
-	}, "about.tmpl")
+	if Superadmin > 0 {
+		render(c, gin.H{
+			"title":        "About BrandsNigeria",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "about.tmpl")
+	} else {
+		render(c, gin.H{
+			"title":        "About BrandsNigeria",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "about.tmpl")
+	}
+
 }
 
 func showFeedbackPage(c *gin.Context) {
@@ -83,10 +93,23 @@ func showFeedbackPage(c *gin.Context) {
 }
 
 func showFeedbackPageAuthenticated(c *gin.Context) {
-	render(c, gin.H{
-		"title":        "Feedback",
-		"is_logged_in": true,
-	}, "feedback.tmpl")
+	if Superadmin > 0 {
+		render(c, gin.H{
+			"title":        "Feedback",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "feedback.tmpl")
+	} else {
+		render(c, gin.H{
+			"title":        "Feedback",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "feedback.tmpl")
+	}
+}
+
+type User struct {
+	username string `json:"username"`
 }
 
 func performLogin(c *gin.Context) {
@@ -101,11 +124,24 @@ func performLogin(c *gin.Context) {
 		}
 		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
-		c.SetCookie("username", username, 3600, "", "", false, true)
-		render(c, gin.H{
-			"title":        "Successful Login",
-			"user":         username,
-			"is_logged_in": true}, "login-successful.tmpl")
+		if username == "08146382332" {
+			Superadmin = 1
+			UserLoggedIn = username
+			// render(c, gin.H{
+			// 	"title":        "Successful Login",
+			// 	"user":         username,
+			// 	"is_logged_in": true, "superadmin": "08146382332"}, "login-successful.tmpl")
+			showIndexPage(c)
+		} else {
+			Superadmin = 0
+			UserLoggedIn = username
+			showIndexPage(c)
+			// render(c, gin.H{
+			// 	"title":        "Successful Login",
+			// 	"user":         username,
+			// 	"is_logged_in": true, "superadmin": "no"}, "login-successful.tmpl")
+		}
+
 	} else {
 		c.HTML(http.StatusBadRequest, "login.tmpl", gin.H{
 			"ErrorTitle":   "Login Failed",

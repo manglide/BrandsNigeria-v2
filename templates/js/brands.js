@@ -393,3 +393,28 @@
                 }
               });
   }
+  
+  function withdrawRating(elem) {
+	var load = elem.id.split('_');
+	var prompt = confirm("Are you sure?")
+	if(prompt) {
+		jQuery.ajax(
+            {
+                url : '/u/withdrawrating',
+                type: "POST",
+                data: {rid: load[0], pid: load[1], username: load[2]},
+                beforeSend: function ()
+                {
+                 
+                },
+                success:function(response)
+                {
+                  location.reload();
+                },
+                error: function(response)
+                {
+                  alert(response)
+                }
+              });
+	}
+  }

@@ -13,7 +13,7 @@ import (
 )
 
 func showIndexPage(c *gin.Context) {
-	articles := getAllArticles()
+	// articles := getAllArticles()
 	allItems, _ := getAllItems()
 	itemsCount := getAllItemsCount()
 	products, err := getAllItemsFrontPage()
@@ -22,21 +22,35 @@ func showIndexPage(c *gin.Context) {
 	}
 	loggedInInterface, _ := c.Get("is_logged_in")
 	loggedIn := loggedInInterface.(bool)
+
 	if loggedIn {
-		render(c,
-			gin.H{
-				"title":        "Home Page",
-				"payload":      articles,
-				"items":        allItems,
-				"itemscount":   itemsCount,
-				"products":     products,
-				"is_logged_in": true},
-			"index.tmpl")
+		if Superadmin > 0 {
+			render(c,
+				gin.H{
+					"title":        "Home Page",
+					"items":        allItems,
+					"itemscount":   itemsCount,
+					"products":     products,
+					"superadmin":   Superadmin,
+					"username":     UserLoggedIn,
+					"is_logged_in": true},
+				"index.tmpl")
+		} else {
+			render(c,
+				gin.H{
+					"title":        "Home Page",
+					"items":        allItems,
+					"itemscount":   itemsCount,
+					"products":     products,
+					"superadmin":   Superadmin,
+					"username":     UserLoggedIn,
+					"is_logged_in": true},
+				"index.tmpl")
+		}
 	} else {
 		render(c,
 			gin.H{
 				"title":        "Home Page",
-				"payload":      articles,
 				"items":        allItems,
 				"itemscount":   itemsCount,
 				"products":     products,
@@ -152,7 +166,7 @@ func getProductPage(c *gin.Context) {
 func postComments(c *gin.Context) {
 	pid := c.PostForm("productid")
 	cat := c.PostForm("productcategory")
-	username := c.PostForm("username")
+	username := UserLoggedIn
 	author := c.PostForm("author")
 	comments := c.PostForm("comment")
 	rating := c.PostForm("rating")
@@ -187,6 +201,7 @@ func createProductPage(c *gin.Context) {
 		gin.H{
 			"title":        "Create New Product",
 			"is_logged_in": true,
+			"superadmin":   true,
 			"competitors":  competitors,
 			"categories":   categories,
 		},
@@ -223,9 +238,32 @@ func createProduct(c *gin.Context) {
 	myform.PRODUCTGUID = genGUID(c.PostForm("productname"))
 	myform.PRODUCTNAME = c.PostForm("productname")
 	myform.IMAGEDEFAULT = c.PostForm("imagedefault")
-	if c.PostForm("imagedefault") == "on" {
+
+	if c.PostForm("imagedefault") == "yes" {
 		myform.PRODUCTIMAGE1 = "images/default-home.jpg"
 		myform.PRODUCTIMAGE2 = "images/default-product.jpg"
+	} else {
+
+		// file, err := c.FormFile("imagehomepage")
+		// if err != nil {
+		// 	log.Println(err)
+		// }
+
+		// err = c.SaveUploadedFile(file, "templates/assets/images/"+genGUID(c.PostForm("productname")))
+		// if err != nil {
+		// 	log.Println(err)
+		// }
+
+		// fileX, errX := c.FormFile("imagemain")
+		// if errX != nil {
+		// 	log.Println(errX)
+		// }
+
+		// errX = c.SaveUploadedFile(fileX, "templates/assets/images/"+fileX.Filename)
+		// if errX != nil {
+		// 	log.Println(errX)
+		// }
+
 	}
 	myform.CATEGORIES = c.PostForm("categories")
 	myform.MANUFACTURER = c.PostForm("manufacturer")
@@ -404,6 +442,56 @@ func pCompetitor(c *gin.Context) {
 					"products":     listY,
 					"is_logged_in": true},
 				"product-no-competition.tmpl")
+		}
+	}
+}
+
+func createProductListPage(c *gin.Context) {
+	v, err := getProductLists()
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	render(c, gin.H{
+		"title":        "Submission Successful",
+		"data":         v,
+		"is_logged_in": true, "superadmin": true}, "product-list.tmpl")
+}
+
+func ratedProducts(c *gin.Context) {
+	v, err := getProductListsByUser(UserLoggedIn)
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	render(c, gin.H{
+		"title":        "Submission Successful",
+		"data":         v,
+		"username":     UserLoggedIn,
+		"is_logged_in": true, "superadmin": Superadmin}, "rated-products.tmpl")
+}
+
+func withdrawRating(c *gin.Context) {
+	rid := c.PostForm("rid")
+	pid := c.PostForm("pid")
+	user := c.PostForm("username")
+	a, err := deleteRating(rid, pid, user)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"data":    "failed",
+			"message": err.Error(),
+		})
+	} else {
+		if a > 0 {
+			c.JSON(200, gin.H{
+				"data":    "success",
+				"message": "reload",
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"data":    "failed",
+				"message": "Item not deleted",
+			})
 		}
 	}
 }
