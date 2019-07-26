@@ -2,13 +2,13 @@
 <div class="cardTitleInnerExtendedChildrenProductPage">
 	{{ $dir := sentimentMood .PRODUCTSENTIMENTMOOD }}
 	{{ $title := sentimentMoodT .PRODUCTSENTIMENTMOOD}}
-	<a href="#" class="{{$dir}}" title={{$title}}>
+	<div class="{{$dir}}" title={{$title}}>
 		<span>
 			<i class="material-icons md-32" style="">{{ .PRODUCTSENTIMENT }}</i>
 		</span>
 		<div class="textBelowRatingTrends">
 			{{ .PRODUCTSENTIMENTMOOD }}
 		</div>
-	</a>
+	</div>
 </div>
 {{ end }}

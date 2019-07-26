@@ -1,0 +1,23 @@
+<!-- Modal upVote Product -->
+      <div class="modal fade" id="upvoteProduct" tabindex="-1" role="dialog" aria-labelledby="upvoteProduct" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="upvoteProductLongTitle">Rate and Comment</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {{ if .is_logged_in }}
+	            	<div class="modal-body">
+	              {{ template "enter-comment-modal.tmpl" . }}
+	            </div>
+            {{ else }}
+	            <div class="modal-body">
+	              <div class="default">Oops! sorry, you must be logged in to rate and comment</div>
+	            </div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+<!-- Modal upVote Product Ends -->

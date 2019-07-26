@@ -2,13 +2,13 @@
 <div class="cardTitleInnerExtendedChildrenProductPage">
 	{{ $dir := trendDir .PRODUCTTRENDDIRECTION }}
 	{{ $title := trendDirT .PRODUCTTRENDDIRECTION }}
-	<a href="#" class="{{$dir}}" title={{$title}}>
+	<div class="{{$dir}}" title={{$title}}>
 		<span>
 			<i class="material-icons md-32" style="">{{ .PRODUCTTREND }}</i>
 		</span>
 		<div class="textBelowRatingTrends">
 			{{ .PRODUCTTRENDDIRECTION }}
 		</div>
-	</a>
+	</div>
 </div>
 {{ end }}

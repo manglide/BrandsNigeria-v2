@@ -11,12 +11,10 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="author"></label>
-			<input type="text" class="form-control" id="author" name="author" 
-						placeholder="Author">
+			<input type="text" required class="form-control" style="margin-top:10px" name="authorx" placeholder="Author">
 		</div>
 		<div class="form-group">
-			<textarea rows="2" class="form-control" name="comment" 
+			<textarea rows="2" required class="form-control" id="comment" name="comment" 
 				placeholder="Comment"></textarea>
 		
 		</div>
@@ -26,7 +24,7 @@
 		</div>
 		<label>Rate over 5</label>
 		<div class="form-group">
-			<select name="rating">
+			<select name="rating" id="rating">
 				<option selected value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>
@@ -34,7 +32,7 @@
 				<option value="5">5</option>
 			</select>
 		</div>
-		<button type="submit" id="sendcomment" class="btn btn-info btn-block">Submit</button>
+		<button type="submit" id="sendC" class="btn btn-info btn-block">Submit</button>
 		</form>
 	</div>
 </div>

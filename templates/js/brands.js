@@ -393,12 +393,11 @@
                 }
               });
   }
-  
   function withdrawRating(elem) {
 	var load = elem.id.split('_');
 	var prompt = confirm("Are you sure?")
 	if(prompt) {
-		jQuery.ajax(
+		$.ajax(
             {
                 url : '/u/withdrawrating',
                 type: "POST",
@@ -418,3 +417,11 @@
               });
 	}
   }
+
+function upvoteProduct(guid, str) {
+	$("#upvoteProduct").modal();
+}
+
+function downRateProduct(guid, str) {
+	$("#upvoteProduct").modal();
+}
