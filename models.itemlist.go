@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 
 	"database/sql"
@@ -67,6 +68,35 @@ type productListPage struct {
 	PRODUCTGUID              string `json:"productGUID"`
 	PRODUCTDESCRIPTION       string `json:"productDESCRIPTION"`
 	PRODUCTMANUFACTURER      string `json:"productMANUFACTURER"`
+	PRODUCTLIKES             string `json:"productLIKES"`
+	PRODUCTDISLIKES          string `json:"productDISLIKES"`
+	PRODUCTTREND             string `json:"productTREND"`
+	PRODUCTTRENDDIRECTION    string `json:"productTRENDDIRECTION"`
+	PRODUCTSENTIMENT         string `json:"productSENTIMENT"`
+	PRODUCTSENTIMENTMOOD     string `json:"productSENTIMENTMOOD"`
+	PRODUCTUSERCOMMENTS      string `json:"productUSERCOMMENTS"`
+	PRODUCTRATING            string `json:"productRATING"`
+	PRODUCTAUTHOR            string `json:"productAUTHOR"`
+	PRODUCTDATEPUBLISHED     string `json:"productDATEPUBLISHED"`
+	PRODUCTSKU               string `json:"productSKU"`
+	PRODUCTMPN               string `json:"productMPN"`
+	PRODUCTPRICE             string `json:"productPRICE"`
+	PRODUCTLOCATIONCOUNT     string `json:"productLOCATIONCOUNT"`
+	PRODUCTFIRSTCOMPETITION  string `json:"productFIRSTCOMPETITION"`
+	PRODUCTSECONDCOMPETITION string `json:"productSECONDCOMPETITION"`
+	PRODUCTINGREDIENTS       string `json:"productINGREDIENTS"`
+	PRODUCTCATEGORY          string `json:"productCATEGORY"`
+	PRODUCTIMAGE1            string `json:"productIMAGE1"`
+	PRODUCTIMAGE2            string `json:"productIMAGE2"`
+}
+
+type productListPageEdit struct {
+	PRODUCTID                int    `json:"productID"`
+	PRODUCTNAME              string `json:"productNAME"`
+	PRODUCTGUID              string `json:"productGUID"`
+	PRODUCTDESCRIPTION       string `json:"productDESCRIPTION"`
+	PRODUCTMANUFACTURER      string `json:"productMANUFACTURER"`
+	PRODUCTMANUFACTURERADDR  string `json:"productMANUFACTURERADDR"`
 	PRODUCTLIKES             string `json:"productLIKES"`
 	PRODUCTDISLIKES          string `json:"productDISLIKES"`
 	PRODUCTTREND             string `json:"productTREND"`
@@ -1278,4 +1308,147 @@ func deleteRating(rid, pid, user string) (int, error) {
 	lid, err := res.RowsAffected()
 	return int(lid), nil
 
+}
+
+func getProductToEdit(pid string) ([]productListPageEdit, error) {
+	var productPage = []productListPageEdit{}
+	var (
+		singleItem productListPageEdit
+	)
+	row, err := database.DB.Query(`
+		SELECT all_products.id AS product_ID, 
+		all_products.title AS productname,
+		all_products.product_name_clean_url AS productGUID, 
+		all_products.about AS description, 
+		all_products.manufacturer AS manufacturer, 
+		all_products.address AS address, 
+		SUM(product_review.likes) AS likes, 
+		SUM(product_review.dislikes) AS dislikes, 
+		CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'trending_up' ELSE 'trending_down' END AS trend, 
+		CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'Up' ELSE 'Down' END AS trend_direction, 
+		CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'sentiment_very_satisfied' ELSE 'sentiment_very_dissatisfied' END AS sentiment, 
+		CASE WHEN (product_review.likes) > (product_review.dislikes) THEN 'Good' ELSE 'Bad' END AS sentiment_mood, 
+		COUNT(product_review.user_comments) AS usercomments, 
+		AVG(product_review.rating) AS rating,
+		product_review.author AS author,
+		UNIX_TIMESTAMP(product_review.date) AS datePublished, 
+		all_products.sku AS sku, 
+		all_products.mpn AS mpn,
+		all_products.price AS price, 
+		COUNT(user_location_lat) + COUNT(user_location_lon) AS locationcount, 
+		all_products.competitor_1 AS firstCompetition, 
+		all_products.competitor_2 AS secondCompetition,
+		all_products.ingredients AS ingredients, 
+		product_categories.category AS category, 
+		CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+		CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+		FROM all_products 
+		JOIN product_review ON all_products.id = product_review.product_id
+		JOIN product_categories ON all_products.category = product_categories.id  
+		WHERE 
+		all_products.about <> '' 
+		AND all_products.about IS NOT NULL
+		AND all_products.product_name_clean_url = ?
+		AND all_products.manufacturer IS NOT NULL AND 
+		all_products.address IS NOT NULL AND
+		all_products.ingredients IS NOT NULL AND
+		all_products.product_image_1 IS NOT NULL AND
+		all_products.product_image_2 IS NOT NULL AND
+		all_products.price IS NOT NULL
+		GROUP BY all_products.id ORDER BY rating DESC
+	`, pid)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&singleItem.PRODUCTID,
+				&singleItem.PRODUCTNAME,
+				&singleItem.PRODUCTGUID,
+				&singleItem.PRODUCTDESCRIPTION,
+				&singleItem.PRODUCTMANUFACTURER,
+				&singleItem.PRODUCTMANUFACTURERADDR,
+				&singleItem.PRODUCTLIKES,
+				&singleItem.PRODUCTDISLIKES,
+				&singleItem.PRODUCTTREND,
+				&singleItem.PRODUCTTRENDDIRECTION,
+				&singleItem.PRODUCTSENTIMENT,
+				&singleItem.PRODUCTSENTIMENTMOOD,
+				&singleItem.PRODUCTUSERCOMMENTS,
+				&singleItem.PRODUCTRATING,
+				&singleItem.PRODUCTAUTHOR,
+				&singleItem.PRODUCTDATEPUBLISHED,
+				&singleItem.PRODUCTSKU,
+				&singleItem.PRODUCTMPN,
+				&singleItem.PRODUCTPRICE,
+				&singleItem.PRODUCTLOCATIONCOUNT,
+				&singleItem.PRODUCTFIRSTCOMPETITION,
+				&singleItem.PRODUCTSECONDCOMPETITION,
+				&singleItem.PRODUCTINGREDIENTS,
+				&singleItem.PRODUCTCATEGORY,
+				&singleItem.PRODUCTIMAGE1,
+				&singleItem.PRODUCTIMAGE2,
+			)
+			if err != nil {
+				return nil, err
+			}
+			productPage = append(productPage, singleItem)
+		}
+		defer row.Close()
+	}
+	return productPage, nil
+}
+
+func editProductDB(items MyformE) (*MyformE, error) {
+	// We need to remember to generate sku and mpn
+	price, _ := strconv.ParseFloat(items.PRICE, 64)
+	priceF := float64(price)
+	about := strings.TrimSpace(items.ABOUT)
+	// about = strconv.Quote(about)
+	ingredients := strings.TrimSpace(items.INGREDIENTS)
+	// ingredients = strconv.Quote(ingredients)
+	log.Println(items.PRODUCTID)
+	updateAllPr, err := database.DB.Prepare(`update all_products
+						SET 
+						title = ?, 
+						category = ?, 
+						competitor_1 = ?, 
+						competitor_2 = ?,
+						about = ?, 
+						manufacturer = ?, 
+						address = ?, 
+						ingredients = ?, 
+						updated = ?, 
+						price = ?
+						WHERE id = ?`)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	tx, err := database.DB.Begin()
+
+	_, err = tx.Stmt(updateAllPr).Exec(
+		items.PRODUCTNAME,
+		items.CATEGORIES,
+		items.COMPETITORS[0],
+		items.COMPETITORS[1],
+		about,
+		items.MANUFACTURER,
+		items.MANUFACTURERADDRESS,
+		ingredients,
+		0,
+		priceF,
+		items.PRODUCTID,
+	)
+
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	defer updateAllPr.Close()
+
+	if err := tx.Commit(); err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return &items, nil
 }

@@ -139,6 +139,22 @@ func equal(val, val2 int) bool {
 	}
 }
 
+func equalNoAdd(val, val2 int) bool {
+	if val == val2 {
+		return true
+	} else {
+		return false
+	}
+}
+
+func equalStr(str, str1 string) bool {
+	if strings.Compare(str, str1) == 0 {
+		return true
+	} else {
+		return false
+	}
+}
+
 func roundUp(val string) string {
 	i, _ := strconv.ParseFloat(val, 0)
 	s := fmt.Sprintf("%.2f", i)
@@ -168,6 +184,8 @@ func main() {
 		"sentimentMood":   sentimentMood,
 		"sentimentMoodT":  sentimentMoodT,
 		"roundUp":         roundUp,
+		"equalStr":        equalStr,
+		"equalNoAdd":      equalNoAdd,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

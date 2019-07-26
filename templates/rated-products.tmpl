@@ -11,7 +11,6 @@ $(document).ready( function () {
 		<table id="plist" class="display responsive no-wrap"  style="width:100%">
 	    		<thead>
 	        <tr>
-	            <th>Product ID</th>
 	            <th>Product Title</th>
 				<th>Rating</th>
 				<th>Category</th>
@@ -23,7 +22,6 @@ $(document).ready( function () {
 				{{ $user := .username }}
 		        {{ range .data}}
 				<tr>
-			        <td>{{.PRODUCTID}}</td>
 			        <td>{{.PRODUCTTITLE}}</td>
 				    <td>
 						{{ $mainVal := .RATING }}

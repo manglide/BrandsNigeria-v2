@@ -1,0 +1,104 @@
+<!--register.tmpl-->
+<!--Embed the header.tmpl template at this location-->
+{{ template "header.tmpl" .}}
+{{ $categories := .categories }}
+{{ $competitors := .competitors }}
+{{ range .data }}
+<div class="viewarea">
+<div class="aboutContent">
+<h1>Edit Product {{.PRODUCTNAME}}</h1>
+<div class="panel panel-default col-sm-6">
+<div class="panel-body">
+<!--If there's an error, display the error-->
+
+<!--Create a form that POSTs to the /new/product route-->
+<form class="form" action="/editproduct" method="POST" enctype="multipart/form-data">
+<div class="form-group">
+<input type="hidden" value="{{.PRODUCTID}}" name="pid" />
+<label for="productname">Product Name (Title)</label>
+<input type="text" class="form-control" required="required" 
+		id="productname" name="productname" value="{{.PRODUCTNAME}}" placeholder="productname">
+</div>
+<div class="form-group">
+<label for="imagedefault">Use Default Image</label>
+<label class="radio-inline"><input type="radio" value="yes" checked disabled name="imagedefault">Yes</label>
+<label class="radio-inline"><input type="radio" value="no" disabled name="imagedefault">No</label>
+</div>
+<!-- <div class="form-group">
+<label for="imagehomepage">Product Image Homepage - <p class="bg-info">Dimensions - 281x133</p></label>
+<input type="file" class="form-control-file border" id="imagehomepage" name="imagehomepage" 
+	placeholder="imagehomepage">
+</div>
+<div class="form-group">
+<label for="imagemain">Product Image Main - <p class="bg-info">Dimensions - 750x354</p></label>
+<input type="file" class="form-control-file border" id="imagemain" name="imagemain" placeholder="imagemain">
+</div> -->
+<div class="form-group">
+<label for="category">Category</label>
+<select name="categories" id="categories" required="required">
+{{ $pC := .PRODUCTCATEGORY }}
+{{ range $categories }}
+	{{ if equalStr .CATEGORY $pC }}
+	<option class="form-control" selected name="{{.CATEGORY}}" value="{{.ID}}">{{.CATEGORY}}</option>
+	{{ else }}
+	<option class="form-control" name="{{.CATEGORY}}" value="{{.ID}}">{{.CATEGORY}}</option>
+	{{ end }}
+{{ end }}
+</select>
+</div>
+<div class="form-group" required="required">
+<label for="manufacturer">Manufacturer</label>
+<input type="text" class="form-control" id="manufacturer" name="manufacturer" 
+	placeholder="manufacturer" value="{{.PRODUCTMANUFACTURER}}">
+</div>
+<div class="form-group" required="required">
+<label for="manufactureraddress">Manufacturer Address</label>
+<input type="text" class="form-control" id="manufactureraddress" name="manufactureraddress" 
+	placeholder="Manufacturer Address" value="{{.PRODUCTMANUFACTURERADDR}}">
+</div>
+<div class="form-group">
+<label for="about">Description</label>
+<textarea type="textarea" required="required" rows="5" name="about" class="form-control" id="about" placeholder="Description">
+	{{.PRODUCTDESCRIPTION}}
+</textarea>
+</div>
+<div class="form-group">
+<label for="ingredients">Ingredients</label>
+<textarea type="textarea" rows="5" name="ingredients" class="form-control" id="ingredients" 
+	placeholder="ingredients">
+		{{.PRODUCTINGREDIENTS}}
+</textarea>
+</div>
+<div class="form-group">
+<label for="price">Price</label>
+<input type="number" min="1" name="price" class="form-control" id="price" 
+	placeholder="price" value="{{.PRODUCTPRICE}}" />
+</div>
+
+<div class="form-group">
+<label for="competitors">Competitors</label>
+<select multiple name="competitors[]" class="form-control" id="competitors" required="required">
+{{ $pN1 := .PRODUCTFIRSTCOMPETITION}}
+{{ $pN2 := .PRODUCTSECONDCOMPETITION}}
+	{{ range $competitors }}
+		{{ if equalStr .PRODUCTNAME $pN1 }}
+			<option class="form-control" selected value="{{.PRODUCTNAME}}">{{.PRODUCTNAME}}</option>
+		{{ else if equalStr .PRODUCTNAME $pN2 }}
+			<option class="form-control" selected value="{{.PRODUCTNAME}}">{{.PRODUCTNAME}}</option>
+		{{ else }}
+			<option class="form-control" value="{{.PRODUCTNAME}}">{{.PRODUCTNAME}}</option>
+		{{ end }}
+	{{ end }}
+</select>
+</div>
+
+
+<button type="submit" class="btn btn-success">Save</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+{{ end }}
+<!--Embed the footer.tmpl template at this location-->
+{{ template "footer.tmpl" .}}

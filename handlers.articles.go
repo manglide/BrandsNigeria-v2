@@ -124,7 +124,7 @@ func getProductPageAuthenticated(c *gin.Context) {
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
-	v, _ := c.Cookie("username")
+
 	render(c,
 		gin.H{
 			"title":            "Product Page - " + productTitle,
@@ -132,7 +132,8 @@ func getProductPageAuthenticated(c *gin.Context) {
 			"numberofcomments": numberofcomments,
 			"comments":         comments,
 			"is_logged_in":     true,
-			"username":         v,
+			"username":         UserLoggedIn,
+			"superadmin":       Superadmin,
 		},
 		"productPage.tmpl")
 }
@@ -159,6 +160,7 @@ func getProductPage(c *gin.Context) {
 			"data":             data,
 			"numberofcomments": numberofcomments,
 			"comments":         comments,
+			"superadmin":       Superadmin,
 		},
 		"productPage.tmpl")
 }
@@ -201,7 +203,7 @@ func createProductPage(c *gin.Context) {
 		gin.H{
 			"title":        "Create New Product",
 			"is_logged_in": true,
-			"superadmin":   true,
+			"superadmin":   Superadmin,
 			"competitors":  competitors,
 			"categories":   categories,
 		},
@@ -209,6 +211,24 @@ func createProductPage(c *gin.Context) {
 }
 
 type Myform struct {
+	PRODUCTGUID         string   `form:"productguid"`
+	PRODUCTNAME         string   `form:"productname"`
+	IMAGEDEFAULT        string   `form:"imagedefault"`
+	CATEGORIES          string   `form:"categories"`
+	MANUFACTURER        string   `form:"manufacturer"`
+	MANUFACTURERADDRESS string   `form:"manufactureraddress"`
+	ABOUT               string   `form:"about"`
+	INGREDIENTS         string   `form:"ingredients"`
+	PRICE               string   `form:"price"`
+	COMPETITORS         []string `form:"competitors"`
+	PRODUCTIMAGE1       string   `form:"productimage1"`
+	PRODUCTIMAGE2       string   `json:"productimage2"`
+	SKU                 string   `form:"sku"`
+	MPN                 string   `form:"mpn"`
+}
+
+type MyformE struct {
+	PRODUCTID           string   `form:"productid"`
 	PRODUCTGUID         string   `form:"productguid"`
 	PRODUCTNAME         string   `form:"productname"`
 	IMAGEDEFAULT        string   `form:"imagedefault"`
@@ -493,5 +513,65 @@ func withdrawRating(c *gin.Context) {
 				"message": "Item not deleted",
 			})
 		}
+	}
+}
+
+func editProduct(c *gin.Context) {
+	p := c.Param("product_id")
+	categories, err := getCategories()
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+	}
+	competitors, err := getCompetitorsI()
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+	}
+	data, err := getProductToEdit(p)
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+	}
+	render(c,
+		gin.H{
+			"title":        "Edit Product",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+			"competitors":  competitors,
+			"categories":   categories,
+			"data":         data,
+		},
+		"edit-product.tmpl")
+}
+
+func saveProduct(c *gin.Context) {
+	var myform MyformE
+	myform.PRODUCTID = c.PostForm("pid")
+	myform.PRODUCTGUID = c.PostForm("productname")
+	myform.PRODUCTNAME = c.PostForm("productname")
+	myform.IMAGEDEFAULT = c.PostForm("imagedefault")
+	if c.PostForm("imagedefault") == "yes" {
+		myform.PRODUCTIMAGE1 = "images/default-home.jpg"
+		myform.PRODUCTIMAGE2 = "images/default-product.jpg"
+	} else {
+	}
+	myform.CATEGORIES = c.PostForm("categories")
+	myform.MANUFACTURER = c.PostForm("manufacturer")
+	myform.MANUFACTURERADDRESS = c.PostForm("manufactureraddress")
+	myform.ABOUT = c.PostForm("about")
+	myform.INGREDIENTS = c.PostForm("ingredients")
+	myform.PRICE = c.PostForm("price")
+	myform.COMPETITORS = c.Request.Form["competitors[]"]
+	myform.SKU = strconv.Itoa(genSKU())
+	myform.MPN = strconv.Itoa(genMPN())
+
+	editedProduct, err := editProductDB(myform)
+	if err == nil {
+		render(c, gin.H{
+			"title":        "Submission Successful",
+			"product":      editedProduct,
+			"username":     UserLoggedIn,
+			"superadmin":   Superadmin,
+			"is_logged_in": true}, "edit-product-successful.tmpl")
+	} else {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
 }

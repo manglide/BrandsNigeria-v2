@@ -16,6 +16,7 @@ $(document).ready( function () {
 				<th>Product GUID</th>
 				<th>Category</th>
 				<th>Manufacturer</th>
+				<th>Action</th>
 	        </tr>
 	    		</thead>
 		    <tbody>
@@ -26,6 +27,11 @@ $(document).ready( function () {
 					<td>{{.PRODUCTGUID}}</td>
 					<td>{{.PRODUCTCATEGORY}}</td>
 					<td>{{.PRODUCTMANUFACTURER}}</td>
+					<td>
+						<a href="/edit/{{.PRODUCTGUID}}">
+							<button class="btn btn-success">Edit</button>
+						</a>
+					</td>
 		        </tr>
 				{{ end }}
 		    </tbody>
