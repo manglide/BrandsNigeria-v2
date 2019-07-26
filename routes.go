@@ -45,12 +45,14 @@ func initializeRoutes() {
 	router.GET("/edit/:product_id", ensureLoggedInJWT(), editProduct)
 	router.POST("/editproduct", ensureLoggedInJWT(), saveProduct)
 	router.POST("/deleteproduct", ensureLoggedInJWT(), deleteProduct)
+	router.POST("/restoreproduct", ensureLoggedInJWT(), restoreProduct)
 
 	createProductRoutes := router.Group("/new")
 	{
 		createProductRoutes.GET("/product", ensureLoggedInJWT(), createProductPage)
 		createProductRoutes.POST("/product", ensureLoggedInJWT(), createProduct)
 		createProductRoutes.GET("/productlist", ensureLoggedInJWT(), createProductListPage)
+		createProductRoutes.GET("/deletedProductlist", ensureLoggedInJWT(), createDeletedProductListPage)
 	}
 
 	api := router.Group("/api")

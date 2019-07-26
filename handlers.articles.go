@@ -478,6 +478,18 @@ func createProductListPage(c *gin.Context) {
 		"is_logged_in": true, "superadmin": true}, "product-list.tmpl")
 }
 
+func createDeletedProductListPage(c *gin.Context) {
+	v, err := getDeletedProductLists()
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+		log.Println(err)
+	}
+	render(c, gin.H{
+		"title": "Submission Successful",
+		"data":  v, "username": UserLoggedIn,
+		"is_logged_in": true, "superadmin": Superadmin}, "delete-product-list.tmpl")
+}
+
 func ratedProducts(c *gin.Context) {
 	v, err := getProductListsByUser(UserLoggedIn)
 	if err != nil {
@@ -593,6 +605,27 @@ func deleteProduct(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"data":    "failed",
 			"message": "cannot delete item",
+		})
+	}
+}
+
+func restoreProduct(c *gin.Context) {
+	pid := c.PostForm("pid")
+	guid := c.PostForm("guid")
+	b, err := restoreITEM(guid, pid)
+	if err != nil {
+		log.Println(err)
+		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+	}
+	if b > 0 {
+		c.JSON(200, gin.H{
+			"data":    "success",
+			"message": "reload",
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"data":    "failed",
+			"message": "cannot restore item",
 		})
 	}
 }

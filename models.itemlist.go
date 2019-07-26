@@ -340,6 +340,47 @@ func getProductLists() ([]itemProductList, error) {
 	return itemProductLists, nil
 }
 
+func getDeletedProductLists() ([]itemProductList, error) {
+	var itemProductLists = []itemProductList{}
+	var (
+		singularItem itemProductList
+	)
+	row, err := database.DB.Query(`
+		SELECT all_products.id AS product_ID, 
+		all_products.title AS productTITLE ,
+		all_products.product_name_clean_url AS productGUID ,
+		all_products.manufacturer AS manufacturer,
+		product_categories.category AS category
+		FROM all_products
+		JOIN product_review ON all_products.id = product_review.product_id
+		JOIN product_categories ON all_products.category = product_categories.id
+		WHERE
+		all_products.about IS NOT NULL AND
+		all_products.manufacturer IS NOT NULL AND 
+		all_products.address IS NOT NULL AND
+		all_products.ingredients IS NOT NULL AND
+		all_products.product_image_1 IS NOT NULL AND
+		all_products.product_image_2 IS NOT NULL AND
+		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
+		GROUP BY all_products.id ORDER BY rating DESC
+	`, 1)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(&singularItem.PRODUCTID, &singularItem.PRODUCTTITLE, &singularItem.PRODUCTGUID,
+				&singularItem.PRODUCTMANUFACTURER, &singularItem.PRODUCTCATEGORY)
+			if err != nil {
+				return nil, err
+			}
+			itemProductLists = append(itemProductLists, singularItem)
+		}
+		defer row.Close()
+	}
+	return itemProductLists, nil
+}
+
 func getProductListsByUser(userid string) ([]userRatedProductList, error) {
 	var itemProductLists = []userRatedProductList{}
 	var (
@@ -1475,6 +1516,36 @@ func deleteITEM(guid, pid string) (int, error) {
 	tx, err := database.DB.Begin()
 
 	res, err := tx.Stmt(updateAllPr).Exec(1, pid)
+
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+
+	defer updateAllPr.Close()
+
+	if err := tx.Commit(); err != nil {
+		return 0, errors.New(err.Error())
+	}
+
+	b, err := res.RowsAffected()
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+	return int(b), nil
+}
+
+func restoreITEM(guid, pid string) (int, error) {
+
+	updateAllPr, err := database.DB.Prepare(`update all_products
+						SET 
+						deleted = ? 
+						WHERE id = ?;`)
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+	tx, err := database.DB.Begin()
+
+	res, err := tx.Stmt(updateAllPr).Exec(0, pid)
 
 	if err != nil {
 		return 0, errors.New(err.Error())

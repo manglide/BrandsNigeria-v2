@@ -441,6 +441,31 @@ function deleteProduct(guid, pid) {
                 }
               });
 	}
+}
+
+function restoreProduct(guid, pid) {
+	var prompt = confirm("Are you sure?")
+	if(prompt) {
+		$.ajax(
+            {
+                url : '/restoreproduct',
+                type: "POST",
+                data: {pid: pid, guid: guid},
+                beforeSend: function ()
+                {
+                 
+                },
+                success:function(response)
+                {
+                	alert("Operation Successful")
+                    location.reload()
+                },
+                error: function(response)
+                {
+                  alert(response)
+                }
+              });
+	}
   }
 
 function upvoteProduct(guid, str) {
