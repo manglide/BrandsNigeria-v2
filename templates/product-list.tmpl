@@ -16,7 +16,7 @@ $(document).ready( function () {
 				<th>Product GUID</th>
 				<th>Category</th>
 				<th>Manufacturer</th>
-				<th>Action</th>
+				<th>Actions</th>
 	        </tr>
 	    		</thead>
 		    <tbody>
@@ -28,9 +28,16 @@ $(document).ready( function () {
 					<td>{{.PRODUCTCATEGORY}}</td>
 					<td>{{.PRODUCTMANUFACTURER}}</td>
 					<td>
-						<a href="/edit/{{.PRODUCTGUID}}">
-							<button class="btn btn-success">Edit</button>
+						<a href="/edit/{{.PRODUCTGUID}}" title="Edit {{.PRODUCTTITLE}}">
+							<i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
 						</a>
+						<a href="javascript:void(0)" 
+							onClick="deleteProduct('{{.PRODUCTGUID}}','{{.PRODUCTID}}')"
+							id="{{.PRODUCTGUID}}_{{.PRODUCTID}}" 
+							title="Delete {{.PRODUCTTITLE}}">
+							<i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+						</a>
+						
 					</td>
 		        </tr>
 				{{ end }}

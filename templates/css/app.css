@@ -1964,3 +1964,9 @@ nav .brand-logo {
 .username {
 	width: 11em;
 }
+.fa-trash {
+  color: #f60437;
+}
+.fa-pencil {
+	color: green;
+}

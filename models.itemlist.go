@@ -222,8 +222,9 @@ func getAllItemsFrontPage() ([]productList, error) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`)
+	`, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -280,8 +281,9 @@ func getAllItems() ([]itemList, string) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`)
+	`, 0)
 	if err != nil {
 		return nil, err.Error()
 	} else {
@@ -319,8 +321,9 @@ func getProductLists() ([]itemProductList, error) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`)
+	`, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -362,8 +365,9 @@ func getProductListsByUser(userid string) ([]userRatedProductList, error) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`, userid)
+	`, userid, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -400,7 +404,7 @@ func getAllItemsCount() int {
 			AND all_products.ingredients IS NOT NULL 
 			AND all_products.product_image_1 IS NOT NULL 
 			AND all_products.product_image_2 IS NOT NULL 
-			AND all_products.price IS NOT NULL 
+			AND all_products.price IS NOT NULL AND all_products.deleted = 0 
 			GROUP BY all_products.id ORDER BY rating DESC) 
 		AS count
 	`)
@@ -463,7 +467,8 @@ func getAllComments(productID int) ([]commentList, error) {
 			JOIN all_products 
 			ON product_review.product_id = all_products.ID 
 			WHERE product_review.product_id = ?
-	`, productID)
+			AND all_products.deleted = ?
+	`, productID, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -536,9 +541,10 @@ func getProductData(pid string) ([]productListPage, error) {
 		all_products.ingredients IS NOT NULL AND
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
-		all_products.price IS NOT NULL
+		all_products.price IS NOT NULL AND
+		all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`, pid)
+	`, pid, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -627,8 +633,9 @@ func getRichSnippet(pid string) ([]productRichSnippet, error) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`, pid)
+	`, pid, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -818,8 +825,9 @@ func getCompetitors(guid string) ([]competitors, []noCompetition, error) {
 					all_products.product_image_1 IS NOT NULL AND
 					all_products.product_image_2 IS NOT NULL AND
 					all_products.price IS NOT NULL
+					AND all_products.deleted = ?
 					GROUP BY all_products.id ORDER BY rating DESC
-				`, guid).Scan(
+				`, guid, 0).Scan(
 		&singleItem.PRODUCTID,
 		&singleItem.PRODUCTNAME,
 		&singleItem.PRODUCTGUID,
@@ -1236,8 +1244,9 @@ func productRecommendation(data []string) ([]pRecommendation, []noCompetition, e
 					all_products.product_image_1 IS NOT NULL AND
 					all_products.product_image_2 IS NOT NULL AND
 					all_products.price IS NOT NULL
+					AND all_products.deleted = ?
 					GROUP BY all_products.id ORDER BY rating DESC
-				`, &j.PRODUCTGUID).Scan(
+				`, &j.PRODUCTGUID, 0).Scan(
 				&singleItem.PRODUCTID,
 				&singleItem.PRODUCTNAME,
 				&singleItem.PRODUCTGUID,
@@ -1355,8 +1364,9 @@ func getProductToEdit(pid string) ([]productListPageEdit, error) {
 		all_products.product_image_1 IS NOT NULL AND
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
+		AND all_products.deleted = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`, pid)
+	`, pid, 0)
 	if err != nil {
 		return nil, err
 	} else {
@@ -1451,4 +1461,34 @@ func editProductDB(items MyformE) (*MyformE, error) {
 	}
 
 	return &items, nil
+}
+
+func deleteITEM(guid, pid string) (int, error) {
+
+	updateAllPr, err := database.DB.Prepare(`update all_products
+						SET 
+						deleted = ? 
+						WHERE id = ?;`)
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+	tx, err := database.DB.Begin()
+
+	res, err := tx.Stmt(updateAllPr).Exec(1, pid)
+
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+
+	defer updateAllPr.Close()
+
+	if err := tx.Commit(); err != nil {
+		return 0, errors.New(err.Error())
+	}
+
+	b, err := res.RowsAffected()
+	if err != nil {
+		return 0, errors.New(err.Error())
+	}
+	return int(b), nil
 }

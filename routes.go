@@ -44,6 +44,7 @@ func initializeRoutes() {
 
 	router.GET("/edit/:product_id", ensureLoggedInJWT(), editProduct)
 	router.POST("/editproduct", ensureLoggedInJWT(), saveProduct)
+	router.POST("/deleteproduct", ensureLoggedInJWT(), deleteProduct)
 
 	createProductRoutes := router.Group("/new")
 	{

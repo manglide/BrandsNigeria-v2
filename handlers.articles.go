@@ -575,3 +575,24 @@ func saveProduct(c *gin.Context) {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
 }
+
+func deleteProduct(c *gin.Context) {
+	pid := c.PostForm("pid")
+	guid := c.PostForm("guid")
+	b, err := deleteITEM(guid, pid)
+	if err != nil {
+		log.Println(err)
+		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+	}
+	if b > 0 {
+		c.JSON(200, gin.H{
+			"data":    "success",
+			"message": "reload",
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"data":    "failed",
+			"message": "cannot delete item",
+		})
+	}
+}
