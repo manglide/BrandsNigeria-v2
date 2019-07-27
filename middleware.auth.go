@@ -13,6 +13,10 @@ func ensureLoggedIn() gin.HandlerFunc {
 		loggedInInterface, _ := c.Get("is_logged_in")
 		loggedIn := loggedInInterface.(bool)
 		if !loggedIn {
+			c.HTML(http.StatusUnauthorized, "unauthenticated.tmpl", gin.H{
+				"ErrorTitle":   "Unauthorized Access",
+				"is_logged_in": false,
+				"ErrorMessage": "Unauthorised Access"})
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 	}
@@ -40,6 +44,7 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 					"ErrorTitle":   "Unauthorized Access",
 					"is_logged_in": false,
 					"ErrorMessage": err.Error()})
+				c.AbortWithStatus(http.StatusUnauthorized)
 			}
 
 			if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -51,6 +56,7 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 					"ErrorTitle":   "Unauthorized Access",
 					"is_logged_in": false,
 					"ErrorMessage": err.Error()})
+				c.AbortWithStatus(http.StatusUnauthorized)
 			}
 		} else {
 			// c.AbortWithStatus(http.StatusUnauthorized)
@@ -58,6 +64,7 @@ func ensureLoggedInJWT() gin.HandlerFunc {
 				"ErrorTitle":   "Unauthorized Access",
 				"is_logged_in": false,
 				"ErrorMessage": err.Error()})
+			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 	}
 }
