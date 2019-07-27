@@ -33,8 +33,8 @@ $(document).ready(function() {
 			                    	
 		                    },
 		                    success:function(result){
-								console.log(result)
-		                        // location.reload();
+								alert("Review submitted successfully")
+								location.reload();
 		                    },
 		                    error:function(result){
 		                    	   if(result.status == 401 && result.statusText === "Unauthorized") {
@@ -59,8 +59,8 @@ $(document).ready(function() {
 			                    	
 		                    },
 		                    success:function(result){
-								console.log(result)
-		                        // location.reload();
+								alert("Review submitted successfully")
+								location.reload();
 		                    },
 		                    error:function(result){
 		                    	   if(result.status == 401 && result.statusText === "Unauthorized") {

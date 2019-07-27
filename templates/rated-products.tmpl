@@ -22,7 +22,9 @@ $(document).ready( function () {
 				{{ $user := .username }}
 		        {{ range .data}}
 				<tr>
-			        <td>{{.PRODUCTTITLE}}</td>
+			        <td>
+						<a href="/s/product/{{ .PRODUCTGUID }}">{{.PRODUCTTITLE}}</a>
+					</td>
 				    <td>
 						{{ $mainVal := .RATING }}
 						<div title="You rated it {{.RATING}}">
