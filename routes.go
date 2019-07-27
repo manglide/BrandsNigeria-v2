@@ -11,25 +11,25 @@ func initializeRoutes() {
 	{
 		userRoutes.GET("/login", ensureNotLoggedIn(), showLoginPage)
 		userRoutes.GET("/about", ensureNotLoggedIn(), showAboutPage)
-		userRoutes.GET("/s/about", ensureLoggedInJWT(), showAboutPageAuthenticated)
+		userRoutes.GET("/s/about", ensureLoggedIn(), showAboutPageAuthenticated)
 		userRoutes.GET("/feedback", ensureNotLoggedIn(), showFeedbackPage)
-		userRoutes.GET("/s/ratedProducts", ensureLoggedInJWT(), ratedProducts)
-		userRoutes.GET("/s/feedback", ensureLoggedInJWT(), showFeedbackPageAuthenticated)
+		userRoutes.GET("/s/ratedProducts", ensureLoggedIn(), ratedProducts)
+		userRoutes.GET("/s/feedback", ensureLoggedIn(), showFeedbackPageAuthenticated)
 		userRoutes.POST("/login", ensureNotLoggedIn(), performLogin)
-		userRoutes.GET("/logout", ensureLoggedInJWT(), logout)
+		userRoutes.GET("/logout", ensureLoggedIn(), logout)
 		userRoutes.GET("/register", ensureNotLoggedIn(), showRegistrationPage)
 		userRoutes.POST("/register", ensureNotLoggedIn(), register)
-		userRoutes.POST("/comments", ensureLoggedInJWT(), postComments)
-		userRoutes.POST("/withdrawrating", ensureLoggedInJWT(), withdrawRating)
+		userRoutes.POST("/comments", ensureLoggedIn(), postComments)
+		userRoutes.POST("/withdrawrating", ensureLoggedIn(), withdrawRating)
 	}
 
 	articleRoutes := router.Group("/article")
 	{
 		// route from Part 1 of the tutorial
-		articleRoutes.GET("/view/:article_id", ensureLoggedInJWT(), getArticle)
+		articleRoutes.GET("/view/:article_id", ensureLoggedIn(), getArticle)
 		articleRoutes.GET("/views/:article_id", ensureNotLoggedIn(), getArticleUnAuthenticated)
-		articleRoutes.GET("/create", ensureLoggedInJWT(), showArticleCreationPage)
-		articleRoutes.POST("/create", ensureLoggedInJWT(), createArticle)
+		articleRoutes.GET("/create", ensureLoggedIn(), showArticleCreationPage)
+		articleRoutes.POST("/create", ensureLoggedIn(), createArticle)
 	}
 
 	productRoutes := router.Group("/product")
@@ -39,20 +39,20 @@ func initializeRoutes() {
 
 	productRoutesAU := router.Group("/s/product")
 	{
-		productRoutesAU.GET("/:product_id", ensureLoggedInJWT(), getProductPageAuthenticated)
+		productRoutesAU.GET("/:product_id", ensureLoggedIn(), getProductPageAuthenticated)
 	}
 
-	router.GET("/edit/:product_id", ensureLoggedInJWT(), editProduct)
-	router.POST("/editproduct", ensureLoggedInJWT(), saveProduct)
-	router.POST("/deleteproduct", ensureLoggedInJWT(), deleteProduct)
-	router.POST("/restoreproduct", ensureLoggedInJWT(), restoreProduct)
+	router.GET("/edit/:product_id", ensureLoggedIn(), editProduct)
+	router.POST("/editproduct", ensureLoggedIn(), saveProduct)
+	router.POST("/deleteproduct", ensureLoggedIn(), deleteProduct)
+	router.POST("/restoreproduct", ensureLoggedIn(), restoreProduct)
 
 	createProductRoutes := router.Group("/new")
 	{
-		createProductRoutes.GET("/product", ensureLoggedInJWT(), createProductPage)
-		createProductRoutes.POST("/product", ensureLoggedInJWT(), createProduct)
-		createProductRoutes.GET("/productlist", ensureLoggedInJWT(), createProductListPage)
-		createProductRoutes.GET("/deletedProductlist", ensureLoggedInJWT(), createDeletedProductListPage)
+		createProductRoutes.GET("/product", ensureLoggedIn(), createProductPage)
+		createProductRoutes.POST("/product", ensureLoggedIn(), createProduct)
+		createProductRoutes.GET("/productlist", ensureLoggedIn(), createProductListPage)
+		createProductRoutes.GET("/deletedProductlist", ensureLoggedIn(), createDeletedProductListPage)
 	}
 
 	api := router.Group("/api")

@@ -36,12 +36,13 @@ func register(c *gin.Context) {
 	password := c.PostForm("password")
 	if user, err := registerNewUser(firstname, lastname, username, password); err == nil {
 		// If the user is created, set the token in a cookie and log the user in
-		token, err := generateSessionTokenJWT(username)
-		if err != nil {
-			c.HTML(http.StatusBadRequest, "login.html", gin.H{
-				"ErrorTitle":   "Failed to Generate JWT Token",
-				"ErrorMessage": "Failed to generate JWT Token " + err.Error()})
-		}
+		// token, err := generateSessionTokenJWT(username)
+		token := generateSessionToken()
+		// if err != nil {
+		// 	c.HTML(http.StatusBadRequest, "login.html", gin.H{
+		// 		"ErrorTitle":   "Failed to Generate JWT Token",
+		// 		"ErrorMessage": "Failed to generate JWT Token " + err.Error()})
+		// }
 		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
 		render(c, gin.H{
@@ -118,7 +119,7 @@ func performLogin(c *gin.Context) {
 	if isUserValid(username, password) {
 		token, err := generateSessionTokenJWT(username)
 		if err != nil {
-			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+			c.HTML(http.StatusBadRequest, "login.tmpl", gin.H{
 				"ErrorTitle":   "Failed to Generate JWT Token",
 				"ErrorMessage": "Failed to generate JWT Token " + err.Error()})
 		}
