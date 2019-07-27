@@ -1922,7 +1922,7 @@ nav .brand-logo {
   }
 }
 
-@media screen and (max-width: 432px) {
+@media screen and (min-width: 432px) {
   .customerreviews {
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 50;
