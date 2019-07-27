@@ -1,4 +1,6 @@
+{{ if .is_logged_in }}
 {{ template "enter-comment.tmpl" . }}
+{{ end }}
 {{ range .comments }}
 		<div class="aboutProductComments" itemprop="review" itemscope itemtype="http://schema.org/Review">
 			<div class="individualUserAvatarAndName btn btn-success">
