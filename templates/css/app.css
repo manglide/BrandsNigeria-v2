@@ -1814,7 +1814,7 @@ nav .brand-logo {
 .banner-lg { width:468px; height:60px; }
 }
 
-@media screen and (min-width: 400px) {
+/*@media screen and (min-width: 400px) {
   .customerreviews {
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 50;
@@ -1932,7 +1932,7 @@ nav .brand-logo {
     margin-top: 20px;
     position: relative;
   }
-}
+}*/
 
 /*@media (min-width: 720px) and (max-width: 1200px) {
 	.viewarea {
