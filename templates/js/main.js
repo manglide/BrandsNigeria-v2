@@ -123,7 +123,6 @@ $(document).ready(function() {
 	        cache: false,
 	        contentType: false,
 	        processData: false,
-	        // method: 'POST',
 			before: function() {
 			    $("#storeimg").empty().html('Uploading...please wait')
 		    },
