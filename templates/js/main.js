@@ -117,7 +117,7 @@ $(document).ready(function() {
 		data.append('pid',$(pid).val())
 		data.append('guid', $(guid).val())
 		$.ajax({
-	        url: 'http://localhost:4444/uploadimage',
+	        url: '/sendImageUploadimage',
 			type: 'POST',
 	        data: data,
 	        cache: false,
