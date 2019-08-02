@@ -14,7 +14,8 @@
 <!--Create a form that POSTs to the /new/product route-->
 <form class="form" action="/editproduct" method="POST" enctype="multipart/form-data">
 <div class="form-group">
-<input type="hidden" value="{{.PRODUCTID}}" name="pid" />
+<input type="hidden" id="pid" value="{{.PRODUCTID}}" name="pid" />
+<input type="hidden" id="guid" value="{{ sGUID .PRODUCTNAME }}" name="guid" />
 <label for="productname">Product Name (Title)</label>
 <input type="text" class="form-control" required="required" 
 		id="productname" name="productname" value="{{.PRODUCTNAME}}" placeholder="productname">
@@ -95,6 +96,22 @@
 
 <button type="submit" class="btn btn-success">Save</button>
 </form>
+<br />
+
+<div class="aboutProductComments">
+<div class="individualUserAvatarAndName">
+<div class="" style="display:inline; float:left;">
+<form class="form" action="/uploadimage" method="POST" enctype="multipart/form-data">
+<div class="form-group">
+<label for="imagehomepage">Product Image</label>
+<input type="file" class="form-control-file border" id="imagehomepage" name="imagehomepage" 
+	placeholder="imagehomepage">
+</div>
+<button type="button" id="storeimg" class="btn btn-info">Save Image</button>
+</form>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

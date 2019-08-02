@@ -629,3 +629,21 @@ func restoreProduct(c *gin.Context) {
 		})
 	}
 }
+
+func genSitemap(c *gin.Context) {
+	sitemapData, err := dataSitemap()
+	if err == nil {
+		// c.Writer.Header().Add("Content-Type", "application/xml; charset=utf-8")
+		c.Writer.Header().Set("Content-Type", "application/xml; charset=utf-8")
+		// c.Header("Content-Type", "text/xml")
+
+		render(c, gin.H{
+			"title":        "Sitemap",
+			"sitemap":      sitemapData,
+			"username":     UserLoggedIn,
+			"superadmin":   Superadmin,
+			"is_logged_in": true}, "sitemap.tmpl")
+	} else {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+	}
+}

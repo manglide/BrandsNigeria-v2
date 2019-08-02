@@ -156,6 +156,7 @@ func logout(c *gin.Context) {
 	c.Set("is_logged_in", false)
 	c.Set("username", nil)
 	Superadmin = 0
+	UserLoggedIn = ""
 	c.Redirect(http.StatusTemporaryRedirect, "/")
 }
 

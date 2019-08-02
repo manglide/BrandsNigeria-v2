@@ -1,9 +1,10 @@
 <!--submission-successful.tmpl-->
 {{ template "productpage-header.tmpl" .}}
+{{ $v := sGUID .product.PRODUCTNAME }}
 <div class="viewarea">
 <strong>The Product was successfully updated. Click to view.</strong><br />
 <h2>
-	<a href="/s/product/{{.product.PRODUCTGUID}}">{{.product.PRODUCTNAME}}</a>
+	<a href="/s/product/{{$v}}">{{.product.PRODUCTNAME}}</a>
 </h2>
 </div>
 {{ template "footer.tmpl" .}}

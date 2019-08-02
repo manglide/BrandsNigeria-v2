@@ -106,6 +106,40 @@ $(document).ready(function() {
 		 }
 	 });
 	
+	$("#storeimg").click(function(event){
+		$(this).empty().html('Uploading...please wait')
+		var pid = document.getElementById("pid")
+		var guid = document.getElementById("guid")
+		var data = new FormData();
+	    $.each($('#imagehomepage')[0].files, function(i, file) {
+	        data.append('file-'+i, file);
+	    });
+		data.append('pid',$(pid).val())
+		data.append('guid', $(guid).val())
+		$.ajax({
+	        url: 'http://localhost:4444/uploadimage',
+			type: 'POST',
+	        data: data,
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        // method: 'POST',
+			before: function() {
+			    $("#storeimg").empty().html('Uploading...please wait')
+		    },
+	        success: function(response){
+	            alert("Image Saved Successfully")
+				$("#storeimg").empty().html('Save Image')
+				.removeClass("btn-info btn-danger").addClass("btn-success")
+	        },
+			error:function(response){
+				console.log(response)
+				$("#storeimg").empty().html('Save Image')
+				.removeClass("btn-info btn-success").addClass("btn-danger")
+			}
+	    });
+	})
+	
 	$("#sendC").click(function(event){
             event.preventDefault();
             

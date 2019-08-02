@@ -1563,3 +1563,48 @@ func restoreITEM(guid, pid string) (int, error) {
 	}
 	return int(b), nil
 }
+
+type sitemap struct {
+	PRODUCTGUID string `json:"productguid"`
+	PRODUCTNAME string `json:"productname"`
+}
+
+func dataSitemap() ([]sitemap, error) {
+	var sitemaps = []sitemap{}
+	var (
+		singleItem sitemap
+	)
+	row, err := database.DB.Query(`	
+			SELECT all_products.title AS productname, 
+			all_products.product_name_clean_url AS productGUID FROM all_products 
+			JOIN product_review ON all_products.id = product_review.product_id 
+			JOIN product_categories ON all_products.category = product_categories.id 
+			WHERE
+			all_products.about IS NOT NULL AND 
+			all_products.manufacturer IS NOT NULL AND 
+			all_products.address IS NOT NULL AND 
+			all_products.ingredients IS NOT NULL AND 
+			all_products.product_image_1 IS NOT NULL AND 
+			all_products.product_image_2 IS NOT NULL AND 
+			all_products.price IS NOT NULL AND
+			all_products.deleted = 0
+			GROUP BY all_products.id ORDER BY rating DESC 
+	`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&singleItem.PRODUCTNAME,
+				&singleItem.PRODUCTGUID,
+			)
+			if err != nil {
+				return nil, err
+			}
+			sitemaps = append(sitemaps, singleItem)
+		}
+		defer row.Close()
+	}
+	return sitemaps, nil
+
+}

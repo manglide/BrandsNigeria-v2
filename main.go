@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -131,6 +132,14 @@ func iterate(count string) []int {
 	return Items
 }
 
+func sGUID(str string) string {
+	str = strings.ToLower(str)
+	f := regexp.MustCompile(`\s+`)
+	q := f.Split(str, -1)
+	s := strings.Join(q, "-")
+	return s
+}
+
 func equal(val, val2 int) bool {
 	if add(val) == val2 {
 		return true
@@ -186,6 +195,7 @@ func main() {
 		"roundUp":         roundUp,
 		"equalStr":        equalStr,
 		"equalNoAdd":      equalNoAdd,
+		"sGUID":           sGUID,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")
