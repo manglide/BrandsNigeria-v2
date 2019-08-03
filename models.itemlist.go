@@ -574,7 +574,7 @@ func getProductData(pid string) ([]productListPage, error) {
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
 		WHERE 
-		all_products.about <> '' 
+		all_products.about IS NOT NULL 
 		AND all_products.about IS NOT NULL
 		AND all_products.product_name_clean_url = ?
 		AND all_products.manufacturer IS NOT NULL AND 
@@ -763,7 +763,8 @@ func makeProduct(items Myform) (*Myform, error) {
 	datetime.Format(time.RFC3339)
 	stmtX, errX := database.DB.Prepare(`insert into product_review
 				(
-					product_id, product_category, likes, dislikes, rating, user_comments, 
+					product_id, product_category, likes, dislikes, rating, 
+					user_comments, 
 					user_location_lat, user_location_lon, date, author
 				)
 				values(?,?,?,?,?,?,?,?,?,?);`)
@@ -1396,7 +1397,7 @@ func getProductToEdit(pid string) ([]productListPageEdit, error) {
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
 		WHERE 
-		all_products.about <> '' 
+		all_products.about IS NOT NULL 
 		AND all_products.about IS NOT NULL
 		AND all_products.product_name_clean_url = ?
 		AND all_products.manufacturer IS NOT NULL AND 

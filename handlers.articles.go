@@ -538,7 +538,9 @@ func editProduct(c *gin.Context) {
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
+	log.Println(p)
 	data, err := getProductToEdit(p)
+	log.Println(data)
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
