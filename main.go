@@ -157,7 +157,11 @@ func equalNoAdd(val, val2 int) bool {
 }
 
 func equalStr(str, str1 string) bool {
-	if strings.Compare(str, str1) == 0 {
+	a := strings.ToLower(str)
+	b := strings.ToLower(str1)
+	a = strings.TrimSpace(a)
+	b = strings.TrimSpace(b)
+	if strings.Compare(a, b) == 0 {
 		return true
 	} else {
 		return false
