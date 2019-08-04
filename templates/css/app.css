@@ -1982,3 +1982,16 @@ nav .brand-logo {
 .fa-pencil {
 	color: green;
 }
+.reviewrating {
+	font-family: 'Century Gothic', sans-serif;
+    font-weight: 50;
+	display: block;
+	float: left;
+	padding: 12px;
+}
+
+span.rT {
+	font-family: 'Century Gothic', sans-serif;
+	font-weight: 600;
+	font-size: 12px;
+}

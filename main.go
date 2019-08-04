@@ -174,6 +174,10 @@ func roundUp(val string) string {
 	return s
 }
 
+func whoami() string {
+	return UserLoggedIn
+}
+
 func main() {
 
 	// Set the router as the default one provided by Gin
@@ -200,6 +204,7 @@ func main() {
 		"equalStr":        equalStr,
 		"equalNoAdd":      equalNoAdd,
 		"sGUID":           sGUID,
+		"whoami":          whoami,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

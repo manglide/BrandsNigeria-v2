@@ -136,6 +136,8 @@ type productRichSnippet struct {
 }
 
 type commentList struct {
+	REVIEWID      int    `json:"reviewid"`
+	PRODUCTID     int    `json:"productid"`
 	PRODUCTNAME   string `json:"productname"`
 	LIKES         string `json:"likes"`
 	DISLIKE       string `json:"dislike"`
@@ -145,6 +147,9 @@ type commentList struct {
 	LONGITUDE     string `json:"longitude"`
 	DATEPUBLISHED string `json:"datePublished"`
 	AUTHOR        string `json:"author"`
+	USER          string `json:"user"`
+	USEFUL        string `json:"useful"`
+	NOTUSEFUL     string `json:"notuseful"`
 }
 
 type category struct {
@@ -495,7 +500,10 @@ func getAllComments(productID int) ([]commentList, error) {
 	)
 
 	row, err := database.DB.Query(`
-			SELECT all_products.title AS productname, 
+			SELECT
+			product_review.id AS reviewid,
+			product_review.product_id AS productid,
+			all_products.title AS productname, 
 			product_review.likes AS likes, 
 			product_review.dislikes AS dislike, 
 			product_review.rating AS rate, 
@@ -503,18 +511,25 @@ func getAllComments(productID int) ([]commentList, error) {
 			product_review.user_location_lat AS latitude, 
 			product_review.user_location_lon AS longitude, 
 			product_review.date AS datePublished, 
-			product_review.author AS author 
+			product_review.author AS author,
+			product_review.user AS user,
+			SUM(IFNULL(comment_review.approve,0)) AS useful, 
+			SUM(IFNULL(comment_review.disapprove,0)) AS notuseful
 			FROM product_review 
 			JOIN all_products 
 			ON product_review.product_id = all_products.ID 
+			LEFT JOIN comment_review ON product_review.id = comment_review.review_id
 			WHERE product_review.product_id = ?
 			AND all_products.deleted = ?
+			GROUP BY comment_review.review_id
 	`, productID, 0)
 	if err != nil {
 		return nil, err
 	} else {
 		for row.Next() {
 			err = row.Scan(
+				&comment.REVIEWID,
+				&comment.PRODUCTID,
 				&comment.PRODUCTNAME,
 				&comment.LIKES,
 				&comment.DISLIKE,
@@ -524,6 +539,9 @@ func getAllComments(productID int) ([]commentList, error) {
 				&comment.LONGITUDE,
 				&comment.DATEPUBLISHED,
 				&comment.AUTHOR,
+				&comment.USER,
+				&comment.USEFUL,
+				&comment.NOTUSEFUL,
 			)
 			if err != nil {
 				return nil, err
@@ -1608,4 +1626,102 @@ func dataSitemap() ([]sitemap, error) {
 	}
 	return sitemaps, nil
 
+}
+
+func canRateComment(reviewid, pid, username string) bool {
+	var (
+		numCount int
+		b        cU
+	)
+
+	sqlRaw := fmt.Sprintf(`SELECT COUNT(*) AS count 
+			FROM comment_review 
+			WHERE review_id = '%s'
+			AND product_id = '%s'
+			AND user = '%s'`, reviewid, pid, username)
+
+	if errX := database.DB.QueryRow(sqlRaw).Scan(&b.COUNT); errX == nil {
+		numCount = b.COUNT
+	} else if errX == sql.ErrNoRows {
+		log.Println(sql.ErrNoRows)
+	} else {
+		log.Println(errX)
+	}
+	if numCount > 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
+func approveRatingDB(reviewID, productID, user string) (int, error) {
+
+	if canRateComment(reviewID, productID, user) {
+		var datetime = time.Now()
+		datetime.Format(time.RFC3339)
+
+		stmtX, errX := database.DB.Prepare(`insert into comment_review
+				(
+					review_id, product_id, approve, disapprove, user, date
+				)
+				values(?,?,?,?,?,?);`)
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+		resX, errX := stmtX.Exec(
+			reviewID, productID, 1, 0, user, datetime,
+		)
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		defer stmtX.Close()
+
+		lid, errX := resX.LastInsertId()
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		return int(lid), nil
+	} else {
+		return 0, errors.New("Oops, you cannot upvote a comment twice on the same product")
+	}
+}
+
+func disapproveRatingDB(reviewID, productID, user string) (int, error) {
+
+	if canRateComment(reviewID, productID, user) {
+		var datetime = time.Now()
+		datetime.Format(time.RFC3339)
+
+		stmtX, errX := database.DB.Prepare(`insert into comment_review
+				(
+					review_id, product_id, approve, disapprove, user, date
+				)
+				values(?,?,?,?,?,?);`)
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+		resX, errX := stmtX.Exec(
+			reviewID, productID, 0, 1, user, datetime,
+		)
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		defer stmtX.Close()
+
+		lid, errX := resX.LastInsertId()
+
+		if errX != nil {
+			return 0, errors.New(errX.Error())
+		}
+
+		return int(lid), nil
+	} else {
+		return 0, errors.New("Oops, you cannot downvote a comment twice on the same product")
+	}
 }

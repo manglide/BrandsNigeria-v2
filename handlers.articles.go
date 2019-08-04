@@ -160,6 +160,7 @@ func getProductPage(c *gin.Context) {
 			"data":             data,
 			"numberofcomments": numberofcomments,
 			"comments":         comments,
+			"username":         UserLoggedIn,
 			"superadmin":       Superadmin,
 		},
 		"productPage.tmpl")
@@ -647,5 +648,39 @@ func genSitemap(c *gin.Context) {
 			"is_logged_in": true}, "sitemap.tmpl")
 	} else {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+	}
+}
+
+func approveRating(c *gin.Context) {
+	reviewID := c.PostForm("reviewid")
+	productID := c.PostForm("pid")
+	user := c.PostForm("user")
+	count, err := approveRatingDB(reviewID, productID, user)
+
+	if count > 0 {
+		c.JSON(200, gin.H{
+			"data": "success",
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"data": err.Error(),
+		})
+	}
+}
+
+func disapproveRating(c *gin.Context) {
+	reviewID := c.PostForm("reviewid")
+	productID := c.PostForm("pid")
+	user := c.PostForm("user")
+	count, err := disapproveRatingDB(reviewID, productID, user)
+
+	if count > 0 {
+		c.JSON(200, gin.H{
+			"data": "success",
+		})
+	} else {
+		c.JSON(400, gin.H{
+			"data": err.Error(),
+		})
 	}
 }

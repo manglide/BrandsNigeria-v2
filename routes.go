@@ -65,6 +65,8 @@ func initializeRoutes() {
 		api.POST("/areasofrejection", neutral(), getAreasOfRejection)
 		api.POST("/productrecommendation", neutral(), getProductRecommendation)
 		api.POST("/productsAPICompetitor", neutral(), pCompetitor)
+		api.POST("/approveRating", ensureLoggedIn(), approveRating)
+		api.POST("/disapproveRating", ensureLoggedIn(), disapproveRating)
 	}
 
 }
