@@ -499,30 +499,68 @@ func getAllComments(productID int) ([]commentList, error) {
 		comment commentList
 	)
 
-	row, err := database.DB.Query(`
+	/*row, err := database.DB.Query(`
 			SELECT
 			product_review.id AS reviewid,
 			product_review.product_id AS productid,
-			all_products.title AS productname, 
-			product_review.likes AS likes, 
-			product_review.dislikes AS dislike, 
-			product_review.rating AS rate, 
-			product_review.user_comments AS comment, 
-			product_review.user_location_lat AS latitude, 
-			product_review.user_location_lon AS longitude, 
-			product_review.date AS datePublished, 
+			all_products.title AS productname,
+			product_review.likes AS likes,
+			product_review.dislikes AS dislike,
+			product_review.rating AS rate,
+			product_review.user_comments AS comment,
+			product_review.user_location_lat AS latitude,
+			product_review.user_location_lon AS longitude,
+			product_review.date AS datePublished,
 			product_review.author AS author,
 			product_review.user AS user,
-			SUM(IFNULL(comment_review.approve,0)) AS useful, 
+			SUM(IFNULL(comment_review.approve,0)) AS useful,
 			SUM(IFNULL(comment_review.disapprove,0)) AS notuseful
-			FROM product_review 
-			JOIN all_products 
-			ON product_review.product_id = all_products.ID 
+			FROM product_review
+			JOIN all_products
+			ON product_review.product_id = all_products.ID
 			LEFT JOIN comment_review ON product_review.id = comment_review.review_id
 			WHERE product_review.product_id = ?
 			AND all_products.deleted = ?
-			GROUP BY comment_review.review_id
-	`, productID, 0)
+			GROUP BY comment_review.review_id HAVING useful > 1
+	`, productID, 0)*/
+
+	row, err := database.DB.Query(`
+					SELECT 
+					product_review.id AS reviewid, 
+					product_review.product_id AS productid, 
+					all_products.title AS productname, product_review.likes AS likes, 
+					product_review.dislikes AS dislike, 
+					product_review.rating AS rate, 
+					product_review.user_comments AS comment, 
+					product_review.user_location_lat AS latitude, 
+					product_review.user_location_lon AS longitude, 
+					product_review.date AS datePublished, 
+					product_review.author AS author, 
+					product_review.user AS user, 
+					(
+						SELECT IFNULL(SUM(comment_review.approve),0) 
+						FROM comment_review 
+						WHERE product_id = productid 
+						AND 
+						user = user 
+						AND 
+						review_id = reviewid
+					) AS useful, 
+					(
+						SELECT IFNULL(SUM(comment_review.disapprove),0) 
+						FROM comment_review 
+						WHERE product_id = productid 
+						AND 
+						user = user 
+						AND 
+						review_id = reviewid
+					) AS notuseful 
+					FROM product_review 
+					JOIN all_products ON product_review.product_id = all_products.ID 
+					WHERE 
+					product_review.product_id = ? 
+					AND 
+					all_products.deleted = ?`, productID, 0)
 	if err != nil {
 		return nil, err
 	} else {
