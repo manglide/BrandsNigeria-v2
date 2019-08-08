@@ -214,8 +214,8 @@ func getAllItemsFrontPage() ([]productList, error) {
 		COUNT(user_location_lat) + COUNT(user_location_lon) AS locationcount, 
 		all_products.ingredients AS ingredients, 
 		product_categories.category AS category, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+		CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+		CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
 		FROM all_products 
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
@@ -624,8 +624,8 @@ func getProductData(pid string) ([]productListPage, error) {
 		all_products.competitor_2 AS secondCompetition,
 		all_products.ingredients AS ingredients, 
 		product_categories.category AS category, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+		CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+		CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
 		FROM all_products 
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
@@ -716,13 +716,12 @@ func getRichSnippet(pid string) ([]productRichSnippet, error) {
 		all_products.sku AS sku, 
 		all_products.mpn AS mpn,
 		all_products.price AS price, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1
+		CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1
 		FROM all_products 
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
 		WHERE 
 		all_products.product_name_clean_url = ? AND
-		all_products.about <> '' 
 		AND all_products.about IS NOT NULL
 		AND all_products.manufacturer IS NOT NULL AND 
 		all_products.address IS NOT NULL AND
@@ -908,8 +907,8 @@ func getCompetitors(guid string) ([]competitors, []noCompetition, error) {
 					COUNT(user_location_lat) + COUNT(user_location_lon) AS locationcount, 
 					all_products.ingredients AS ingredients, 
 					product_categories.category AS category, 
-					CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-					CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+					CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+					CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
 					FROM all_products 
 					JOIN product_review ON all_products.id = product_review.product_id
 					JOIN product_categories ON all_products.category = product_categories.id  
@@ -1327,8 +1326,8 @@ func productRecommendation(data []string) ([]pRecommendation, []noCompetition, e
 					COUNT(user_location_lat) + COUNT(user_location_lon) AS locationcount, 
 					all_products.ingredients AS ingredients, 
 					product_categories.category AS category, 
-					CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-					CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+					CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+					CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
 					FROM all_products 
 					JOIN product_review ON all_products.id = product_review.product_id
 					JOIN product_categories ON all_products.category = product_categories.id  
@@ -1447,8 +1446,8 @@ func getProductToEdit(pid string) ([]productListPageEdit, error) {
 		all_products.competitor_2 AS secondCompetition,
 		all_products.ingredients AS ingredients, 
 		product_categories.category AS category, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-		CONCAT('https://asknigeria.com.ng/assets/brands/images/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+		CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
+		CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
 		FROM all_products 
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
@@ -1515,10 +1514,11 @@ func editProductDB(items MyformE) (*MyformE, error) {
 	// about = strconv.Quote(about)
 	ingredients := strings.TrimSpace(items.INGREDIENTS)
 	// ingredients = strconv.Quote(ingredients)
-	log.Println(items.PRODUCTID)
+	guid := genGUID(items.PRODUCTNAME)
 	updateAllPr, err := database.DB.Prepare(`update all_products
 						SET 
 						title = ?, 
+						product_name_clean_url = ?,
 						category = ?, 
 						competitor_1 = ?, 
 						competitor_2 = ?,
@@ -1536,6 +1536,7 @@ func editProductDB(items MyformE) (*MyformE, error) {
 
 	_, err = tx.Stmt(updateAllPr).Exec(
 		items.PRODUCTNAME,
+		guid,
 		items.CATEGORIES,
 		items.COMPETITORS[0],
 		items.COMPETITORS[1],
