@@ -443,70 +443,7 @@ function deleteProduct(guid, pid) {
 	}
 }
 
-function approveRating(reviewID, productID, user, domID) {
-	$.ajax(
-            {
-                url : '/api/approveRating',
-                type: "POST",
-                data: {reviewid: reviewID, pid: productID, user: user},
-                beforeSend: function ()
-                {
-                 
-                },
-                success:function(response)
-                {
-                	
-                	if(response.data == "success") {
-						var currentV = parseInt(document.getElementById(domID).innerHTML)
-						currentV += 1;
-						document.getElementById(domID).innerHTML = currentV
-					} else {
-						alert(response.responseJSON.data)
-					}
-                },
-                error: function(response)
-                {
-                	
-                	if(response.statusText === "Unauthorized") {
-						alert("Sorry, you must be logged in to upvote")
-					} else {
-						alert(response.responseJSON.data)	
-					}
-                }
-              });
-}
 
-function disapproveRating(reviewID, productID, user, domID) {
-	$.ajax(
-            {
-                url : '/api/disapproveRating',
-                type: "POST",
-                data: {reviewid: reviewID, pid: productID, user: user},
-                beforeSend: function ()
-                {
-                 
-                },
-                success:function(response)
-                {
-                	
-                	if(response.data == "success") {
-						var currentV = parseInt(document.getElementById(domID).innerHTML)
-						currentV += 1;
-						document.getElementById(domID).innerHTML = currentV
-					} else {
-						alert(response.data)
-					}
-                },
-                error: function(response)
-                {
-                  	if(response.statusText === "Unauthorized") {
-						alert("Sorry, you must be logged in to downvote")
-					} else {
-						alert(response.responseJSON.data)	
-					}
-                }
-              });
-}
 
 function restoreProduct(guid, pid) {
 	var prompt = confirm("Are you sure?")

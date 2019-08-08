@@ -5,17 +5,17 @@
 	{{ $user := whoami }}
 	<!-- Was this item useful -->
 	<div 
-		class="btn btn-default btn-sm" title="I agree"
+		class="btn btn-default btn-sm appr" title="I agree"
 		data-toggle="modal" data-target="#approveRating" 
-		onClick="approveRating('{{ $reviewID }}','{{ $pid }}','{{ $user }}','apr_{{$reviewID}}_{{$pid}}_{{$user}}')">
+		id="div-apr_{{$reviewID}}_{{$pid}}_{{$user}}">
 		<div class="textBelowRatingsProductPage">
 			<span class="fa fa-thumbs-up"></span>
 			<span class="rT" id="apr_{{$reviewID}}_{{$pid}}_{{$user}}">{{ .USEFUL }}</span>
 		</div>
 	</div>
-	<div class="btn btn-default btn-sm" title="I disagree"
-			data-toggle="modal" data-target="#disapproveRating" 
-			onClick="disapproveRating('{{ $reviewID }}','{{ $pid }}','{{ $user }}','disapr_{{$reviewID}}_{{$pid}}_{{$user}}')">
+	<div class="btn btn-default btn-sm disappr" title="I disagree"
+			id="div-disapr_{{$reviewID}}_{{$pid}}_{{$user}}"
+			data-toggle="modal" data-target="#disapproveRating">
 		<div className="textBelowRatingsProductPage">
 			<span class="fa fa-thumbs-down"></span>
 			<span class="rT" id="disapr_{{$reviewID}}_{{$pid}}_{{$user}}">{{ .NOTUSEFUL }}</span>

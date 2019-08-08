@@ -137,7 +137,86 @@ $(document).ready(function() {
 				.removeClass("btn-info btn-success").addClass("btn-danger")
 			}
 	    });
-	})
+	});
+	
+	$(".appr").click(function(elem){
+		var source = $(this).attr("id");
+		var f = source.split("-");
+		var domID = f[1];
+		var c = domID.split("_")
+		var reviewID = c[1];
+		var productID = c[2];
+		var user = c[3];
+		$.ajax(
+           {
+               url : '/api/approveRating',
+               type: "POST",
+               data: {reviewid: reviewID, pid: productID, user: user},
+               beforeSend: function ()
+               {
+                 
+               },
+               success:function(response)
+               {
+                	
+               	if(response.data == "success") {
+						var currentV = parseInt(document.getElementById(domID).innerHTML)
+						currentV += 1;
+						document.getElementById(domID).innerHTML = currentV
+					} else {
+						alert(response.responseJSON.data)
+					}
+               },
+               error: function(response)
+               {
+                	
+               	if(response.statusText === "Unauthorized") {
+						alert("Sorry, you must be logged in to upvote")
+					} else {
+						alert(response.responseJSON.data)	
+					}
+               }
+             });
+	});
+	
+	$(".disappr").click(function() {
+		var source = $(this).attr("id");
+		var f = source.split("-");
+		var domID = f[1];
+		var c = domID.split("_")
+		var reviewID = c[1];
+		var productID = c[2];
+		var user = c[3];
+		$.ajax(
+            {
+                url : '/api/disapproveRating',
+                type: "POST",
+                data: {reviewid: reviewID, pid: productID, user: user},
+                beforeSend: function ()
+                {
+                 
+                },
+                success:function(response)
+                {
+                	
+                	if(response.data == "success") {
+						var currentV = parseInt(document.getElementById(domID).innerHTML)
+						currentV += 1;
+						document.getElementById(domID).innerHTML = currentV
+					} else {
+						alert(response.data)
+					}
+                },
+                error: function(response)
+                {
+                  	if(response.statusText === "Unauthorized") {
+						alert("Sorry, you must be logged in to downvote")
+					} else {
+						alert(response.responseJSON.data)	
+					}
+                }
+              });
+	});
 	
 	$("#sendC").click(function(event){
             event.preventDefault();
