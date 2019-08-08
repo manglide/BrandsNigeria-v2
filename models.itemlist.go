@@ -820,14 +820,14 @@ func makeProduct(items Myform) (*Myform, error) {
 				(
 					product_id, product_category, likes, dislikes, rating, 
 					user_comments, 
-					user_location_lat, user_location_lon, date, author
+					user_location_lat, user_location_lon, date, user, author
 				)
-				values(?,?,?,?,?,?,?,?,?,?);`)
+				values(?,?,?,?,?,?,?,?,?,?,?);`)
 	if errX != nil {
 		return nil, errors.New(errX.Error())
 	}
 	_, errX = stmtX.Exec(
-		lid, items.CATEGORIES, 0, 0, 1, "Awesome Product", "", "", datetime, "System Generated",
+		lid, items.CATEGORIES, 0, 0, 1, "Awesome Product", "", "", datetime, "", "System Generated",
 	)
 
 	if errX != nil {
