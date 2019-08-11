@@ -209,7 +209,7 @@ $(document).ready(function() {
                 },
                 error: function(response)
                 {
-                	
+                	console.log(response)
                   	if(response.statusText === "Unauthorized") {
 						alert("Sorry, you must be logged in to downvote")
 					} else {
