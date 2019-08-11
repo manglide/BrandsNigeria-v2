@@ -170,10 +170,10 @@ $(document).ready(function() {
                error: function(response)
                {
                 	
-               	if(response.statusText === "Unauthorized") {
+               	if(response.status === "401") {
 						alert("Sorry, you must be logged in to upvote")
 					} else {
-						alert(response.responseJSON.data)	
+						alert(response.statusText)	
 					}
                }
              });
@@ -209,8 +209,7 @@ $(document).ready(function() {
                 },
                 error: function(response)
                 {
-                	console.log(response)
-                  	if(response.statusText === "Unauthorized") {
+                  	if(response.status === "401") {
 						alert("Sorry, you must be logged in to downvote")
 					} else {
 						alert(response.statusText)	
