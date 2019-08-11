@@ -209,10 +209,11 @@ $(document).ready(function() {
                 },
                 error: function(response)
                 {
+                	
                   	if(response.statusText === "Unauthorized") {
 						alert("Sorry, you must be logged in to downvote")
 					} else {
-						alert(response.responseJSON.data)	
+						alert(response.statusText)	
 					}
                 }
               });
