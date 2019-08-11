@@ -170,10 +170,10 @@ $(document).ready(function() {
                error: function(response)
                {
                 	
-               	if(response.status === "401") {
+               	if(response.status == 401) {
 						alert("Sorry, you must be logged in to upvote")
 					} else {
-						alert(response.statusText)	
+						alert(response.status + " " + response.statusText)
 					}
                }
              });
@@ -209,10 +209,10 @@ $(document).ready(function() {
                 },
                 error: function(response)
                 {
-                  	if(response.status === "401") {
+                  	if(response.status == 401) {
 						alert("Sorry, you must be logged in to downvote")
 					} else {
-						alert(response.statusText)	
+						alert(response.status + " " + response.statusText)	
 					}
                 }
               });
