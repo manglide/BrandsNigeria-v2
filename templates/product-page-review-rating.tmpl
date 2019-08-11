@@ -4,21 +4,21 @@
 	{{ $pid := .PRODUCTID }}
 	{{ $user := whoami }}
 	<!-- Was this item useful -->
-	<div 
-		class="btn btn-default btn-sm appr" title="I agree"
+	<button 
+		class="btn btn-success btn-sm appr" title="I agree"
 		data-toggle="modal" data-target="#approveRating" 
 		id="div-apr_{{$reviewID}}_{{$pid}}_{{$user}}">
 		<div class="textBelowRatingsProductPage">
 			<span class="fa fa-thumbs-up"></span>
 			<span class="rT" id="apr_{{$reviewID}}_{{$pid}}_{{$user}}">{{ .USEFUL }}</span>
 		</div>
-	</div>
-	<div class="btn btn-default btn-sm disappr" title="I disagree"
+	</button>
+	<button class="btn btn-danger btn-sm disappr" title="I disagree"
 			id="div-disapr_{{$reviewID}}_{{$pid}}_{{$user}}"
 			data-toggle="modal" data-target="#disapproveRating">
 		<div className="textBelowRatingsProductPage">
 			<span class="fa fa-thumbs-down"></span>
 			<span class="rT" id="disapr_{{$reviewID}}_{{$pid}}_{{$user}}">{{ .NOTUSEFUL }}</span>
 		</div>
-	</div>
+	</button>
 </div>
