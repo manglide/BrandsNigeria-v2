@@ -1,5 +1,6 @@
 <!--create-article.tmpl-->
 {{ template "header.tmpl" .}}
+<div class="viewarea">
 <h1>Create Article</h1>
 <div class="panel panel-default col-sm-12">
 <div class="panel-body">
@@ -8,7 +9,7 @@
 {{.ErrorTitle}}: {{.ErrorMessage}}
 </p>
 {{end}}
-<form class="form" action="/article/create" method="POST">
+<form class="form" action="/blog/create" method="POST">
 <div class="form-group">
 <label for="title">Title</label>
 <input type="text" class="form-control" id="title" name="title" placeholder="Title">
@@ -19,6 +20,7 @@
 </div>
 <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+</div>
 </div>
 </div>
 {{ template "footer.tmpl" .}}

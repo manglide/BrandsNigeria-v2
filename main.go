@@ -174,6 +174,10 @@ func roundUp(val string) string {
 	return s
 }
 
+func count(data []blog) int {
+	return len(data)
+}
+
 func whoami() string {
 	return UserLoggedIn
 }
@@ -205,6 +209,7 @@ func main() {
 		"equalNoAdd":      equalNoAdd,
 		"sGUID":           sGUID,
 		"whoami":          whoami,
+		"count":           count,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

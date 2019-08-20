@@ -1,0 +1,8 @@
+{{ template "header.tmpl" .}}
+<div class="viewarea">
+			{{ range .message }}
+				<h2>{{.Title}}</h2>
+			    <p>{{.Content}}</p>
+		    {{ end }}
+</div>
+{{ template "footer.tmpl" .}}

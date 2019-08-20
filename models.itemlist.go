@@ -1764,3 +1764,39 @@ func disapproveRatingDB(reviewID, productID, user string) (int, error) {
 		return 0, errors.New("Oops, you cannot downvote a comment twice on the same product")
 	}
 }
+
+type blog struct {
+	ID      int    `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Date    string `json:"date"`
+	GUID    string `json:"guid"`
+}
+
+func blogList() ([]blog, error) {
+	var bloglists = []blog{}
+	var (
+		singleItem blog
+	)
+	row, err := database.DB.Query(`	
+			SELECT title AS title, content AS content, date_published, guid AS date FROM blog WHERE published = 0
+	`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&singleItem.Title,
+				&singleItem.Content,
+				&singleItem.Date,
+				&singleItem.GUID,
+			)
+			if err != nil {
+				return nil, err
+			}
+			bloglists = append(bloglists, singleItem)
+		}
+		defer row.Close()
+	}
+	return bloglists, nil
+}

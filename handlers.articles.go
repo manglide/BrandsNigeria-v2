@@ -61,38 +61,38 @@ func showIndexPage(c *gin.Context) {
 }
 
 func getArticle(c *gin.Context) {
-	// Check if the article ID is valid
-	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
-		// Check if the article exists
-		if article, err := getSingleArticle(articleID); err == nil {
-			render(c, gin.H{"title": article.Title, "message": article, "is_logged_in": true}, "article.tmpl")
-		} else {
-			render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
-		}
-
+	articleID := c.Param("article_id")
+	// Check if the article exists
+	if article, err := getSingleArticle(articleID); err == nil {
+		render(c,
+			gin.H{
+				"superadmin":   Superadmin,
+				"username":     UserLoggedIn,
+				"message":      article,
+				"is_logged_in": true},
+			"blog-body.tmpl")
 	} else {
-		render(c, gin.H{"title": "404 Not Found", "message": "Oops! Sorry we cant find any article with the ID"}, "404.tmpl")
+		render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
 	}
+
 }
 
 func getArticleUnAuthenticated(c *gin.Context) {
-	// Check if the article ID is valid
-	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
-		// Check if the article exists
-		if article, err := getSingleArticle(articleID); err == nil {
-			render(c, gin.H{"title": article.Title, "message": article}, "article.tmpl")
-		} else {
-			render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
-		}
-
+	articleID := c.Param("article_id")
+	// Check if the article exists
+	if article, err := getSingleArticle(articleID); err == nil {
+		render(c, gin.H{"message": article}, "blog-body.tmpl")
 	} else {
-		render(c, gin.H{"title": "404 Not Found", "message": "Oops! Sorry we cant find any article with the ID"}, "404.tmpl")
+		render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
 	}
+	// return nil, errors.New("Article not found")
 }
 
 func showArticleCreationPage(c *gin.Context) {
 	render(c, gin.H{
 		"title":        "Create New Article",
+		"superadmin":   Superadmin,
+		"username":     UserLoggedIn,
 		"is_logged_in": true}, "create-article.tmpl")
 }
 
@@ -103,8 +103,11 @@ func createArticle(c *gin.Context) {
 		render(c, gin.H{
 			"title":        "Submission Successful",
 			"payload":      a,
+			"superadmin":   Superadmin,
+			"username":     UserLoggedIn,
 			"is_logged_in": true}, "submission-successful.tmpl")
 	} else {
+		log.Println(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }
@@ -541,7 +544,6 @@ func editProduct(c *gin.Context) {
 	}
 	log.Println(p)
 	data, err := getProductToEdit(p)
-	log.Println(data)
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
@@ -683,4 +685,35 @@ func disapproveRating(c *gin.Context) {
 			"data": err.Error(),
 		})
 	}
+}
+
+func getBlogsList(c *gin.Context) {
+	data, err := blogList()
+	log.Println(data)
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+	}
+	render(c,
+		gin.H{
+			"title":        "Blog Archive",
+			"is_logged_in": false,
+			"message":      data,
+		},
+		"article.tmpl")
+}
+
+func getBlogsListAuth(c *gin.Context) {
+	data, err := blogList()
+	if err != nil {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+	}
+	render(c,
+		gin.H{
+			"title":        "Blog Archive",
+			"superadmin":   Superadmin,
+			"username":     UserLoggedIn,
+			"is_logged_in": true,
+			"message":      data,
+		},
+		"article.tmpl")
 }

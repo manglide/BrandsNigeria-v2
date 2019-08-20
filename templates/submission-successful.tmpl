@@ -2,6 +2,10 @@
 {{ template "header.tmpl" .}}
 <div class="viewarea">
 <strong>The article was successfully submitted.</strong>
-<a href="/article/view/{{.payload.ID}}">{{.payload.Title}}</a>
+	{{ if .superadmin }}
+		<a href="/blog/s/{{.payload.GUID}}">{{.payload.Title}}</a>
+	{{ else }}
+		<a href="/blog/{{.payload.GUID}}">{{.payload.Title}}</a>
+	{{ end }}
 </div>
 {{ template "footer.tmpl" .}}

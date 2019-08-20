@@ -21,13 +21,15 @@ func initializeRoutes() {
 		userRoutes.POST("/register", ensureNotLoggedIn(), register)
 		userRoutes.POST("/comments", ensureLoggedIn(), postComments)
 		userRoutes.POST("/withdrawrating", ensureLoggedIn(), withdrawRating)
+		userRoutes.GET("/blog", ensureNotLoggedIn(), getBlogsList)
+		userRoutes.GET("/s/blog", ensureLoggedIn(), getBlogsListAuth)
 	}
 
-	articleRoutes := router.Group("/article")
+	articleRoutes := router.Group("/blog")
 	{
 		// route from Part 1 of the tutorial
-		articleRoutes.GET("/view/:article_id", ensureLoggedIn(), getArticle)
-		articleRoutes.GET("/views/:article_id", ensureNotLoggedIn(), getArticleUnAuthenticated)
+		articleRoutes.GET("/s/:article_id", ensureLoggedIn(), getArticle)
+		articleRoutes.GET("/[:article_id]", ensureNotLoggedIn(), getArticleUnAuthenticated)
 		articleRoutes.GET("/create", ensureLoggedIn(), showArticleCreationPage)
 		articleRoutes.POST("/create", ensureLoggedIn(), createArticle)
 	}
