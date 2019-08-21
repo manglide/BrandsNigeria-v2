@@ -124,7 +124,7 @@ $(document).ready(function() {
 		    },
 	        success: function(response){
 				console.log(response)
-				$("#imageloc").val() = response
+				$("#imageloc").val(response)
 				$("#storeblogimg").empty().html('Save Image')
 				.removeClass("btn-info btn-danger").addClass("btn-success")
 	            alert("Image Saved Successfully")
