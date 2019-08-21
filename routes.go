@@ -25,11 +25,12 @@ func initializeRoutes() {
 		userRoutes.GET("/s/blog", ensureLoggedIn(), getBlogsListAuth)
 	}
 
+	router.GET("/blogs/:id/:guid", ensureNotLoggedIn(), getArticleUnAuthenticated)
+
 	articleRoutes := router.Group("/blog")
 	{
-		// route from Part 1 of the tutorial
-		articleRoutes.GET("/s/:article_id", ensureLoggedIn(), getArticle)
-		articleRoutes.GET("/[:article_id]", ensureNotLoggedIn(), getArticleUnAuthenticated)
+		articleRoutes.GET("/s/:id/:guid", ensureLoggedIn(), getArticle)
+		// articleRoutes.GET("/s/:id/:guid", ensureNotLoggedIn(), getArticleUnAuthenticated)
 		articleRoutes.GET("/create", ensureLoggedIn(), showArticleCreationPage)
 		articleRoutes.POST("/create", ensureLoggedIn(), createArticle)
 	}

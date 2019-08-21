@@ -1,20 +1,22 @@
 {{ template "header.tmpl" .}}
 <div class="viewarea">
+<div class="aboutContent">
   {{ $count := count .message }}
   {{ if equalNoAdd $count 0}}
 	  	<h2>No Articles Found</h2>
   {{ else }}
 		{{ if .is_logged_in }}
 			{{ range .message }}
-				<a href="/blog/s/{{.GUID}}">{{.Title}}</a>
-			    <p>{{.Content}}</p>
+				<a href="/blog/s/{{.ID}}/{{.GUID}}">{{.Title}}</a>
+			    <p>{{substring .Content 0 30}}</p>
 		    {{ end }}
 		{{ else }}
 			{{ range .message }}
-				<a href="/blog/{{.GUID}}">{{.Title}}</a>
-			    <p>{{.Content}}</p>
+				<a href="/blogs/{{.ID}}/{{.GUID}}">{{.Title}}</a>
+			    <p>{{substring .Content 0 30}}</p>
 		    {{ end }}
 		{{ end }}
   {{ end }}
+</div>
 </div>
 {{ template "footer.tmpl" .}}

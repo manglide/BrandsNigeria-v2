@@ -3,9 +3,9 @@
 <div class="viewarea">
 <strong>The article was successfully submitted.</strong>
 	{{ if .superadmin }}
-		<a href="/blog/s/{{.payload.GUID}}">{{.payload.Title}}</a>
+		<a href="/blog/s/{{.payload.ID}}/{{.payload.GUID}}">{{.payload.Title}}</a>
 	{{ else }}
-		<a href="/blog/{{.payload.GUID}}">{{.payload.Title}}</a>
+		<a href="/blogs/{{.payload.ID}}/{{.payload.GUID}}">{{.payload.Title}}</a>
 	{{ end }}
 </div>
 {{ template "footer.tmpl" .}}

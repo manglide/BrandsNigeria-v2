@@ -105,6 +105,37 @@ $(document).ready(function() {
 			 }
 		 }
 	 });
+	$("#storeblogimg").click(function(event){
+		$(this).empty().html('Uploading...please wait')
+		var data = new FormData();
+	    $.each($('#imageblog')[0].files, function(i, file) {
+	        data.append('file-'+i, file);
+	    });
+		
+		$.ajax({
+	        url: '/sendBlogImageForUpload',
+			type: 'POST',
+	        data: data,
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+			before: function() {
+			    $("#storeblogimg").empty().html('Uploading...please wait')
+		    },
+	        success: function(response){
+				console.log(response)
+				$("#imageloc").val() = response
+				$("#storeblogimg").empty().html('Save Image')
+				.removeClass("btn-info btn-danger").addClass("btn-success")
+	            alert("Image Saved Successfully")
+	        },
+			error:function(response){
+				console.log(response)
+				$("#storeblogimg").empty().html('Save Image')
+				.removeClass("btn-info btn-success").addClass("btn-danger")
+			}
+	    });
+	});
 	
 	$("#storeimg").click(function(event){
 		$(this).empty().html('Uploading...please wait')

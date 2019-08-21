@@ -10,14 +10,14 @@ import (
 	"github.com/brandsnigeria/webapp/database"
 )
 
-func getSingleArticle(guid string) ([]blog, error) {
+func getSingleArticle(id int, guid string) ([]blog, error) {
 	var lb = []blog{}
 	var (
 		singleItem blog
 	)
 	row, err := database.DB.Query(`
-		SELECT id, title, content, date_published FROM blog WHERE guid = ?
-	`, guid)
+		SELECT id, title, content, guid, date_published FROM blog WHERE id = ? AND guid = ?
+	`, id, guid)
 
 	if err != nil {
 		return nil, err
@@ -27,6 +27,7 @@ func getSingleArticle(guid string) ([]blog, error) {
 				&singleItem.ID,
 				&singleItem.Title,
 				&singleItem.Content,
+				&singleItem.GUID,
 				&singleItem.Date,
 			)
 			if err != nil {

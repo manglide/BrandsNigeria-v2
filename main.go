@@ -182,6 +182,23 @@ func whoami() string {
 	return UserLoggedIn
 }
 
+func substring(input string, start int, end int) string {
+	f := regexp.MustCompile(`\s+`)
+	q := f.Split(input, -1)
+	length := len(q)
+	var str = ""
+	if end > length {
+		return input
+	}
+
+	if end <= length {
+		for c := 0; c < end; c += 1 {
+			str += q[c] + " "
+		}
+	}
+	return str
+}
+
 func main() {
 
 	// Set the router as the default one provided by Gin
@@ -210,6 +227,7 @@ func main() {
 		"sGUID":           sGUID,
 		"whoami":          whoami,
 		"count":           count,
+		"substring":       substring,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

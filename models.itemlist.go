@@ -1779,13 +1779,14 @@ func blogList() ([]blog, error) {
 		singleItem blog
 	)
 	row, err := database.DB.Query(`	
-			SELECT title AS title, content AS content, date_published, guid AS date FROM blog WHERE published = 0
+			SELECT id, title AS title, content AS content, date_published, guid AS date FROM blog WHERE published = 0
 	`)
 	if err != nil {
 		return nil, err
 	} else {
 		for row.Next() {
 			err = row.Scan(
+				&singleItem.ID,
 				&singleItem.Title,
 				&singleItem.Content,
 				&singleItem.Date,

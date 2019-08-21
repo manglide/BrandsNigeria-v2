@@ -61,9 +61,10 @@ func showIndexPage(c *gin.Context) {
 }
 
 func getArticle(c *gin.Context) {
-	articleID := c.Param("article_id")
+	articleID, _ := strconv.Atoi(c.Param("id"))
+	guid := c.Param("guid")
 	// Check if the article exists
-	if article, err := getSingleArticle(articleID); err == nil {
+	if article, err := getSingleArticle(articleID, guid); err == nil {
 		render(c,
 			gin.H{
 				"superadmin":   Superadmin,
@@ -78,9 +79,10 @@ func getArticle(c *gin.Context) {
 }
 
 func getArticleUnAuthenticated(c *gin.Context) {
-	articleID := c.Param("article_id")
+	articleID, _ := strconv.Atoi(c.Param("id"))
+	guid := c.Param("guid")
 	// Check if the article exists
-	if article, err := getSingleArticle(articleID); err == nil {
+	if article, err := getSingleArticle(articleID, guid); err == nil {
 		render(c, gin.H{"message": article}, "blog-body.tmpl")
 	} else {
 		render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
@@ -689,7 +691,6 @@ func disapproveRating(c *gin.Context) {
 
 func getBlogsList(c *gin.Context) {
 	data, err := blogList()
-	log.Println(data)
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
