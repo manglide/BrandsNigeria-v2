@@ -123,14 +123,12 @@ $(document).ready(function() {
 			    $("#storeblogimg").empty().html('Uploading...please wait')
 		    },
 	        success: function(response){
-				console.log(response)
-				$("#imageloc").val(response)
+				$("#imageloc").val(response.message)
 				$("#storeblogimg").empty().html('Save Image')
 				.removeClass("btn-info btn-danger").addClass("btn-success")
 	            alert("Image Saved Successfully")
 	        },
 			error:function(response){
-				console.log(response)
 				$("#storeblogimg").empty().html('Save Image')
 				.removeClass("btn-info btn-success").addClass("btn-danger")
 			}

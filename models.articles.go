@@ -5,6 +5,7 @@ package main
 import (
 	"errors"
 
+	"log"
 	"time"
 
 	"github.com/brandsnigeria/webapp/database"
@@ -17,7 +18,7 @@ func getSingleArticle(id int, guid string) ([]blog, error) {
 	)
 	row, err := database.DB.Query(`
 		SELECT id, title, content, guid, date_published, 
-		CONCAT('https://images.brandsnigeria.com.ng/750x224/', imageloc) AS imageloc
+		CONCAT('https://images.brandsnigeria.com.ng/', imageloc) AS imageloc
 		FROM blog WHERE id = ? AND guid = ?
 	`, id, guid)
 
@@ -51,9 +52,10 @@ func createNewArticle(title, content, imageloc string) (*blog, error) {
 	var datetime = time.Now()
 	datetime.Format(time.RFC3339)
 	guid := sGUID(title)
+	log.Println(imageloc)
 	stmtX, errX := database.DB.Prepare(`insert into blog
 				(
-					title, content, date_published, author, guid, imageloc,
+					title, content, date_published, author, guid, imageloc
 				)
 				values(?,?,?,?,?,?);`)
 	if errX != nil {
