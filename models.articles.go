@@ -16,7 +16,9 @@ func getSingleArticle(id int, guid string) ([]blog, error) {
 		singleItem blog
 	)
 	row, err := database.DB.Query(`
-		SELECT id, title, content, guid, date_published FROM blog WHERE id = ? AND guid = ?
+		SELECT id, title, content, guid, date_published, 
+		CONCAT('https://images.brandsnigeria.com.ng/750x224/', imageloc) AS imageloc
+		FROM blog WHERE id = ? AND guid = ?
 	`, id, guid)
 
 	if err != nil {
@@ -29,6 +31,7 @@ func getSingleArticle(id int, guid string) ([]blog, error) {
 				&singleItem.Content,
 				&singleItem.GUID,
 				&singleItem.Date,
+				&singleItem.IMAGE,
 			)
 			if err != nil {
 				return nil, err
@@ -41,7 +44,7 @@ func getSingleArticle(id int, guid string) ([]blog, error) {
 
 }
 
-func createNewArticle(title, content string) (*blog, error) {
+func createNewArticle(title, content, imageloc string) (*blog, error) {
 	var (
 		singleItem blog
 	)
@@ -50,14 +53,14 @@ func createNewArticle(title, content string) (*blog, error) {
 	guid := sGUID(title)
 	stmtX, errX := database.DB.Prepare(`insert into blog
 				(
-					title, content, date_published, author, guid
+					title, content, date_published, author, guid, imageloc,
 				)
-				values(?,?,?,?,?);`)
+				values(?,?,?,?,?,?);`)
 	if errX != nil {
 		return nil, errors.New(errX.Error())
 	}
 	resX, errX := stmtX.Exec(
-		title, content, datetime, UserLoggedIn, guid,
+		title, content, datetime, UserLoggedIn, guid, imageloc,
 	)
 
 	if errX != nil {
@@ -72,6 +75,7 @@ func createNewArticle(title, content string) (*blog, error) {
 	singleItem.Date = datetime.String()
 	singleItem.GUID = guid
 	singleItem.Title = title
+	singleItem.IMAGE = imageloc
 
 	if errX != nil {
 		return nil, errors.New(errX.Error())

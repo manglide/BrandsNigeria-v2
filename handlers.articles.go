@@ -101,7 +101,8 @@ func showArticleCreationPage(c *gin.Context) {
 func createArticle(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
-	if a, err := createNewArticle(title, content); err == nil {
+	imageLoc := c.PostForm("imageloc")
+	if a, err := createNewArticle(title, content, imageLoc); err == nil {
 		render(c, gin.H{
 			"title":        "Submission Successful",
 			"payload":      a,

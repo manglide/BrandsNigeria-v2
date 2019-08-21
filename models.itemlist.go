@@ -1771,6 +1771,7 @@ type blog struct {
 	Content string `json:"content"`
 	Date    string `json:"date"`
 	GUID    string `json:"guid"`
+	IMAGE   string `json:"image"`
 }
 
 func blogList() ([]blog, error) {
