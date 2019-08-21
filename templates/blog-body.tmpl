@@ -10,7 +10,7 @@
 {{ end }}
 <meta name="description" content="{{ substring .Content 0 30 }}" />
 <meta property="og:description" content="{{ substring .Content 0 30 }}" />
-<meta property="og:image" content="https://res.cloudinary.com/asknigeria/image/upload/v1546245659/ask-logo-lite.png" />
+<meta property="og:image" content="https://brandsnigeria.com.ng/{{.IMAGE}}" />
 <meta property="og:locale" content="en_NG" />
 <meta property="fb:app_id" content="491555231663023" />
 <style>
@@ -39,6 +39,7 @@ div.c {
     </div>
   </div>
   <div class="c">
+				<img src="https://brandsnigeria.com.ng/{{.IMAGE}}" />
 				<h2>{{.Title}}</h2>
 			    <p>{{.Content}}</p>
   </div>
