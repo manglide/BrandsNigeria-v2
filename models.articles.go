@@ -17,8 +17,12 @@ func getSingleArticle(id int, guid string) ([]blog, error) {
 		singleItem blog
 	)
 	row, err := database.DB.Query(`
-		SELECT id, title, content, guid, date_published, 
-		CONCAT('https://images.brandsnigeria.com.ng/', imageloc) AS imageloc
+		SELECT id, title, content, guid, date_published,
+		CASE WHEN imageloc = ''
+            THEN ''
+            ELSE 
+            CONCAT('https://images.brandsnigeria.com.ng/', imageloc)
+       	END AS imageloc 
 		FROM blog WHERE id = ? AND guid = ?
 	`, id, guid)
 

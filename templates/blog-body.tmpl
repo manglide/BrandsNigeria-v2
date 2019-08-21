@@ -39,9 +39,14 @@ div.c {
     </div>
   </div>
   <div class="c">
+				{{ if equalStr .IMAGE "" }}
+				<h2>{{.Title}}</h2>
+			    <p>{{.Content}}</p>
+				{{ else }}
 				<img class="img-fluid img-thumbnail" src="{{.IMAGE}}" />
 				<h2>{{.Title}}</h2>
 			    <p>{{.Content}}</p>
+				{{ end }}
   </div>
 </div>
 </div>
