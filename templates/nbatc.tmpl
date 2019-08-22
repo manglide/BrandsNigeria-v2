@@ -209,8 +209,21 @@
 				<tr>
 		            <td><strong><a target="_blank" href="https://brandsnigeria.com.ng/product/{{.PRODUCTGUID}}">{{ uppercase .TITLE }}</a></strong></td>
 		            <td>{{ uppercase .MANUFACTURER }}</td>
-					<td>{{ uppercase .COMPETITOR1 }}</td>
-					<td>{{ uppercase .COMPETITOR2 }}</td>
+					<td>
+						<strong>
+							<a target="_blank" href="https://brandsnigeria.com.ng/product/{{ sGUID .COMPETITOR1}}">
+								{{ uppercase .COMPETITOR1 }}
+							</a>
+						</strong>
+					
+					</td>
+					<td>
+						<strong>
+							<a target="_blank" href="https://brandsnigeria.com.ng/product/{{ sGUID .COMPETITOR2}}">
+								{{ uppercase .COMPETITOR2 }}
+							</a>
+						</strong>
+					</td>
 		        </tr>
 			{{ end }}
 			</tbody>
