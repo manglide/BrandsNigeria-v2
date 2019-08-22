@@ -208,7 +208,9 @@
 			{{ range .message }}
 				<tr>
 		            <td><strong><a target="_blank" href="https://brandsnigeria.com.ng/product/{{.PRODUCTGUID}}">{{ uppercase .TITLE }}</a></strong></td>
-		            <td>{{ uppercase .MANUFACTURER }}</td>
+		            <td>
+						{{ uppercase .MANUFACTURER }}
+					</td>
 					<td>
 						<strong>
 							<a target="_blank" href="https://brandsnigeria.com.ng/product/{{ sGUID .COMPETITOR1}}">
