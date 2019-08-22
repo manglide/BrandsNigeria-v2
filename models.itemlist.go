@@ -1823,7 +1823,7 @@ func getNBATC() ([]nbatcS, error) {
 			product_name_clean_url AS guid,
 			manufacturer AS manufacturer, 
 			competitor_1 AS competitor1, competitor_2 AS competitor2 
-			FROM all_products WHERE deleted = 0
+			FROM all_products WHERE deleted = 0 AND manufacturer <> ''
 	`)
 	if err != nil {
 		return nil, err
