@@ -719,3 +719,18 @@ func getBlogsListAuth(c *gin.Context) {
 		},
 		"article.tmpl")
 }
+
+func nbatc(c *gin.Context) {
+	data, err := getNBATC()
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+		log.Println(err)
+	}
+	render(c,
+		gin.H{
+			"title":        "Nigerian Brands and their Competitors",
+			"is_logged_in": false,
+			"message":      data,
+		},
+		"nbatc.tmpl")
+}

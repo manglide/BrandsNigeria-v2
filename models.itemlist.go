@@ -1802,3 +1802,46 @@ func blogList() ([]blog, error) {
 	}
 	return bloglists, nil
 }
+
+type nbatcS struct {
+	ID           int    `json:"id"`
+	TITLE        string `json:"title"`
+	PRODUCTGUID  string `json:"guid"`
+	MANUFACTURER string `json:"manufacturer"`
+	COMPETITOR1  string `json:"competitor1"`
+	COMPETITOR2  string `json:"competitor2"`
+}
+
+func getNBATC() ([]nbatcS, error) {
+	var nbatclists = []nbatcS{}
+	var (
+		singleItem nbatcS
+	)
+	row, err := database.DB.Query(`	
+			SELECT id AS id, title AS title, 
+			product_name_clean_url AS guid,
+			manufacturer AS manufacturer, 
+			competitor_1 AS competitor1, competitor_2 AS competitor2 
+			FROM all_products WHERE deleted = 0 AND manufacturer <> ''
+	`)
+	if err != nil {
+		return nil, err
+	} else {
+		for row.Next() {
+			err = row.Scan(
+				&singleItem.ID,
+				&singleItem.TITLE,
+				&singleItem.PRODUCTGUID,
+				&singleItem.MANUFACTURER,
+				&singleItem.COMPETITOR1,
+				&singleItem.COMPETITOR2,
+			)
+			if err != nil {
+				return nil, err
+			}
+			nbatclists = append(nbatclists, singleItem)
+		}
+		defer row.Close()
+	}
+	return nbatclists, nil
+}
