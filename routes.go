@@ -27,7 +27,7 @@ func initializeRoutes() {
 
 	router.GET("/blogs/:id/:guid", ensureNotLoggedIn(), getArticleUnAuthenticated)
 
-	router.GET("/nigerian-brands-and-their-competitors", ensureNotLoggedIn(), nbatc)
+	router.GET("/nigerian-brands-and-their-competitors", neutral(), nbatc)
 
 	articleRoutes := router.Group("/blog")
 	{
