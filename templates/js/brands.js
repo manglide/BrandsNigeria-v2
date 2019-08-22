@@ -443,8 +443,6 @@ function deleteProduct(guid, pid) {
 	}
 }
 
-
-
 function restoreProduct(guid, pid) {
 	var prompt = confirm("Are you sure?")
 	if(prompt) {

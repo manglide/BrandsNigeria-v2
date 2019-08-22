@@ -5,7 +5,6 @@ package main
 import (
 	"errors"
 
-	"log"
 	"time"
 
 	"github.com/brandsnigeria/webapp/database"
@@ -56,7 +55,6 @@ func createNewArticle(title, content, imageloc string) (*blog, error) {
 	var datetime = time.Now()
 	datetime.Format(time.RFC3339)
 	guid := sGUID(title)
-	log.Println(imageloc)
 	stmtX, errX := database.DB.Prepare(`insert into blog
 				(
 					title, content, date_published, author, guid, imageloc

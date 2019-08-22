@@ -11,6 +11,16 @@ $(document).ready(function() {
       }, 1000)
     }
 	 });
+	
+	function openShare(url, urlToPost, width, height) {
+			window.open(url, '_blank', 'width=' + width + ',height=' + height + ',scrollbars=no,status=no');
+			return false;
+	}
+	
+	$(".socialb").click(function(){
+		// console.log($(this).attr("data-href"))
+		return openShare('https://www.facebook.com/sharer/sharer.php?u=', $(this).attr("data-href"), 626, 436);
+	})
 	$("#datacomments").submit(function(event){
             event.preventDefault();
             var latitude = 0
