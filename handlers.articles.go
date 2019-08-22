@@ -62,32 +62,42 @@ func showIndexPage(c *gin.Context) {
 
 func getArticle(c *gin.Context) {
 	articleID, _ := strconv.Atoi(c.Param("id"))
-	guid := c.Param("guid")
-	// Check if the article exists
-	if article, err := getSingleArticle(articleID, guid); err == nil {
-		render(c,
-			gin.H{
-				"superadmin":   Superadmin,
-				"username":     UserLoggedIn,
-				"message":      article,
-				"is_logged_in": true},
-			"blog-body.tmpl")
+	if articleID == 1 {
+		nbatc(c)
 	} else {
-		render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
+		guid := c.Param("guid")
+		// Check if the article exists
+		if article, err := getSingleArticle(articleID, guid); err == nil {
+			render(c,
+				gin.H{
+					"superadmin":   Superadmin,
+					"username":     UserLoggedIn,
+					"message":      article,
+					"is_logged_in": true},
+				"blog-body.tmpl")
+		} else {
+			render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
+		}
 	}
 
 }
 
 func getArticleUnAuthenticated(c *gin.Context) {
 	articleID, _ := strconv.Atoi(c.Param("id"))
-	guid := c.Param("guid")
-	// Check if the article exists
-	if article, err := getSingleArticle(articleID, guid); err == nil {
-		render(c, gin.H{"message": article}, "blog-body.tmpl")
+	if articleID == 1 {
+		nbatcUnAuthenticated(c)
 	} else {
-		render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
+		articleID, _ := strconv.Atoi(c.Param("id"))
+		guid := c.Param("guid")
+		// Check if the article exists
+		if article, err := getSingleArticle(articleID, guid); err == nil {
+			render(c, gin.H{"message": article}, "blog-body.tmpl")
+		} else {
+			render(c, gin.H{"title": "404 Not Found", "message": http.StatusNotFound}, "404.tmpl")
+		}
+		// return nil, errors.New("Article not found")
 	}
-	// return nil, errors.New("Article not found")
+
 }
 
 func showArticleCreationPage(c *gin.Context) {
@@ -723,6 +733,23 @@ func getBlogsListAuth(c *gin.Context) {
 }
 
 func nbatc(c *gin.Context) {
+	data, err := getNBATC()
+	if err != nil {
+		// render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
+		log.Println(err)
+	}
+	render(c,
+		gin.H{
+			"title":        "Nigerian Brands and their Competitors",
+			"superadmin":   Superadmin,
+			"username":     UserLoggedIn,
+			"is_logged_in": true,
+			"message":      data,
+		},
+		"nbatc.tmpl")
+}
+
+func nbatcUnAuthenticated(c *gin.Context) {
 	data, err := getNBATC()
 	if err != nil {
 		// render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
