@@ -244,6 +244,8 @@ func main() {
 
 	// Serve Adsense .txt File
 	router.StaticFile("/ads.txt", "./templates/adsense/ads.txt")
+	// Serve Favicon File
+	router.StaticFile("/favicon.ico", "./templates/favicon/favicon.ico")
 
 	db, err := sql.Open("mysql", "reviewmonster:love~San&500#@tcp(127.0.0.1:3306)/asknigeria?charset=utf8mb4,utf8")
 	if err != nil {
