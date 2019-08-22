@@ -1818,7 +1818,7 @@ func getNBATC() ([]nbatcS, error) {
 		singleItem nbatcS
 	)
 	row, err := database.DB.Query(`	
-			SELECT id AS id, title AS title, 
+			SELECT id AS id, TRIM(title) AS title, 
 			product_name_clean_url AS guid,
 			manufacturer AS manufacturer, 
 			competitor_1 AS competitor1, competitor_2 AS competitor2 

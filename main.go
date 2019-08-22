@@ -117,7 +117,7 @@ func splitRIndex(item string, index int) string {
 }
 
 func uppercase(item string) string {
-	return strings.ToUpper(item)
+	return strings.ToUpper(strings.TrimSpace(item))
 }
 
 func iterate(count string) []int {
