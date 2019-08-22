@@ -152,6 +152,8 @@ func getProductPage(c *gin.Context) {
 	}
 	numberofcomments := getAllCommentsCount(pid)
 	data, err := getProductData(productTitle)
+	log.Println(productTitle)
+	log.Println(data)
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -723,8 +725,7 @@ func getBlogsListAuth(c *gin.Context) {
 func nbatc(c *gin.Context) {
 	data, err := getNBATC()
 	if err != nil {
-		// render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
-		log.Println(err)
+		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
 	render(c,
 		gin.H{

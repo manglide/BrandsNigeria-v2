@@ -480,7 +480,8 @@ func getPID(productID string) (int, error) {
 	row, err := database.DB.Query(`
 		SELECT id FROM all_products 
 		WHERE product_name_clean_url = ?
-	`, productID)
+		AND deleted = ?
+	`, productID, 0)
 	if err != nil {
 		return 0, err
 	}
@@ -630,8 +631,7 @@ func getProductData(pid string) ([]productListPage, error) {
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
 		WHERE 
-		all_products.about IS NOT NULL 
-		AND all_products.about IS NOT NULL
+		all_products.about <> ''
 		AND all_products.product_name_clean_url = ?
 		AND all_products.manufacturer IS NOT NULL AND 
 		all_products.address IS NOT NULL AND
