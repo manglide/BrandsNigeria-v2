@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -199,6 +200,10 @@ func substring(input string, start int, end int) string {
 	return str
 }
 
+func encode(str string) string {
+	return url.QueryEscape(str)
+}
+
 func main() {
 
 	// Set the router as the default one provided by Gin
@@ -228,6 +233,7 @@ func main() {
 		"whoami":          whoami,
 		"count":           count,
 		"substring":       substring,
+		"encode":          encode,
 	})
 	router.LoadHTMLGlob("templates/*.*")
 	router.Static("/css", "templates/css")

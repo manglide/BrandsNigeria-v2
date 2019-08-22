@@ -18,8 +18,8 @@ $(document).ready(function() {
 	}
 	
 	$(".socialb").click(function(){
-		// console.log($(this).attr("data-href"))
-		return openShare('https://www.facebook.com/sharer/sharer.php?u=', $(this).attr("data-href"), 626, 436);
+		var link = $(this).attr("data-href")
+		window.open('fb-messenger://share?link=' + encodeURIComponent(link) + '&app_id=491555231663023');
 	})
 	$("#datacomments").submit(function(event){
             event.preventDefault();

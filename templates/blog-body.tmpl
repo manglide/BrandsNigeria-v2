@@ -65,6 +65,8 @@
   </head>
 
   <body class="container">
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=491555231663023&autoLogAppEvents=1"></script>
     <header>
     <!--<div class="ipl-progress-indicator" id="ipl-progress-indicator">
       <div class="ipl-progress-indicator-head">
@@ -143,15 +145,10 @@
 	<div class="aboutContent">
 	  <div class="row">
 	    <div class="col-sm">
-	      	<a href="#" class="fa fa-facebook">
-				<div class="fb-share-button" 
-				    data-href="https://brandsnigeria.com.ng/blogs/{{.ID}}/{{.GUID}}" 
-				    data-layout="button_count">
-				</div>
-			</a>
-			<a href="#" class="fa fa-twitter"></a>
-			<a href="#" class="fa fa-linkedin"></a>
-			<a href="#" class="fa fa-instagram"></a>
+			<div style="padding:15px;" class="fb-share-button" 
+				data-href="https://brandsnigeria.com.ng/blogs/{{.ID}}/{{.GUID}}" 
+				data-layout="button">
+			</div>	
 	    </div>
 	  </div>
 	  <div class="c">
@@ -164,15 +161,6 @@
 					    <p>{{.Content}}</p>
 					{{ end }}
 	  </div>
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-	    var js, fjs = d.getElementsByTagName(s)[0];
-	    if (d.getElementById(id)) return;
-	    js = d.createElement(s); js.id = id;
-	    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-	    fjs.parentNode.insertBefore(js, fjs);
-	  }(document, 'script', 'facebook-jssdk'));
-	</script>
 </div>
 </div>
 {{ end }}
