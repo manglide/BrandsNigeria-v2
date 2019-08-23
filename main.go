@@ -134,7 +134,7 @@ func iterate(count string) []int {
 }
 
 func sGUID(str string) string {
-	str = strings.ToLower(str)
+	str = strings.ToLower(strings.TrimSpace(str))
 	f := regexp.MustCompile(`\s+`)
 	q := f.Split(str, -1)
 	s := strings.Join(q, "-")
