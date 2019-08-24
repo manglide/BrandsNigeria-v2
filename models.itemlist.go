@@ -88,6 +88,7 @@ type productListPage struct {
 	PRODUCTCATEGORY          string `json:"productCATEGORY"`
 	PRODUCTIMAGE1            string `json:"productIMAGE1"`
 	PRODUCTIMAGE2            string `json:"productIMAGE2"`
+	SHAREABLEIMAGE           string `json:"shareableIMAGE"`
 }
 
 type productListPageEdit struct {
@@ -626,7 +627,8 @@ func getProductData(pid string) ([]productListPage, error) {
 		all_products.ingredients AS ingredients, 
 		product_categories.category AS category, 
 		CONCAT('https://images.brandsnigeria.com.ng/281x224/', SUBSTR(all_products.product_image_1,8)) AS productImage_1, 
-		CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2 
+		CONCAT('https://images.brandsnigeria.com.ng/750x224/', SUBSTR(all_products.product_image_2,8)) AS productImage_2,
+		all_products.shareableimage AS shareableimage
 		FROM all_products 
 		JOIN product_review ON all_products.id = product_review.product_id
 		JOIN product_categories ON all_products.category = product_categories.id  
@@ -672,6 +674,7 @@ func getProductData(pid string) ([]productListPage, error) {
 				&singleItem.PRODUCTCATEGORY,
 				&singleItem.PRODUCTIMAGE1,
 				&singleItem.PRODUCTIMAGE2,
+				&singleItem.SHAREABLEIMAGE,
 			)
 			if err != nil {
 				return nil, err

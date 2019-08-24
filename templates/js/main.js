@@ -178,6 +178,41 @@ $(document).ready(function() {
 	    });
 	});
 	
+	$("#storeshareimg").click(function(event){
+		alert("wego")
+		$(this).empty().html('Uploading...please wait')
+		var pid = document.getElementById("pid")
+		var guid = document.getElementById("guid")
+		var data = new FormData();
+	    $.each($('#imageshare')[0].files, function(i, file) {
+	        data.append('fileNameShare', file);
+	    });
+		data.append('pid',$(pid).val())
+		data.append('guid', $(guid).val())
+		$.ajax({
+	        url: 'http://localhost:4444/sendBlogImageForShare',
+			type: 'POST',
+	        data: data,
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+			before: function() {
+			    $("#storeshareimg").empty().html('Uploading...please wait')
+		    },
+	        success: function(response){
+				$("#imageloc").val(response.message)
+				$("#storeshareimg").empty().html('Save Image')
+				.removeClass("btn-info btn-danger").addClass("btn-success")
+	            alert("Image Saved Successfully")
+	        },
+			error:function(response){
+				$("#storeshareimg").empty().html('Save Image')
+				.removeClass("btn-info btn-success").addClass("btn-danger")
+			}
+	    });
+	});
+	
+	
 	$(".appr").click(function(elem){
 		var source = $(this).attr("id");
 		var f = source.split("-");
