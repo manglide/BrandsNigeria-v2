@@ -1,6 +1,6 @@
 {{ template "header.tmpl" .}}
 <div class="viewarea">
-<div class="aboutContent">
+<div class="aboutContent" style="text-align:justify; font-family:'Open Sans Condensed', sans-serif; font-size:20px;">
   {{ $count := count .message }}
   {{ if equalNoAdd $count 0}}
 	  	<h2>No Articles Found</h2>
