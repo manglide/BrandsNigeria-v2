@@ -720,7 +720,7 @@ visibility:hidden;
   font-weight: 50;
   font-size: 12px;
   height: auto;
-  width: 80%;
+  
   display: block;
   margin-top: 20px;
   float: left;
@@ -734,7 +734,7 @@ visibility:hidden;
   font-weight: 50;
   font-size: 20px;
   overflow: none;
-  width: 80%;
+  width: 85%;
   margin-top: 20px;
   float: left;
   text-align: justify;
@@ -881,7 +881,7 @@ flex: 1;
   margin-top: 9px;
 }
 .otherIconsOnProductPage {
-width: 63%;
+
 float: left;
 display: block;
 flex: 1;
@@ -1013,7 +1013,7 @@ padding: 5px;
     font-weight: 50;
     font-size: 20px;
     overflow: none;
-    width: 44%;
+    
     text-align: justify;
     overflow-wrap: break-word;
     display: block;
@@ -1133,7 +1133,7 @@ padding: 5px;
     font-weight: 50;
     font-size: 12px;
     height: auto;
-    width: 43%;
+    
     margin-top: 20px;
     position: relative;
   }
@@ -1171,7 +1171,7 @@ padding: 5px;
     margin-top: 9px;
   }
   .otherIconsOnProductPage {
-    width: 40%;
+    
     float: left;
     display: table-cell;
     word-wrap: break-word;
@@ -1318,7 +1318,7 @@ padding: 5px;
 	    text-align: justify;
 	    overflow-wrap: normal;
 	    display: block;
-	    width: 35%;
+	    
 		flex: 1;
 	}
 }
@@ -1398,7 +1398,7 @@ padding: 5px;
 	overflow-wrap: normal;
 	display: block;
 	flex: 1;
-	width: 35%;
+	
   }
   .productpagebTag {
     color: #000;
@@ -1514,7 +1514,7 @@ padding: 5px;
     font-weight: 50;
     font-size: 12px;
     height: auto;
-    width: 43%;
+    display: inline-grid;
     margin-top: 20px;
     position: relative;
   }
@@ -1552,7 +1552,7 @@ padding: 5px;
     margin-top: 9px;
   }
   .otherIconsOnProductPage {
-    width: 40%;
+    
     float: left;
     display: table-cell;
     word-wrap: break-word;
@@ -1994,4 +1994,10 @@ span.rT {
 	font-family: 'Century Gothic', sans-serif;
 	font-weight: 600;
 	font-size: 12px;
+}
+
+@media screen and (min-width: 800px) {
+  .customerreviews {
+    width: 88%;
+  }
 }
