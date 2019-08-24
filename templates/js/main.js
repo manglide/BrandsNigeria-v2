@@ -179,7 +179,6 @@ $(document).ready(function() {
 	});
 	
 	$("#storeshareimg").click(function(event){
-		alert("wego")
 		$(this).empty().html('Uploading...please wait')
 		var pid = document.getElementById("pid")
 		var guid = document.getElementById("guid")
@@ -190,7 +189,7 @@ $(document).ready(function() {
 		data.append('pid',$(pid).val())
 		data.append('guid', $(guid).val())
 		$.ajax({
-	        url: 'http://localhost:4444/sendBlogImageForShare',
+	        url: '/sendBlogImageForShare',
 			type: 'POST',
 	        data: data,
 	        cache: false,
