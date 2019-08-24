@@ -1419,7 +1419,7 @@ func deleteRating(rid, pid, user string) (int, error) {
 
 }
 
-func getProductToEdit(pid string) ([]productListPageEdit, error) {
+func getProductToEdit(id, pid string) ([]productListPageEdit, error) {
 	var productPage = []productListPageEdit{}
 	var (
 		singleItem productListPageEdit
@@ -1465,8 +1465,9 @@ func getProductToEdit(pid string) ([]productListPageEdit, error) {
 		all_products.product_image_2 IS NOT NULL AND
 		all_products.price IS NOT NULL
 		AND all_products.deleted = ?
+		AND all_products.id = ?
 		GROUP BY all_products.id ORDER BY rating DESC
-	`, pid, 0)
+	`, pid, 0, id)
 	if err != nil {
 		return nil, err
 	} else {

@@ -47,7 +47,7 @@ func initializeRoutes() {
 		productRoutesAU.GET("/:product_id", ensureLoggedIn(), getProductPageAuthenticated)
 	}
 
-	router.GET("/edit/:product_id", ensureLoggedIn(), editProduct)
+	router.GET("/edit/:id/:guid", ensureLoggedIn(), editProduct)
 	router.POST("/editproduct", ensureLoggedIn(), saveProduct)
 	router.POST("/deleteproduct", ensureLoggedIn(), deleteProduct)
 	router.POST("/restoreproduct", ensureLoggedIn(), restoreProduct)

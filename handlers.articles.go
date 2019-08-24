@@ -548,7 +548,8 @@ func withdrawRating(c *gin.Context) {
 }
 
 func editProduct(c *gin.Context) {
-	p := c.Param("product_id")
+	id := c.Param("id")
+	p := c.Param("guid")
 	categories, err := getCategories()
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
@@ -558,7 +559,7 @@ func editProduct(c *gin.Context) {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
 	log.Println(p)
-	data, err := getProductToEdit(p)
+	data, err := getProductToEdit(id, p)
 	if err != nil {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusServiceUnavailable}, "500.tmpl")
 	}
