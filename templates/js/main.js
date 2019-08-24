@@ -211,6 +211,10 @@ $(document).ready(function() {
 	    });
 	});
 	
+	$('.btnShare').click(function(){
+		postToFeed();
+		return false;
+	});
 	
 	$(".appr").click(function(elem){
 		var source = $(this).attr("id");

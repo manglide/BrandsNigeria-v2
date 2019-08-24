@@ -162,8 +162,7 @@ func getProductPage(c *gin.Context) {
 	}
 	numberofcomments := getAllCommentsCount(pid)
 	data, err := getProductData(productTitle)
-	log.Println(productTitle)
-	log.Println(data)
+
 	if err != nil {
 		log.Println(err.Error())
 	}

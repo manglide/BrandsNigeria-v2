@@ -29,6 +29,27 @@
     <!--<script src="/vendor/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
     <script src="/vendor/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="/vendor/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0&appId=491555231663023&autoLogAppEvents=1"></script>
+    <script type="text/javascript">
+    	window.fbAsyncInit = function(){
+		FB.init({
+		    appId: '491555231663023', status: true, cookie: true, xfbml: true }); 
+		};
+		(function(d, debug){var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		    if(d.getElementById(id)) {return;}
+		    js = d.createElement('script'); js.id = id; 
+		    js.async = true;js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+		    ref.parentNode.insertBefore(js, ref);}(document, /*debug*/ false));
+		function postToFeed(){
+		var obj = {
+			method: 'feed', 
+			link: "https://brandsnigeria.com.ng/{{.PRODUCTGUID}}", 
+			picture: "https://images.brandsnigeria.com.ng/{{.SHAREABLEIMAGE}}",
+			name: "Review of - {{ uppercase .PRODUCTNAME}} - By Brands Nigeria",description: "{{.PRODUCTDESCRIPTION}}"};
+		function callback(response){}
+		FB.ui(obj, callback);
+		}
+    </script>
 {{ end }} 
     {{ template "richsnippet.tmpl" . }}
     
