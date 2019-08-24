@@ -70,6 +70,50 @@ func showAboutPage(c *gin.Context) {
 	}, "about.tmpl")
 }
 
+func showTerms(c *gin.Context) {
+	render(c, gin.H{
+		"title": "About BrandsNigeria",
+	}, "terms.tmpl")
+}
+
+func showTermsPageAuthenticated(c *gin.Context) {
+	if Superadmin > 0 {
+		render(c, gin.H{
+			"title":        "Terms and Conditions",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "terms.tmpl")
+	} else {
+		render(c, gin.H{
+			"title":        "Terms and Conditions",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "terms.tmpl")
+	}
+}
+
+func showPrivacy(c *gin.Context) {
+	render(c, gin.H{
+		"title": "About BrandsNigeria",
+	}, "privacy.tmpl")
+}
+
+func showPrivacyPageAuthenticated(c *gin.Context) {
+	if Superadmin > 0 {
+		render(c, gin.H{
+			"title":        "Privacy Policy",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "privacy.tmpl")
+	} else {
+		render(c, gin.H{
+			"title":        "Privacy Policy",
+			"is_logged_in": true,
+			"superadmin":   Superadmin,
+		}, "privacy.tmpl")
+	}
+}
+
 func showAboutPageAuthenticated(c *gin.Context) {
 	if Superadmin > 0 {
 		render(c, gin.H{
