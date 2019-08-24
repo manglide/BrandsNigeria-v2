@@ -42,10 +42,10 @@
 		    ref.parentNode.insertBefore(js, ref);}(document, /*debug*/ false));
 		function postToFeed(){
 		var obj = {
-			method: 'feed', 
+			method: 'share', 
 			link: "https://brandsnigeria.com.ng/product/{{.PRODUCTGUID}}", 
 			picture: "https://images.brandsnigeria.com.ng/{{.SHAREABLEIMAGE}}",
-			name: "Review of - {{ uppercase .PRODUCTNAME}} - By Brands Nigeria",description: "{{.PRODUCTDESCRIPTION}}"};
+			name: "Review of - {{ uppercase .PRODUCTNAME}} - Brands Nigeria",description: "{{.PRODUCTDESCRIPTION}}"};
 		function callback(response){}
 		FB.ui(obj, callback);
 		}
