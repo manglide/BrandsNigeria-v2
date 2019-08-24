@@ -43,9 +43,8 @@
 		function postToFeed(){
 		var obj = {
 			method: 'share', 
-			link: "https://brandsnigeria.com.ng/product/{{.PRODUCTGUID}}", 
-			picture: "https://images.brandsnigeria.com.ng/{{.SHAREABLEIMAGE}}",
-			name: "Review of - {{ uppercase .PRODUCTNAME}} - Brands Nigeria",description: "{{.PRODUCTDESCRIPTION}}"};
+			href: "https://brandsnigeria.com.ng/product/{{.PRODUCTGUID}}"
+		};
 		function callback(response){}
 		FB.ui(obj, callback);
 		}
