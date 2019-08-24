@@ -1,8 +1,21 @@
-<div class="goback">
+<div class="row">
+<div class="goback col">
 <a href="/" title="Go Back">
 <button type="button" class="btn btn-success navbar-btn">
 <span class="fa fa-chevron-left"></span>
 Go Back
 </button>
 </a>
+</div>
+<div class="col">
+{{ if .superadmin }}
+	{{ range .data }}
+		<a href="/edit/{{.PRODUCTID}}/{{.PRODUCTGUID}}" title="Go Back">
+		<button type="button" class="btn btn-info">
+			Edit
+		</button>
+		</a>
+	{{ end }}
+{{ end }}
+</div>
 </div>
