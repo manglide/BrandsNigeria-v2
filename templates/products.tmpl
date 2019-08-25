@@ -1,16 +1,25 @@
 <div>
   <div class="containerXZ">
+	  <div class="row" style="margin-bottom:12px; width:98%">
+		<div class="col">
+              <input class="form-control"
+            	id="globalsearch"
+				onKeyup="globalSearch(this)" 
+            	type="search" placeholder="Search by product title" 
+				aria-label="Search">
+		</div>
+	  </div>
       <div class='row'>
-            <div class='card-columns'>
+            <div class='card-columns' id="cc">
             	  {{ if .is_logged_in }}
 				{{ range .products }}
-	                <div class='col' itemscope itemtype='http://schema.org/Product'>
+	                <div class='col' id="{{ .PRODUCTNAME }}" itemscope itemtype='http://schema.org/Product'>
 	                    {{ template "card-auth.tmpl" . }}
 	                </div>
               	{{ end }}
 			  {{ else }}
 	              {{ range .products }}
-	                <div class='col' itemscope itemtype='http://schema.org/Product'>
+	                <div class='col' id="{{ .PRODUCTNAME }}" itemscope itemtype='http://schema.org/Product'>
 	                    {{ template "card.tmpl" . }}
 	                </div>
 	              {{ end }}

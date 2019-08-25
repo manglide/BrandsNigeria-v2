@@ -475,3 +475,18 @@ function upvoteProduct(guid, str) {
 function downRateProduct(guid, str) {
 	$("#upvoteProduct").modal();
 }
+
+function globalSearch(elem) {
+	var cc = document.getElementById("cc")
+	$(cc).children().each(function(){
+		if($(elem).val() != "") {
+			if($(elem).val().toLowerCase() === $(this).attr("id").toLowerCase()) {
+				$(this).removeAttr("style")
+			} else {
+				$(this).attr("style","display:none")
+			}	
+		} else {
+			$(this).removeAttr("style")
+		}
+	})
+}

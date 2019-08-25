@@ -216,6 +216,7 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	
 	$(".appr").click(function(elem){
 		var source = $(this).attr("id");
 		var f = source.split("-");
