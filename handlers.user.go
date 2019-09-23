@@ -158,7 +158,10 @@ type User struct {
 }
 
 func fbLogin(c *gin.Context) {
-
+	user := c.Param("user")
+	Superadmin = 0
+	UserLoggedIn = user
+	showIndexPage(c)
 }
 
 func performLogin(c *gin.Context) {
