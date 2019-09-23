@@ -23,8 +23,9 @@ func initializeRoutes() {
 		userRoutes.POST("/withdrawrating", ensureLoggedIn(), withdrawRating)
 		userRoutes.GET("/blog", ensureNotLoggedIn(), getBlogsList)
 		userRoutes.GET("/s/blog", ensureLoggedIn(), getBlogsListAuth)
-		userRoutes.POST("/f/login/:user", ensureNotLoggedIn(), fbLogin)
 	}
+
+	router.GET("/social/:userid", ensureNotLoggedIn(), fbLogin)
 
 	router.GET("/blogs/:id/:guid", ensureNotLoggedIn(), getArticleUnAuthenticated)
 
