@@ -161,6 +161,7 @@ func fbLogin(c *gin.Context) {
 	user := c.Param("userid")
 	Superadmin = 0
 	UserLoggedIn = user
+	token := generateSessionToken()
 	c.SetCookie("token", token, 3600, "", "", false, true)
 	c.Set("is_logged_in", true)
 	showIndexPage(c)
