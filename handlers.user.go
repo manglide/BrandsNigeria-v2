@@ -157,6 +157,10 @@ type User struct {
 	username string `json:"username"`
 }
 
+func fbLogin(c *gin.Context) {
+
+}
+
 func performLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
