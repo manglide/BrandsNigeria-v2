@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ikeikeikeike/go-sitemap-generator/v2/stm"
+	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 )
 
 func showIndexPage(c *gin.Context) {
