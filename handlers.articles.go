@@ -668,6 +668,22 @@ func genSitemap(c *gin.Context) {
 	}
 }
 
+func buildSitemap(c *gin.Context) {
+	sitemapData, err := dataSitemap()
+	if err == nil {
+		sm := stm.NewSitemap(1)
+		sm.SetDefaultHost("https://brandsnigeria.com.ng")
+
+		sm.Create()
+		for k := range sitemapData {
+			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + k}, {"changefreq", "daily"}, {"priority", 0.5}, {"mobile", true}})
+		}
+		c.XML(http.StatusOK, sm.XMLContent())
+	} else {
+		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
+	}
+}
+
 func approveRating(c *gin.Context) {
 	reviewID := c.PostForm("reviewid")
 	productID := c.PostForm("pid")
