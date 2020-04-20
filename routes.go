@@ -56,7 +56,7 @@ func initializeRoutes() {
 	router.POST("/editproduct", ensureLoggedIn(), saveProduct)
 	router.POST("/deleteproduct", ensureLoggedIn(), deleteProduct)
 	router.POST("/restoreproduct", ensureLoggedIn(), restoreProduct)
-	router.GET("/sitemap.xml", neutral(), genSitemap)
+	// router.GET("/sitemap.xml", neutral(), genSitemap)
 
 	createProductRoutes := router.Group("/new")
 	{
