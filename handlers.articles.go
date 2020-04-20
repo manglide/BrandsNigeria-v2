@@ -681,7 +681,7 @@ func buildSitemap(c *gin.Context) {
 		}
 		c.Writer.Header().Set("Content-Type", "application/xml; charset=utf-8")
 		// c.XML(http.StatusOK, sm.XMLContent())
-		c.XML(http.StatusOK, gin.H{"payload": sm.XMLContent(), "status": http.StatusOK})
+		c.XML(http.StatusOK, gin.H{"message": sm.XMLContent(), "status": http.StatusOK})
 	} else {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
