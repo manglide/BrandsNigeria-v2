@@ -679,7 +679,9 @@ func buildSitemap(c *gin.Context) {
 		for k := range sitemapData {
 			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + strconv.Itoa(k)}, {"changefreq", "daily"}, {"priority", 0.5}, {"mobile", true}})
 		}
-		c.XML(http.StatusOK, sm.XMLContent())
+		c.Writer.Header().Set("Content-Type", "application/xml; charset=utf-8")
+		// c.XML(http.StatusOK, sm.XMLContent())
+		c.XML(http.StatusOK, gin.H{"payload": sm.XMLContent(), "status": http.StatusOK})
 	} else {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
