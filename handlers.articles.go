@@ -676,7 +676,7 @@ func buildSitemap(c *gin.Context) {
 		sm.SetDefaultHost("https://brandsnigeria.com.ng")
 
 		sm.Create()
-		for k, v := range sitemapData {
+		for _, v := range sitemapData {
 			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + v.PRODUCTGUID}, {"changefreq", "daily"}, {"priority", 0.5}})
 		}
 		c.Writer.Header().Set("Content-Type", "application/xml; charset=utf-8")
