@@ -677,7 +677,7 @@ func buildSitemap(c *gin.Context) {
 
 		sm.Create()
 		for k := range sitemapData {
-			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + k}, {"changefreq", "daily"}, {"priority", 0.5}, {"mobile", true}})
+			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + strconv.Itoa(k)}, {"changefreq", "daily"}, {"priority", 0.5}, {"mobile", true}})
 		}
 		c.XML(http.StatusOK, sm.XMLContent())
 	} else {
