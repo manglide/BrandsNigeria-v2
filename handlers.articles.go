@@ -680,7 +680,7 @@ func buildSitemap(c *gin.Context) {
 			sm.Add(stm.URL{{"loc", "https://brandsnigeria.com.ng/product/" + v.PRODUCTGUID}, {"changefreq", "daily"}, {"priority", 0.5}})
 		}
 		c.Writer.Header().Set("Content-Type", "application/xml; charset=utf-8")
-		c.XML(http.StatusOK, sm.XMLContent())
+		c.XML(http.StatusOK, gin.H{"message": sm.XMLContent()})
 	} else {
 		render(c, gin.H{"title": "Server Error", "message": http.StatusInternalServerError}, "500.tmpl")
 	}
