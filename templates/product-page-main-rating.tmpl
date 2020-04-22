@@ -1,20 +1,14 @@
 {{ range .data }}
-<div class="ratingDiv"
-	itemprop="aggregateRating"
-	itemscope itemtype="http://schema.org/AggregateRating">
-	<span class="ratingVal" itemprop="ratingValue">
+<div class="ratingDiv">
+	<span class="ratingVal" >
 	  {{ roundUp .PRODUCTRATING}} / 5 stars
 	</span><br />
-	<span class="numofCustReviews" itemprop="reviewCount">
+	<span class="numofCustReviews" >
 		{{ .PRODUCTUSERCOMMENTS }}
 	</span>
 	<span class="numofCustReviews" style="margin-left:14px;">
 		Customer reviews
 	</span>
-	<div itemprop="itemReviewed" itemtype="http://schema.org/Thing" itemscope>
-		<link itemprop="url" href="https://brandsnigeria.com.ng/product/{{ .PRODUCTGUID }}" />
-		<span itemprop="name">{{ removeNewLines .PRODUCTNAME}}</span>
-		<span itemprop="productID">{{.PRODUCTID}}</span>
-	</div>
+
 </div>
 {{ end }}
