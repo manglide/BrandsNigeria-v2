@@ -2,18 +2,18 @@
 {{ template "enter-comment.tmpl" . }}
 {{ end }}
 {{ range .comments }}
-		<div class="aboutProductComments" itemprop="review" itemscope itemtype="http://schema.org/Review">
-			<div itemprop="itemReviewed" itemscope itemtype="https://schema.org/Thing">
-		        <span itemprop="name">{{ removeNewLines .PRODUCTNAME}}</span>
+		<div class="aboutProductComments">
+			<div>
+		        <span>{{ removeNewLines .PRODUCTNAME}}</span>
 		  </div>
 			<div class="individualUserAvatarAndName btn btn-success">
 				<div class="" style="display:inline; float:left;">
 					<i class="fa fa-user-circle"></i>
-					<div itemprop="author" class="author">{{.AUTHOR}}</div>
+					<div>{{.AUTHOR}}</div>
 				</div>
 				<div class="dateX">
-					<meta itemprop="datePublished" content="{{ visualDate .DATEPUBLISHED }}" />
-					<span itemprop="datePublished">{{ visualDate .DATEPUBLISHED }}</span>
+					<meta content="{{ visualDate .DATEPUBLISHED }}" />
+					<span>{{ visualDate .DATEPUBLISHED }}</span>
 				</div>
 			</div>
 			{{ template "product-page-user-comments.tmpl" . }}

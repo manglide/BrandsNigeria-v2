@@ -1,13 +1,13 @@
-<div>		
+<div>
 		<div class="UserAndComment">
-			<span class="individualComment" itemprop="name">{{ .USERCOMMENTS }}</span>
-			<div class="smallRatingDiv" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+			<span class="individualComment">{{ .USERCOMMENTS }}</span>
+			<div class="smallRatingDiv">
 				<div>
 					{{ template "product-page-comment-rates.tmpl" . }}
 				</div>
 				<div>
-					<meta itemprop="worstRating" content="{{ .PRODUCTRATING }}" />
-					<span itemprop="ratingValue">{{ .PRODUCTRATING }}</span>/<span itemprop="bestRating">5</span>stars
+					<meta content="{{ .PRODUCTRATING }}" />
+					<span>{{ .PRODUCTRATING }}</span>/<span itemprop="bestRating">5</span>stars
 				</div>
 			</div>
 			{{ template "product-page-review-rating.tmpl" . }}
