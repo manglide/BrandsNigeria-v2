@@ -1,7 +1,7 @@
 {{ $arrLength := .numberofcomments }}
 {{ $commentsArr := .comments }}
 {{ range $index, $value := $commentsArr }}
-    {{ if equal $index $arrLength }} 
+    {{ if equal $index $arrLength }}
       {
         "@type": "Review",
         "itemReviewed": {
@@ -19,7 +19,7 @@
           "@type": "Rating",
           "bestRating": "5",
           "ratingValue": {{ .PRODUCTRATING }},
-          "worstRating": {{ .PRODUCTRATING }},
+          "worstRating": {{ .PRODUCTRATING }}
         },
         "publisher": {
           "@type": "Organization",
@@ -44,7 +44,7 @@
           "@type": "Rating",
           "bestRating": "5",
           "ratingValue": {{ .PRODUCTRATING }},
-          "worstRating": {{ .PRODUCTRATING }},
+          "worstRating": {{ .PRODUCTRATING }}
         },
         "publisher": {
           "@type": "Organization",
