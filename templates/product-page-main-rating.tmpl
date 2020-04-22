@@ -12,6 +12,7 @@
 		Customer reviews
 	</span>
 	<div itemprop="itemReviewed" itemtype="http://schema.org/Thing" itemscope>
+		<span itemprop="name">{{ removeNewLines .PRODUCTNAME}}</span>
 		<link itemprop="url" href="https://brandsnigeria.com.ng/product/{{ .PRODUCTGUID }}" />
 		<meta itemprop="name" content="{{ removeNewLines .PRODUCTNAME }}" />
 	</div>
