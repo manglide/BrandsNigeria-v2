@@ -11,6 +11,10 @@
 	<span class="numofCustReviews" style="margin-left:14px;">
 		Customer reviews
 	</span>
-	
+	<div itemprop="itemReviewed" itemtype="http://schema.org/Product" itemscope>
+		<link itemprop="url" href="https://brandsnigeria.com.ng/product/{{ .PRODUCTGUID }}" />
+		<span itemprop="name">{{ removeNewLines .PRODUCTNAME}}</span>
+		<span itemprop="productID">{{.PRODUCTID}}</span>
+	</div>
 </div>
 {{ end }}
