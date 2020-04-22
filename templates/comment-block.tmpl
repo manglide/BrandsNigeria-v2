@@ -3,10 +3,6 @@
 {{ end }}
 {{ range .comments }}
 		<div class="aboutProductComments" itemprop="review" itemscope itemtype="http://schema.org/Review">
-			<div itemprop="itemReviewed" itemscope itemtype="https://schema.org/Thing">
-		        <span itemprop="name">{{ removeNewLines .PRODUCTNAME}}</span>
-		    </div>
-
 			<div class="individualUserAvatarAndName btn btn-success">
 				<div class="" style="display:inline; float:left;">
 					<i class="fa fa-user-circle"></i>
